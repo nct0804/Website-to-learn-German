@@ -1,0 +1,1 @@
+npm run dev : lệnh sẽ giúp tự động reset khi mà code có sự thay đổi
