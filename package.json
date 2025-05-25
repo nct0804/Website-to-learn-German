@@ -2,8 +2,9 @@
   "name": "fwe-lernplattform",
   "description": "This is the package.json file in root allow to run both frontend and backend with one cammand from the root",
   "scripts": {
-    "start:backend": "cd backend && npm install && npm run build && npm run start"
-    
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && npm install && npm run build && npm start",
+    "start:frontend": "cd frontend && npm install && npm run dev"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

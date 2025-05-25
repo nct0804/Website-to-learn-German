@@ -2,7 +2,7 @@
 
 Chỉ cần chạy lệnh npm start ở root mà ko cần phải vào từng folder để chạy lệnh (Without DOCKER!)
 ```
-"start:frontend": "cd frontend && npm install -g pnpm && pnpm install --frozen-lockfile && npm run dev",
+"start:frontend": "cd frontend && npm install && npm run dev"
 "start:backend": "cd backend && npm install && npm run build && npm run start",
 "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
 
@@ -22,6 +22,7 @@ Chỉ cần chạy lệnh npm start ở root mà ko cần phải vào từng fol
 2. Navigate to backend directory 
     ```
     cd backend
+    npm install
     ```
     and create a .env file with following variables:
     ```
@@ -30,6 +31,7 @@ Chỉ cần chạy lệnh npm start ở root mà ko cần phải vào từng fol
 3. Navigate to frontend directory 
     ```
     cd ../frontend
+    npm install
     ```
     and create a .env file with following variables:
     ```
@@ -39,6 +41,6 @@ Chỉ cần chạy lệnh npm start ở root mà ko cần phải vào từng fol
 4. Install necessary packages and run both backend and frontend at project directory:
     ```
     cd ..
-    npm install .
-    npm run start
+    npm install
+    npm start
     ```
