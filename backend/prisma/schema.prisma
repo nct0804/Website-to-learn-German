@@ -3,13 +3,60 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// Enums
+enum LanguageLevel {
+  A1_1  
+  A1_2  
+  A2_1  
+  A2_2  
+}
+
+enum ExerciseType {
+  MULTIPLE_CHOICE
+  VOCABULARY_CHECK
+  FILL_IN_BLANK
+  SENTENCE_ORDER
+}
+
+
+enum VocabularyCategory {
+  COMMON
+  TRAVEL
+  BUSINESS
+  FOOD
+  CULTURE
+  EMOTIONS
+  WEATHER
+  NUMBERS
+  GREETINGS
+  DAILY_ACTIVITIES
+}
+
+// Course Structure
+model Course {
+
+}
+
+model Module {
+
+}
+
+
+
+model Lesson {
+
+}
+
+// Exercise System
+model Exercise {
+
 }
