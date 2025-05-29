@@ -1,3 +1,5 @@
+# README FOR STRUCTURES AND DATABASE
+
 Ý tưởng xây dựng Database ()
 
 Core Data Structure:
@@ -44,8 +46,20 @@ Gamification System
 ```
 
 ```
-Update database : npx prisma migrate dev --name init
-
+migrate : npx prisma migrate dev --name init
+Whenever make changes: npx prisma generate
 Drop the database, reapply all migrate: npx prisma migrate reset (only use for dev)
 (manually in pgadmin safer): 
+```
+
+```
+Manually editing database using pgAdmin (After running Docker)
+1.  Open pgAdmin
+2.  Clicks on "Add New Server"
+3.  Name: random
+4.  Host: localhost
+    port:5432
+    Maintaince Database : germangainsdb
+    Username: germangains
+    Passwort germangains
 ```
