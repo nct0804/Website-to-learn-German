@@ -23,7 +23,11 @@
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
+  "prisma": {
+    "schema": "backend/prisma/schema.prisma"
+  },
   "dependencies": {
     "cors": "^2.8.5"
   }
+
 }
