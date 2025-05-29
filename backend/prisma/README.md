@@ -5,12 +5,14 @@ A1.1 → A1.2 → A2.1 → A2.2
 Course(A1.1,...) > Module() -> Lesson -> Exercise
 
 Example (Vi Du)
+```
 Course (A1.1) 
 └── Module ("Family, Food, Animals, Shopping") 
     └── Lesson ("Animals - Tiere") - Tương đương với với level của Course
         └── Exercise (Multiple Choice: "Wie heisst deine Katze?")
             ├── Options: "Mein Katze heisst..."
             └── Vocabulary: "die Katze" (die, "die Katzen"),...
+```
 
 #### Exercise
 -   Multiple choices
