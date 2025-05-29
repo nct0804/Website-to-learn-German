@@ -51,3 +51,13 @@ model UserProgress {
   @@unique([userId, lessonId, exerciseId])
   @@map("user_progress")
 }
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  @@map("refresh_tokens")
+}
