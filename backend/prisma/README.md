@@ -24,6 +24,9 @@ Course (A1.1)
 -   Vocabulary exercises with pictures
 -   Text to speech, speech to text
 
+Organize Template Data in JSON (Duolingo templates)
+
+
 ```
 @ Todo
 Gamification System
@@ -38,4 +41,11 @@ Gamification System
 3.  Earn enough XP -> gain access to higher courses/level (A1.1, A1.2,..)
 .....
 
+```
+
+```
+Update database : npx prisma migrate dev --name init
+
+Drop the database, reapply all migrate: npx prisma migrate reset (only use for dev)
+(manually in pgadmin safer): 
 ```
