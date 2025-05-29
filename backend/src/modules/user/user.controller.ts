@@ -1,4 +1,3 @@
-// backend/src/modules/user/user.controller.ts
 import { Request, Response } from "express";
 import userService from "./user.service";
 import { AuthenticatedRequest } from "../../middleware/auth.middleware";

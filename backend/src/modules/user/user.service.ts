@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
-
-const prisma = new PrismaClient();
 
 export interface CreateUserData {
   email: string;
@@ -21,12 +19,12 @@ export interface UserResponse {
   id: string;
   email: string;
   username: string;
-  firstName?: string;
-  lastName?: string;
+  firstName?: string | null; // null oder undefined erlauben
+  lastName?: string | null; // null oder undefined erlauben
   level: number;
   xp: number;
   streak: number;
-  lastLogin?: Date;
+  lastLogin?: Date | null; // null oder undefined erlauben
   createdAt: Date;
 }
 
@@ -84,6 +82,8 @@ class UserService {
     if (!user) {
       throw new Error("Invalid credentials");
     }
+
+    // Verify password
     const isPasswordValid = await bcrypt.compare(
       loginData.password,
       user.password
@@ -92,8 +92,10 @@ class UserService {
       throw new Error("Invalid credentials");
     }
 
+    // Update last login and streak
     const updatedUser = await this.updateLoginStreak(user.id, user.lastLogin);
 
+    // Generate tokens
     const { accessToken, refreshToken } = await this.generateTokens(user.id);
 
     const userResponse: UserResponse = {
@@ -187,13 +189,16 @@ class UserService {
       );
 
       if (daysSinceLastLogin === 1) {
+        // Consecutive day
         const currentUser = await prisma.user.findUnique({
           where: { id: userId },
         });
         newStreak = (currentUser?.streak || 0) + 1;
       } else if (daysSinceLastLogin > 1) {
+        // Streak broken
         newStreak = 1;
       } else {
+        // Same day - don't update streak
         const currentUser = await prisma.user.findUnique({
           where: { id: userId },
         });
@@ -211,6 +216,7 @@ class UserService {
   }
 
   private calculateLevel(xp: number): number {
+    // Simple level calculation: level = floor(xp / 100) + 1
     return Math.floor(xp / 100) + 1;
   }
 
@@ -259,10 +265,12 @@ class UserService {
       throw new Error("JWT secrets not configured");
     }
 
+    // Verify refresh token
     const decoded = jwt.verify(refreshToken, jwtRefreshSecret) as {
       userId: string;
     };
 
+    // Check if refresh token exists in database
     const storedToken = await prisma.refreshToken.findUnique({
       where: { token: refreshToken },
     });
