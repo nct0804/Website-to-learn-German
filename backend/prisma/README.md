@@ -1,5 +1,5 @@
 # README FOR STRUCTURES AND DATABASE
-![UML](assets/UML1.png)
+
 Ý tưởng xây dựng Database ()
 
 Core Data Structure:
