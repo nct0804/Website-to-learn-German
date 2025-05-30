@@ -27,5 +27,8 @@
   },
   "dependencies": {
     "cors": "^2.8.5"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

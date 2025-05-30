@@ -46,9 +46,9 @@ Gamification System
 ```
 
 ```
-migrate : npx prisma migrate dev --name init
-Whenever make changes: npx prisma generate
-Drop the database, reapply all migrate: npx prisma migrate reset (only use for dev)
+Create new migrate(s) : npx prisma migrate dev --name init
+npx prisma generate : (Apply for Clients after updateing schema.prisma)
+Drop the database, reapply all migrate: npx prisma migrate reset (Only if there aren't important data)
 (manually in pgadmin safer): 
 ```
 
@@ -63,3 +63,14 @@ Manually editing database using pgAdmin (After running Docker)
     Username: germangains
     Passwort germangains
 ```
+
+## Insert, Delete, Update,.. data for models
+Run the command to manipulate the database
+```
+npx prisma db seed
+```
+When the models start growing larger
+-> Organize the script into sections or break it into multiple files OR EVEN BETTER JSON FILES!!
+
+```
+
