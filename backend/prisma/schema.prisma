@@ -14,10 +14,10 @@ datasource db {
 
 // Enums
 enum LanguageLevel {
-  A1_1  
-  A1_2  
-  A2_1  
-  A2_2  
+  A1_1 @map("A1.1")
+  A1_2 @map("A1.2")
+  A2_1 @map("A2.1")
+  A2_2 @map("A2.2")
 }
 
 enum ExerciseType {
@@ -27,6 +27,11 @@ enum ExerciseType {
   SENTENCE_ORDER
 }
 
+enum ExerciseDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
 
 enum VocabularyCategory {
   COMMON
@@ -43,20 +48,132 @@ enum VocabularyCategory {
 
 // Course Structure
 model Course {
+  id          Int           @id @default(autoincrement())
+  title       String //"German A1.1", "German A1.2", etc.
+  description String?
+  // imageSrc    String        @map("image_src") // Later
+  level       LanguageLevel
+  order       Int
+  isActive    Boolean       @default(true) @map("is_active")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  modules     Module[]
 
+  @@map("courses")
 }
 
 model Module {
+  id            Int      @id @default(autoincrement())
+  courseId      Int      @map("course_id")
+  title         String
+  description   String?
+  order         Int
+  requiredXP    Int      @default(0) @map("required_xp")
+  xpReward      Int      @default(10) @map("xp_reward")
+  estimatedTime Int?     @map("estimated_time")
+  isLocked      Boolean  @default(false) @map("is_locked")
+  createdAt     DateTime @default(now()) @map("created_at")
 
+  course           Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons          Lesson[]
+  prerequisites    ModulePrerequisite[] @relation("ModulePrerequisites")
+  dependentModules ModulePrerequisite[] @relation("DependentModules")
+
+  @@map("modules")
 }
 
+model ModulePrerequisite {
+  id             Int @id @default(autoincrement())
+  moduleId       Int @map("module_id")
+  prerequisiteId Int @map("prerequisite_id")
 
+  module             Module @relation("ModulePrerequisites", fields: [moduleId], references: [id], onDelete: Cascade)
+  prerequisiteModule Module @relation("DependentModules", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, prerequisiteId])
+  @@map("module_prerequisites")
+}
 
 model Lesson {
+  id            Int      @id @default(autoincrement())
+  moduleId      Int      @map("module_id")
+  title         String
+  description   String?
+  order         Int
+  xpReward      Int      @default(5) @map("xp_reward")
+  estimatedTime Int?     @map("estimated_time")
+  createdAt     DateTime @default(now()) @map("created_at")
 
+  module    Module     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  exercises Exercise[]
+
+  @@map("lessons")
 }
 
 // Exercise System
 model Exercise {
+  id          Int                @id @default(autoincrement())
+  lessonId    Int                @map("lesson_id")
+  type        ExerciseType
+  difficulty  ExerciseDifficulty @default(BEGINNER)
+  question    String
+  instruction String?
+  order       Int
+  xpReward    Int                @default(1) @map("xp_reward")
+  timeLimit   Int?               @map("time_limit")
+  createdAt   DateTime           @default(now()) @map("created_at")
 
+  lesson          Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  exerciseOptions ExerciseOption[]
+  vocabularyItems VocabularyExercise[]
+
+  @@map("exercises")
+}
+
+model ExerciseOption {
+  id          Int     @id @default(autoincrement())
+  exerciseId  Int     @map("exercise_id")
+  text        String
+  isCorrect   Boolean @map("is_correct")
+  explanation String?
+  // imageSrc    String? @map("image_src")
+  // audioSrc    String? @map("audio_src") // later on for Nice to Have feature
+  order       Int?
+
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@map("exercise_options")
+}
+
+// Vocabulary Management
+model VocabularyItem {
+  id              Int           @id @default(autoincrement())
+  german          String
+  english         String
+  pronunciation   String?
+  partOfSpeech    String?       @map("part_of_speech")
+  gender          String?
+  plural          String?
+  level           LanguageLevel
+  frequency       Int           @default(1)
+  audioSrc        String?       @map("audio_src")
+  // imageSrc        String?       @map("image_src") // Later
+  exampleSentence String?       @map("example_sentence")
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  vocabularyExercises VocabularyExercise[]
+
+  @@unique([german, level]) // constraint to avoid duplicates
+  @@map("vocabulary_items")
+}
+
+model VocabularyExercise {
+  id           Int @id @default(autoincrement())
+  exerciseId   Int @map("exercise_id")
+  vocabularyId Int @map("vocabulary_id")
+
+  exercise       Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  vocabularyItem VocabularyItem @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+
+  @@unique([exerciseId, vocabularyId])
+  @@map("vocabulary_exercises")
 }
