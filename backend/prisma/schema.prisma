@@ -27,25 +27,6 @@ enum ExerciseType {
   SENTENCE_ORDER
 }
 
-enum ExerciseDifficulty {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-}
-
-enum VocabularyCategory {
-  COMMON
-  TRAVEL
-  BUSINESS
-  FOOD
-  CULTURE
-  EMOTIONS
-  WEATHER
-  NUMBERS
-  GREETINGS
-  DAILY_ACTIVITIES
-}
-
 // Course Structure
 model Course {
   id          Int           @id @default(autoincrement())
@@ -111,20 +92,19 @@ model Lesson {
 
 // Exercise System
 model Exercise {
-  id          Int                @id @default(autoincrement())
-  lessonId    Int                @map("lesson_id")
+  id          Int          @id @default(autoincrement())
+  lessonId    Int          @map("lesson_id")
   type        ExerciseType
-  difficulty  ExerciseDifficulty @default(BEGINNER)
   question    String
   instruction String?
   order       Int
-  xpReward    Int                @default(1) @map("xp_reward")
-  timeLimit   Int?               @map("time_limit")
-  createdAt   DateTime           @default(now()) @map("created_at")
+  xpReward    Int          @default(1) @map("xp_reward")
+  timeLimit   Int?         @map("time_limit")
+  createdAt   DateTime     @default(now()) @map("created_at")
 
-  lesson          Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  exerciseOptions ExerciseOption[]
-  vocabularyItems VocabularyExercise[]
+  lesson           Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  exerciseOptions  ExerciseOption[]
+  exerciseProgress ExerciseProgress[]
 
   @@map("exercises")
 }
@@ -144,36 +124,13 @@ model ExerciseOption {
   @@map("exercise_options")
 }
 
-// Vocabulary Management
-model VocabularyItem {
-  id              Int           @id @default(autoincrement())
-  german          String
-  english         String
-  pronunciation   String?
-  partOfSpeech    String?       @map("part_of_speech")
-  gender          String?
-  plural          String?
-  level           LanguageLevel
-  frequency       Int           @default(1)
-  audioSrc        String?       @map("audio_src")
-  // imageSrc        String?       @map("image_src") // Later
-  exampleSentence String?       @map("example_sentence")
-  createdAt       DateTime      @default(now()) @map("created_at")
+model ExerciseProgress {
+  id          Int     @id @default(autoincrement())
+  // userId      String
+  challengeId Int
+  completed   Boolean @default(false)
+  completedAt DateTime? @map("completed_at")
 
-  vocabularyExercises VocabularyExercise[]
-
-  @@unique([german, level]) // constraint to avoid duplicates
-  @@map("vocabulary_items")
-}
-
-model VocabularyExercise {
-  id           Int @id @default(autoincrement())
-  exerciseId   Int @map("exercise_id")
-  vocabularyId Int @map("vocabulary_id")
-
-  exercise       Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
-  vocabularyItem VocabularyItem @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
-
-  @@unique([exerciseId, vocabularyId])
-  @@map("vocabulary_exercises")
+  Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
+  exerciseId Int?
 }
