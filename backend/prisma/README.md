@@ -23,8 +23,10 @@ Course (A1.1)
 -   Vocabulary check (Kiểm trả nghĩa của từ mới)
 
 **Nice to Have:**
+-   Add Quiz, challenges
 -   Vocabulary exercises with pictures
 -   Text to speech, speech to text
+-   Word audios, text audio
 
 Organize Template Data in JSON (Duolingo templates)
 
@@ -46,9 +48,9 @@ Gamification System
 ```
 
 ```
-Create new migrate(s) : npx prisma migrate dev --name init
+npx prisma migrate dev --name init :Create new migrate(s) : 
 npx prisma generate : (Apply for Clients after updateing schema.prisma)
-Drop the database, reapply all migrate: npx prisma migrate reset (Only if there aren't important data)
+npx prisma migrate reset: drop the database, reapply all migrate (Only if there aren't important data)
 (manually in pgadmin safer): 
 ```
 
