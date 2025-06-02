@@ -12,3 +12,7 @@ npm install --save @fortawesome/fontawesome-svg-core
 npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
 npm install --save @fortawesome/free-brands-svg-icons
+
+
+Mọi component trong app giờ có thể gọi:
+const { user, login, logout } = useAuth()

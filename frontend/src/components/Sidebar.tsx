@@ -27,7 +27,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       )}
     >
       <div className="flex justify-center mb-8">
-        <img src={logoIcon} alt="App Logo" className="w-12 h-12" />
+        <img src={logoIcon} alt="App Logo" className="size-20 object-contain" />
       </div>
 
       <div className="flex flex-col flex-grow">

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { useAuth } from '../hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -11,6 +10,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
@@ -20,7 +20,6 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ onClose, isSignup }: LoginModalProps) {
-  const { login } = useAuth()
   const [mode, setMode] = useState<'login' | 'signup'>(isSignup ? 'signup' : 'login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,12 +27,6 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Submitted:', { email, password, mode })
-
-    // Giả lập đăng nhập
-    login({
-      name: email.split('@')[0], // Lấy phần tên trước @ làm tên user
-    })
-
     onClose()
   }
 
@@ -60,10 +53,10 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="flex flex-col gap-4">
               <Button variant="outline" className="w-full cursor-pointer">
-                <FontAwesomeIcon icon={faApple} size="2x" /> Login with Apple
+                <FontAwesomeIcon icon={faApple} size='2x' />Login with Apple
               </Button>
               <Button variant="outline" className="w-full cursor-pointer">
-                <FontAwesomeIcon icon={faGoogle} size="2x" /> Login with Google
+                <FontAwesomeIcon icon={faGoogle} size='2x' /> Login with Google
               </Button>
             </div>
 
