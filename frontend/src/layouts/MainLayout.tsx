@@ -1,20 +1,34 @@
+// src/layouts/MainLayout.tsx
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import HeaderPanel from '../components/HeaderPanel';
 import { useState } from 'react';
 
 export default function MainLayout() {
   const [isExpanded, setIsExpanded] = useState(true);
+  const sidebarMargin = isExpanded ? 'ml-[200px]' : 'ml-16';
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      <main
-        className={`transition-all duration-300 ${
-          isExpanded ? 'ml-1/8 min-ml-[200px]' : 'ml-16'
-        } flex-1 p-4`}
+
+      <div
+        className={`
+          ${sidebarMargin}    
+          flex-1                  
+          relative                
+        `}
       >
-        <Outlet />
-      </main>
+        <div className="pt-16 flex justify-center overflow-auto h-full">
+          <div className="w-full max-w-3xl px-4">
+            <Outlet />
+          </div>
+        </div>
+      </div>
+
+      <aside className="w-[25%] min-w-[250px] bg-white border-l border-gray-200 p-6">
+        <HeaderPanel />
+      </aside>
     </div>
   );
 }
