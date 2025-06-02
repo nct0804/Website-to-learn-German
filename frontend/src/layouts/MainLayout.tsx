@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import HeaderPanel from '../components/HeaderPanel';
 import { useState } from 'react';
+import QuotePanel from '@/components/QuotePanel';
 
 export default function MainLayout() {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -28,6 +29,7 @@ export default function MainLayout() {
 
       <aside className="w-[25%] min-w-[250px] bg-white border-l border-gray-200 p-6">
         <HeaderPanel />
+        <QuotePanel />
       </aside>
     </div>
   );

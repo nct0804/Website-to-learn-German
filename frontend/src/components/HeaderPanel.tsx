@@ -11,7 +11,7 @@ export default function HeaderPanel() {
   if (!user) {
     // Chưa đăng nhập
     return (
-      <div className="w-full bg-[#fefbe8] rounded-lg p-4 shadow space-y-4">
+      <div className="w-full bg-[#fefbe8] rounded-lg p-4 shadow space-y-4 flex flex-col items-center">
         <h2 className="text-center text-sm font-semibold text-gray-700">
           Create a profile to save your progress!
         </h2>
@@ -21,7 +21,7 @@ export default function HeaderPanel() {
             setIsSignup(true)
             setShowModal(true)
           }}
-          className="w-full px-4 py-2 rounded-full bg-yellow-400 text-white font-semibold hover:bg-yellow-500"
+          className="w-[60%] px-4 py-2 rounded-full bg-[#FFB124] text-white font-semibold hover:bg-yellow-500 cursor-pointer"
         >
           REGISTER
         </button>
@@ -31,7 +31,7 @@ export default function HeaderPanel() {
             setIsSignup(false)
             setShowModal(true)
           }}
-          className="w-full px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600"
+          className="w-[60%] px-4 py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 cursor-pointer"
         >
           LOGIN
         </button>
@@ -43,6 +43,7 @@ export default function HeaderPanel() {
           />
         )}
       </div>
+
     )
   }
 

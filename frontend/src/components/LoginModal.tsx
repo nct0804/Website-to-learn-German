@@ -29,9 +29,8 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
     e.preventDefault()
     console.log('Submitted:', { email, password, mode })
 
-    // Giả lập đăng nhập
     login({
-      name: email.split('@')[0], // Lấy phần tên trước @ làm tên user
+      name: email.split('@')[0], 
     })
 
     onClose()

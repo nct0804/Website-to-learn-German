@@ -22,7 +22,7 @@ export default function UserPanel({ user, logout }: { user: any; logout: () => v
                     <img
                         src={user.avatarUrl || AvatarIcon}
                         alt="Avatar"
-                        className="w-12 h-12 rounded-full object-cover cursor-pointer hover:ring-2 hover:ring-yellow-400"
+                        className="w-12 h-12 rounded-full object-cover cursor-pointer hover:border-2 "
                     />
                 </Link>
                 <Link to="/">

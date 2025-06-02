@@ -38,8 +38,8 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
               key={item.to}
               to={item.to}
               className={clsx(
-                'flex items-center mb-2 rounded px-4 py-2 transition-colors hover:bg-yellow-100',
-                isActive ? 'bg-yellow-200 font-semibold' : ''
+                'flex items-center mb-2 rounded px-4 py-2 transition-colors duration-100 hover:bg-[#fbb024ae]',
+                isActive ? 'bg-[#fbb124] font-semibold' : ''
               )}
             >
               <div className="flex justify-center w-8">{item.icon}</div>
@@ -52,13 +52,13 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       <div className="flex flex-col items-center">
         <button
           onClick={toggleSidebar}
-          className="mb-4 p-2 rounded bg-yellow-200 hover:bg-yellow-300 transition-transform transform hover:scale-110 duration-300"
+          className="mb-4 p-2 rounded bg-[#fbb124] hover:bg-[#fbb024ae] transition-transform transform hover:scale-110 duration-300 cursor-pointer"
         >
           {isExpanded ? <X size={20} /> : <Menu size={20} />}
         </button>
         <Link
           to="/more"
-          className="p-1 rounded hover:bg-yellow-200 transition-transform transform hover:scale-110 duration-300"
+          className="p-1 rounded hover:bg-[#fbb024ae] transition-transform transform hover:scale-110 duration-300"
         >
           <MoreHorizontal size={28} />
         </Link>

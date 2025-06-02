@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import type { ReactNode } from 'react'
+import AvatarIcon from '../assets/icons/avatar.png'
 
 export interface User {
   name: string
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const mockUser: User = {
       name: userData.name || 'Guest',
       level: 1,
-      avatarUrl: userData.avatarUrl || '/default-avatar.png',
+      avatarUrl: userData.avatarUrl || `${AvatarIcon}`,
       fireCount: 0,
       brezelCount: 10,
       heartCount: 5,
