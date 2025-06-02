@@ -11,6 +11,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons'
+
 interface LoginModalProps {
   onClose: () => void
   isSignup: boolean
@@ -32,7 +35,7 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
       <Card className="relative w-full max-w-md">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 cursor-pointer"
         >
           <X size={24} />
         </button>
@@ -49,11 +52,11 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
         <CardContent>
           <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="flex flex-col gap-4">
-              <Button variant="outline" className="w-full">
-                🍎 Login with Apple
+              <Button variant="outline" className="w-full cursor-pointer">
+                <FontAwesomeIcon icon={faApple} size='2x' />Login with Apple
               </Button>
-              <Button variant="outline" className="w-full">
-                🔍 Login with Google
+              <Button variant="outline" className="w-full cursor-pointer">
+                <FontAwesomeIcon icon={faGoogle} size='2x' /> Login with Google
               </Button>
             </div>
 
@@ -95,7 +98,7 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
                 />
               </div>
 
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full cursor-pointer">
                 {mode === 'signup' ? 'Sign Up' : 'Login'}
               </Button>
             </div>
@@ -107,7 +110,7 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
                   <button
                     type="button"
                     onClick={() => setMode('login')}
-                    className="underline underline-offset-4 text-blue-500"
+                    className="underline underline-offset-4 text-blue-500 cursor-pointer"
                   >
                     Login
                   </button>
@@ -118,7 +121,7 @@ export function LoginModal({ onClose, isSignup }: LoginModalProps) {
                   <button
                     type="button"
                     onClick={() => setMode('signup')}
-                    className="underline underline-offset-4 text-blue-500"
+                    className="underline underline-offset-4 text-blue-500 cursor-pointer"
                   >
                     Sign up
                   </button>
