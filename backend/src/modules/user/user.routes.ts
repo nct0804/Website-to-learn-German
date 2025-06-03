@@ -14,7 +14,7 @@ const router = Router();
 
 router.post("/register", registerValidation, userController.register);
 router.post("/login", loginValidation, userController.login);
-router.post("/auth/refresh-token", userController.refreshToken);
+router.post("/refresh-token", userController.refreshToken);
 
 router.get("/me", authenticate, userController.getCurrentUser);
 router.post("/logout", authenticate, userController.logout);
