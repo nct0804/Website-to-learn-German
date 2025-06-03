@@ -69,3 +69,7 @@ When the models start growing larger
 
 ```
 
+## What is missing!!
+Sounds and Images for ExerciseOption(Hien tai dang la Optionoal) 
+Image for Course
+Sounds for GermanSound (Pronounciation)
