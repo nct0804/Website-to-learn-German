@@ -14,6 +14,12 @@ import {
 
 const REFRESH_DAYS = 30;
 
+export const getUserById = async (userId: string) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new NotFoundError("User not found");
+  return user;
+};
+
 export const registerUser = async (data: {
   email: string;
   password: string;
