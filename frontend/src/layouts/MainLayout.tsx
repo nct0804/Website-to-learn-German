@@ -1,4 +1,3 @@
-// src/layouts/MainLayout.tsx
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import HeaderPanel from '../components/HeaderPanel';
@@ -20,11 +19,24 @@ export default function MainLayout() {
           relative                
         `}
       >
-        <div className="pt-16 flex justify-center overflow-auto h-full">
+        <div className="pt-16 flex justify-center overflow-auto h-full custom-scroll">
           <div className="w-full max-w-3xl px-4">
             <Outlet />
           </div>
+          <style>
+            {`
+                .custom-scroll::-webkit-scrollbar {
+                display: none;
+                  }
+                  .custom-scroll {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                    }
+            `}
+          </style>
+
         </div>
+
       </div>
 
       <aside className="w-[25%] min-w-[250px] bg-white border-l border-gray-200 p-6">
