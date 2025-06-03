@@ -31,7 +31,14 @@ export const register = async (
       req.body
     );
     setCookies(res, token, refreshToken);
-    res.status(201).json({ success: true, data: { user: stripPw(user) } });
+    res.status(201).json({
+      success: true,
+      data: {
+        user: stripPw(user),
+        accessToken: token,
+        refreshToken,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -51,7 +58,10 @@ export const login = async (
       password
     );
     setCookies(res, token, refreshToken);
-    res.json({ success: true, data: { user: stripPw(user) } });
+    res.json({
+      success: true,
+      data: { user: stripPw(user), accessToken: token, refreshToken },
+    });
   } catch (err) {
     next(err);
   }
@@ -93,7 +103,7 @@ export const refreshToken = async (
     if (!refreshToken) throw new BadRequestError("No refresh token");
     const { token } = await userService.refreshAccessToken(refreshToken);
     setCookies(res, token);
-    res.json({ success: true, message: "Token refreshed" });
+    res.json({ success: true, message: "Token refreshed", accessToken: token });
   } catch (err) {
     next(err);
   }

@@ -3,7 +3,7 @@ import jwt, { SignOptions } from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { UnauthorizedError } from "./errors";
 
-const JWT_SECRET = process.env.JWT_SECRET || "default-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "15m";
 
 export const hashPassword = (password: string) => bcrypt.hash(password, 10);

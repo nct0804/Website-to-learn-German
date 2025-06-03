@@ -18,6 +18,8 @@ export const authenticate = async (
       ? authHeader.split(" ")[1]
       : req.cookies?.token;
 
+    console.log("Received token:", token);
+
     if (!token) throw new UnauthorizedError("No access token");
 
     const decoded = verifyToken(token);
