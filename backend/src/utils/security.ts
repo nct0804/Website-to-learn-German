@@ -21,4 +21,4 @@ export const verifyToken = (token: string) => {
   }
 };
 
-export const generateRefreshToken = () => uuidv4();
+export const generateRefreshToken = (id: string) => uuidv4();

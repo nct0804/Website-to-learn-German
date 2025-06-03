@@ -12,11 +12,11 @@ import {
 
 const router = Router();
 
-router.post("/auth/register", registerValidation, userController.register);
-router.post("/auth/login", loginValidation, userController.login);
+router.post("/register", registerValidation, userController.register);
+router.post("/login", loginValidation, userController.login);
 router.post("/auth/refresh-token", userController.refreshToken);
 
-router.get("/auth/me", authenticate, userController.getCurrentUser);
-router.post("/auth/logout", authenticate, userController.logout);
+router.get("/me", authenticate, userController.getCurrentUser);
+router.post("/logout", authenticate, userController.logout);
 
 export default router;
