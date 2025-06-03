@@ -55,15 +55,8 @@ npx prisma migrate reset: drop the database, reapply all migrate (Only if there 
 ```
 
 ```
-Manually editing database using pgAdmin (After running Docker)
-1.  Open pgAdmin
-2.  Clicks on "Add New Server"
-3.  Name: random
-4.  Host: localhost
-    port:5432
-    Maintaince Database : germangainsdb
-    Username: germangains
-    Passwort germangains
+Databank Table 
+npx prisma studio
 ```
 
 ## Insert, Delete, Update,.. data for models
