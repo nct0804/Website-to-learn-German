@@ -10,6 +10,7 @@ async function main() {
       title: "German A1.1",
       description: "Beginner German course - first level",
       level: "A1_1",
+      imageSrc: "",
       order: 1,
     }
   });
@@ -17,6 +18,7 @@ async function main() {
     data: {
       title: "German A1.2",
       description: "Beginner German course - second level",
+      imageSrc: "",
       level: "A1_2",
       order: 2,
     }
@@ -210,10 +212,10 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "Hallo", isCorrect: true, explanation: "This is the most common informal greeting", order: 1 },
-          { text: "Tschüss", isCorrect: false, explanation: "This means 'goodbye'", order: 2 },
-          { text: "Danke", isCorrect: false, explanation: "This means 'thank you'", order: 3 },
-          { text: "Bitte", isCorrect: false, explanation: "This means 'please' or 'you're welcome'", order: 4 }
+          { text: "Hallo", isCorrect: true,  order: 1 },
+          { text: "Tschüss", isCorrect: false, order: 2 },
+          { text: "Danke", isCorrect: false,  order: 3 },
+          { text: "Bitte", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -230,7 +232,7 @@ async function main() {
       xpReward: 2,
       exerciseOptions: {
         create: [
-          { text: "Tschüss", isCorrect: true, explanation: "This is an informal way to say goodbye", order: 1 },
+          { text: "Tschüss", isCorrect: true, order: 1 },
           { text: "Hallo", isCorrect: false, order: 2 },
           { text: "Guten Tag", isCorrect: false, order: 3 },
           { text: "Danke schön", isCorrect: false, order: 4 }
@@ -275,10 +277,10 @@ async function main() {
       xpReward: 2,
       exerciseOptions: {
         create: [
-          { text: "Wie heißt du?", isCorrect: true, explanation: "This is the informal way to ask 'What is your name?'", order: 1 },
-          { text: "Wer bist du?", isCorrect: false, explanation: "This means 'Who are you?'", order: 2 },
-          { text: "Woher kommst du?", isCorrect: false, explanation: "This means 'Where are you from?'", order: 3 },
-          { text: "Was machst du?", isCorrect: false, explanation: "This means 'What do you do?'", order: 4 }
+          { text: "Wie heißt du?", isCorrect: true, order: 1 },
+          { text: "Wer bist du?", isCorrect: false, order: 2 },
+          { text: "Woher kommst du?", isCorrect: false, order: 3 },
+          { text: "Was machst du?", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -295,10 +297,10 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "heiße", isCorrect: true, explanation: "'Ich heiße' means 'My name is' or 'I am called'", order: 1 },
-          { text: "bin", isCorrect: false, explanation: "'Ich bin' means 'I am' but is not used for stating your name", order: 2 },
-          { text: "komme", isCorrect: false, explanation: "'Ich komme' means 'I come from'", order: 3 },
-          { text: "mache", isCorrect: false, explanation: "'Ich mache' means 'I do/make'", order: 4 }
+          { text: "heiße", isCorrect: true,  order: 1 },
+          { text: "bin", isCorrect: false, order: 2 },
+          { text: "komme", isCorrect: false, order: 3 },
+          { text: "mache", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -315,7 +317,7 @@ async function main() {
       xpReward: 4,
       exerciseOptions: {
         create: [
-          { text: "Hallo, ich heiße Maria. Wie heißt du?", isCorrect: true, explanation: "This is the correct order for 'Hello, my name is Maria. What's your name?'", order: 1 }
+          { text: "Hallo, ich heiße Maria. Wie heißt du?", isCorrect: true, order: 1 }
         ]
       }
     }
@@ -332,10 +334,10 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "Wie heißen Sie?", isCorrect: true, explanation: "This is the formal way with 'Sie'", order: 1 },
-          { text: "Wie heißt du?", isCorrect: false, explanation: "This is informal with 'du'", order: 2 },
-          { text: "Wer sind Sie?", isCorrect: false, explanation: "This means 'Who are you?' (formal)", order: 3 },
-          { text: "Wie ist dein Name?", isCorrect: false, explanation: "This is informal with 'dein'", order: 4 }
+          { text: "Wie heißen Sie?", isCorrect: true, order: 1 },
+          { text: "Wie heißt du?", isCorrect: false, order: 2 },
+          { text: "Wer sind Sie?", isCorrect: false, order: 3 },
+          { text: "Wie ist dein Name?", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -358,9 +360,9 @@ async function main() {
       exerciseOptions: {
         create: [
           { text: "fünf", isCorrect: true, order: 1 },
-          { text: "vier", isCorrect: false, explanation: "This means 'four'", order: 2 },
-          { text: "sechs", isCorrect: false, explanation: "This means 'six'", order: 3 },
-          { text: "sieben", isCorrect: false, explanation: "This means 'seven'", order: 4 }
+          { text: "vier", isCorrect: false, order: 2 },
+          { text: "sechs", isCorrect: false, order: 3 },
+          { text: "sieben", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -381,7 +383,7 @@ async function main() {
           { text: "2 = zwei", isCorrect: true, order: 2 },
           { text: "3 = drei", isCorrect: true, order: 3 },
           { text: "4 = vier", isCorrect: true, order: 4 },
-          { text: "5 = sechs", isCorrect: false, explanation: "'sechs' is 6, not 5", order: 5 }
+          { text: "5 = sechs", isCorrect: false, order: 5 }
         ]
       }
     }
@@ -398,10 +400,10 @@ async function main() {
       xpReward: 2,
       exerciseOptions: {
         create: [
-          { text: "vier", isCorrect: true, explanation: "'vier' is the German word for 'four'", order: 1 },
-          { text: "sechs", isCorrect: false, explanation: "'sechs' means 'six'", order: 2 },
-          { text: "sieben", isCorrect: false, explanation: "'sieben' means 'seven'", order: 3 },
-          { text: "acht", isCorrect: false, explanation: "'acht' means 'eight'", order: 4 }
+          { text: "vier", isCorrect: true, order: 1 },
+          { text: "sechs", isCorrect: false, order: 2 },
+          { text: "sieben", isCorrect: false, order: 3 },
+          { text: "acht", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -418,10 +420,10 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "10", isCorrect: true, explanation: "'zehn' is the German word for '10'", order: 1 },
-          { text: "7", isCorrect: false, explanation: "'sieben' is the German word for '7'", order: 2 },
-          { text: "17", isCorrect: false, explanation: "'siebzehn' is the German word for '17'", order: 3 },
-          { text: "11", isCorrect: false, explanation: "'elf' is the German word for '11'", order: 4 }
+          { text: "10", isCorrect: true, order: 1 },
+          { text: "7", isCorrect: false,  order: 2 },
+          { text: "17", isCorrect: false, order: 3 },
+          { text: "11", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -444,9 +446,9 @@ async function main() {
       exerciseOptions: {
         create: [
           { text: "dreißig", isCorrect: true, order: 1 },
-          { text: "dreizehn", isCorrect: false, explanation: "This means '13'", order: 2 },
-          { text: "dreizig", isCorrect: false, explanation: "This is incorrect spelling", order: 3 },
-          { text: "dreiundzwanzig", isCorrect: false, explanation: "This means '23'", order: 4 }
+          { text: "dreizehn", isCorrect: false, order: 2 },
+          { text: "dreizig", isCorrect: false, order: 3 },
+          { text: "dreiundzwanzig", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -463,10 +465,10 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "fünfundzwanzig", isCorrect: true, explanation: "In German, 25 is literally 'five-and-twenty'", order: 1 },
-          { text: "zwanzigfünf", isCorrect: false, explanation: "German doesn't put the tens before the ones like English", order: 2 },
-          { text: "zwanzigundfünf", isCorrect: false, explanation: "The units come before 'und' in German", order: 3 },
-          { text: "fünfzwanzig", isCorrect: false, explanation: "Missing the 'und' between numbers", order: 4 }
+          { text: "fünfundzwanzig", isCorrect: true, order: 1 },
+          { text: "zwanzigfünf", isCorrect: false, order: 2 },
+          { text: "zwanzigundfünf", isCorrect: false, order: 3 },
+          { text: "fünfzwanzig", isCorrect: false, order: 4 }
         ]
       }
     }
@@ -483,7 +485,7 @@ async function main() {
       xpReward: 4,
       exerciseOptions: {
         create: [
-          { text: "neunundneunzig", isCorrect: true, explanation: "Literally 'nine-and-ninety'", order: 1 },
+          { text: "neunundneunzig", isCorrect: true, order: 1 },
           { text: "neunzigneun", isCorrect: false, order: 2 },
           { text: "neunneunzig", isCorrect: false, order: 3 },
           { text: "neunzigundneun", isCorrect: false, order: 4 }
@@ -503,7 +505,7 @@ async function main() {
       xpReward: 4,
       exerciseOptions: {
         create: [
-          { text: "zweiundvierzig", isCorrect: true, explanation: "This is how to say 42 in German", order: 1 },
+          { text: "zweiundvierzig", isCorrect: true, order: 1 },
           { text: "vierzigzwei", isCorrect: false, order: 2 },
           { text: "vierzig-zwei", isCorrect: false, order: 3 },
           { text: "zweiviertzig", isCorrect: false, order: 4 }
@@ -511,6 +513,114 @@ async function main() {
       }
     }
   });
+
+/** ====================================================================================================== */
+
+
+// Vowels
+const soundA = await prisma.germanSound.create({
+  data: {
+    symbol: "a",
+    exampleWord: "Mann",
+    audioSrc: "",
+    type: "VOWEL",
+  }
+});
+
+const soundE = await prisma.germanSound.create({
+  data: {
+    symbol: "e",
+    exampleWord: "essen",
+    audioSrc: "",
+    type: "VOWEL",
+  }
+});
+
+// Umlauts
+const soundUmlautA = await prisma.germanSound.create({
+  data: {
+    symbol: "ä",
+    exampleWord: "Männer",
+    audioSrc: "",
+    type: "UMLAUT",
+  }
+});
+
+const soundUmlautO = await prisma.germanSound.create({
+  data: {
+    symbol: "ö",
+    exampleWord: "schön",
+    audioSrc: "",
+    type: "UMLAUT",
+  }
+});
+
+const soundUmlautU = await prisma.germanSound.create({
+  data: {
+    symbol: "ü",
+    exampleWord: "über",
+    audioSrc: "",
+    type: "UMLAUT",
+  }
+});
+
+// Sound Groups
+const vowelGroup = await prisma.soundGroup.create({
+  data: {
+    name: "Basic Vowels",
+    order: 1
+  }
+});
+
+const umlautGroup = await prisma.soundGroup.create({
+  data: {
+    name: "Umlauts",
+    order: 2
+  }
+});
+
+// Associate sounds with groups
+await Promise.all([
+  prisma.soundGroupSound.create({
+    data: { soundId: soundA.id, groupId: vowelGroup.id }
+  }),
+  prisma.soundGroupSound.create({
+    data: { soundId: soundE.id, groupId: vowelGroup.id }
+  }),
+  prisma.soundGroupSound.create({
+    data: { soundId: soundUmlautA.id, groupId: umlautGroup.id }
+  }),
+  prisma.soundGroupSound.create({
+    data: { soundId: soundUmlautO.id, groupId: umlautGroup.id }
+  }),
+  prisma.soundGroupSound.create({
+    data: { soundId: soundUmlautU.id, groupId: umlautGroup.id }
+  })
+]);
+
+// Create a pronunciation module and lesson
+const modulePronunciation = await prisma.module.create({
+  data: {
+    courseId: courseA1_1.id,
+    title: "German Pronunciation",
+    description: "Master German sounds and pronunciation",
+    order: 0, // Make it the first module
+    xpReward: 15,
+    estimatedTime: 30,
+    isLocked: false,
+  }
+});
+
+const lessonVowels = await prisma.lesson.create({
+  data: {
+    moduleId: modulePronunciation.id,
+    title: "German Vowels & Umlauts",
+    description: "Learn the basic vowel sounds and umlauts",
+    order: 1,
+    xpReward: 5,
+    estimatedTime: 15,
+  }
+});
 
   console.log("Test data created!");
 }
