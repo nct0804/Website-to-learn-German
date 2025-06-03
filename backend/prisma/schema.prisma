@@ -25,6 +25,7 @@ enum ExerciseType {
   VOCABULARY_CHECK
   FILL_IN_BLANK
   SENTENCE_ORDER
+  PRONUNCIATION_PRACTICE
 }
 
 // Course Structure
@@ -132,4 +133,51 @@ model ExerciseProgress {
   completedAt DateTime? @map("completed_at")
 
   Exercise Exercise? @relation(fields: [exerciseId], references: [id])
+}
+
+/**
+ * ==============================================================================
+ */
+enum SoundType {
+  VOWEL
+  CONSONANT
+  DIPHTHONG
+  UMLAUT
+}
+
+model GermanSound {
+  id          Int    @id @default(autoincrement())
+  symbol      String //(ä, ö, ü, ß, ...)
+  exampleWord String //("Mädchen", "König",...)
+
+  audioSrc  String    @map("audio_src")
+  type      SoundType
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  soundGroups SoundGroupSound[]
+
+  @@map("german_sounds")
+}
+
+model SoundGroup {
+  id        Int      @id @default(autoincrement())
+  name      String // e.g., "Umlauts", "Consonants", "Vowels"
+  order     Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  sounds SoundGroupSound[]
+
+  @@map("sound_groups")
+}
+
+model SoundGroupSound {
+  id      Int @id @default(autoincrement())
+  soundId Int @map("sound_id")
+  groupId Int @map("group_id")
+
+  sound GermanSound @relation(fields: [soundId], references: [id], onDelete: Cascade)
+  group SoundGroup  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([soundId, groupId])
+  @@map("sound_group_sounds")
 }
