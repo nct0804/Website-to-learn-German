@@ -32,7 +32,7 @@ model Course {
   id          Int           @id @default(autoincrement())
   title       String //"German A1.1", "German A1.2", etc.
   description String?
-  // imageSrc    String        @map("image_src") // Later
+  imageSrc    String        @map("image_src")
   level       LanguageLevel
   order       Int
   isActive    Boolean       @default(true) @map("is_active")
@@ -110,14 +110,14 @@ model Exercise {
 }
 
 model ExerciseOption {
-  id          Int     @id @default(autoincrement())
-  exerciseId  Int     @map("exercise_id")
-  text        String
-  isCorrect   Boolean @map("is_correct")
-  explanation String?
-  // imageSrc    String? @map("image_src")
-  // audioSrc    String? @map("audio_src") // later on for Nice to Have feature
-  order       Int?
+  id         Int     @id @default(autoincrement())
+  exerciseId Int     @map("exercise_id")
+  text       String
+  isCorrect  Boolean @map("is_correct")
+  // explanation String?
+  imageSrc   String? @map("image_src")
+  audioSrc   String? @map("audio_src") // later on for Nice to Have feature
+  order      Int?
 
   exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
 
@@ -125,12 +125,11 @@ model ExerciseOption {
 }
 
 model ExerciseProgress {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   // userId      String
-  challengeId Int
-  completed   Boolean @default(false)
+  exerciseId  Int?
+  completed   Boolean   @default(false)
   completedAt DateTime? @map("completed_at")
 
-  Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
-  exerciseId Int?
+  Exercise Exercise? @relation(fields: [exerciseId], references: [id])
 }
