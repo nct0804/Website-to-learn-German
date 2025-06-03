@@ -1,234 +1,108 @@
-import { Request, Response } from "express";
-import userService from "./user.service";
-import { AuthenticatedRequest } from "../../middleware/auth.middleware";
+import { Request, Response, NextFunction } from "express";
+import * as userService from "./user.service";
+import { AuthRequest } from "../../middleware/auth.middleware";
+import { BadRequestError } from "../../utils/errors";
 
-export class UserController {
-  async register(req: Request, res: Response): Promise<void> {
-    try {
-      const { email, username, password, firstName, lastName } = req.body;
+const ACCESS_COOKIE_MS = 15 * 60 * 1000;
+const REFRESH_COOKIE_MS = 30 * 24 * 60 * 60 * 1000;
 
-      // Validation
-      if (!email || !username || !password) {
-        res.status(400).json({
-          error: "Email, username, and password are required",
-          code: "MISSING_FIELDS",
-        });
-        return;
-      }
+const setCookies = (res: Response, token: string, refresh?: string) => {
+  const common = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none" as const,
+    path: "/",
+  };
+  res.cookie("token", token, { ...common, maxAge: ACCESS_COOKIE_MS });
+  if (refresh)
+    res.cookie("refreshToken", refresh, {
+      ...common,
+      maxAge: REFRESH_COOKIE_MS,
+    });
+};
 
-      // Email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        res.status(400).json({
-          error: "Invalid email format",
-          code: "INVALID_EMAIL",
-        });
-        return;
-      }
-
-      // Password validation
-      if (password.length < 6) {
-        res.status(400).json({
-          error: "Password must be at least 6 characters long",
-          code: "WEAK_PASSWORD",
-        });
-        return;
-      }
-
-      const user = await userService.createUser({
-        email,
-        username,
-        password,
-        firstName,
-        lastName,
-      });
-
-      res.status(201).json({
-        message: "User registered successfully",
-        user,
-      });
-    } catch (error: any) {
-      console.error("Registration error:", error);
-
-      if (error.message.includes("already exists")) {
-        res.status(409).json({
-          error: error.message,
-          code: "USER_EXISTS",
-        });
-        return;
-      }
-
-      res.status(500).json({
-        error: "Registration failed",
-        code: "REGISTRATION_ERROR",
-      });
-    }
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user, token, refreshToken } = await userService.registerUser(
+      req.body
+    );
+    setCookies(res, token, refreshToken);
+    res.status(201).json({ success: true, data: { user: stripPw(user) } });
+  } catch (err) {
+    next(err);
   }
+};
 
-  async login(req: Request, res: Response): Promise<void> {
-    try {
-      const { email, password } = req.body;
-
-      if (!email || !password) {
-        res.status(400).json({
-          error: "Email and password are required",
-          code: "MISSING_CREDENTIALS",
-        });
-        return;
-      }
-
-      const authResult = await userService.loginUser({ email, password });
-
-      // Set refresh token as httpOnly cookie
-      res.cookie("refreshToken", authResult.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
-
-      res.json({
-        message: "Login successful",
-        user: authResult.user,
-        accessToken: authResult.accessToken,
-      });
-    } catch (error: any) {
-      console.error("Login error:", error);
-
-      if (error.message === "Invalid credentials") {
-        res.status(401).json({
-          error: "Invalid email or password",
-          code: "INVALID_CREDENTIALS",
-        });
-        return;
-      }
-
-      res.status(500).json({
-        error: "Login failed",
-        code: "LOGIN_ERROR",
-      });
-    }
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      throw new BadRequestError("Email + password required");
+    const { user, token, refreshToken } = await userService.loginUser(
+      email,
+      password
+    );
+    setCookies(res, token, refreshToken);
+    res.json({ success: true, data: { user: stripPw(user) } });
+  } catch (err) {
+    next(err);
   }
+};
 
-  async getMe(req: AuthenticatedRequest, res: Response): Promise<void> {
-    try {
-      if (!req.user) {
-        res.status(401).json({
-          error: "User not authenticated",
-          code: "NOT_AUTHENTICATED",
-        });
-        return;
-      }
-
-      res.json({
-        user: req.user,
-      });
-    } catch (error) {
-      console.error("Get user error:", error);
-      res.status(500).json({
-        error: "Failed to get user information",
-        code: "GET_USER_ERROR",
-      });
-    }
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await userService.logoutUser(req.cookies.refreshToken);
+    clearCookies(res);
+    res.json({ success: true, message: "Logged out" });
+  } catch (err) {
+    next(err);
   }
+};
 
-  async updateProgress(
-    req: AuthenticatedRequest,
-    res: Response
-  ): Promise<void> {
-    try {
-      if (!req.userId) {
-        res.status(401).json({
-          error: "User not authenticated",
-          code: "NOT_AUTHENTICATED",
-        });
-        return;
-      }
-
-      const { xpGained } = req.body;
-
-      if (typeof xpGained !== "number" || xpGained < 0) {
-        res.status(400).json({
-          error: "Invalid XP amount",
-          code: "INVALID_XP",
-        });
-        return;
-      }
-
-      const updatedUser = await userService.updateUserProgress(
-        req.userId,
-        xpGained
-      );
-
-      res.json({
-        message: "Progress updated successfully",
-        user: updatedUser,
-      });
-    } catch (error: any) {
-      console.error("Update progress error:", error);
-
-      if (error.message === "User not found") {
-        res.status(404).json({
-          error: "User not found",
-          code: "USER_NOT_FOUND",
-        });
-        return;
-      }
-
-      res.status(500).json({
-        error: "Failed to update progress",
-        code: "UPDATE_PROGRESS_ERROR",
-      });
-    }
+export const getCurrentUser = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.json({ success: true, data: { user: stripPw(req.user!) } });
+  } catch (err) {
+    next(err);
   }
+};
 
-  async refreshToken(req: Request, res: Response): Promise<void> {
-    try {
-      const refreshToken = req.cookies.refreshToken;
-
-      if (!refreshToken) {
-        res.status(401).json({
-          error: "Refresh token missing",
-          code: "REFRESH_TOKEN_MISSING",
-        });
-        return;
-      }
-
-      const result = await userService.refreshAccessToken(refreshToken);
-
-      res.json({
-        accessToken: result.accessToken,
-      });
-    } catch (error: any) {
-      console.error("Refresh token error:", error);
-
-      res.status(401).json({
-        error: "Invalid or expired refresh token",
-        code: "INVALID_REFRESH_TOKEN",
-      });
-    }
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) throw new BadRequestError("No refresh token");
+    const { token } = await userService.refreshAccessToken(refreshToken);
+    setCookies(res, token);
+    res.json({ success: true, message: "Token refreshed" });
+  } catch (err) {
+    next(err);
   }
+};
 
-  async logout(req: Request, res: Response): Promise<void> {
-    try {
-      const refreshToken = req.cookies.refreshToken;
-
-      if (refreshToken) {
-        await userService.logout(refreshToken);
-      }
-
-      res.clearCookie("refreshToken");
-      res.json({
-        message: "Logout successful",
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
-      res.status(500).json({
-        error: "Logout failed",
-        code: "LOGOUT_ERROR",
-      });
-    }
-  }
-}
-
-export default new UserController();
+const stripPw = <T extends { password?: unknown }>(u: T) => ({
+  ...u,
+  password: undefined,
+});
+const clearCookies = (res: Response) => {
+  ["token", "refreshToken"].forEach((c) => res.clearCookie(c, { path: "/" }));
+};
