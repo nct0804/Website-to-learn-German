@@ -73,6 +73,7 @@ When the models start growing larger
 Sounds and Images for ExerciseOption(Hien tai dang la Optionoal) 
 Image for Course
 Sounds for GermanSound (Pronounciation)
+```
 
 # Current Database Structure
- ![alt text](http://url/to/img.png)
+ ![alt text](backend/archive/uml.png)
