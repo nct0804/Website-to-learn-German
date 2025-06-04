@@ -1,11 +1,17 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, ExerciseType, LanguageLevel, SoundType } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 // use `prisma` in your application to read and write data in your DB
 
 async function main() {
-// Testing creation of a lesson
-      const courseA1_1 = await prisma.course.create({
+  console.log('🌱 Starting database seed...');
+
+  // ======================================================================
+  // COURSES
+  // ======================================================================
+  console.log('\n🎓 Creating courses...');
+
+  const courseA1_1 = await prisma.course.create({
     data: {
       title: "German A1.1",
       description: "Beginner German course - first level",
@@ -14,6 +20,7 @@ async function main() {
       order: 1,
     }
   });
+  
   const courseA1_2 = await prisma.course.create({
     data: {
       title: "German A1.2",
@@ -24,8 +31,14 @@ async function main() {
     }
   });
 
-  // Modules A1.1
+  console.log(`Created courses: ${courseA1_1.title}, ${courseA1_2.title}`);
 
+  // ======================================================================
+  // MODULES
+  // ======================================================================
+  console.log('\n📚 Creating modules...');
+
+  // Modules A1.1
   const moduleGreetings = await prisma.module.create({
     data: {
       courseId: courseA1_1.id,
@@ -63,7 +76,6 @@ async function main() {
   });
 
   // Modules A1.2
-
   const moduleDailyActivities = await prisma.module.create({
     data: {
       courseId: courseA1_2.id,
@@ -88,6 +100,13 @@ async function main() {
       isLocked: true,
     }
   });
+
+  console.log(`Created ${5} modules`);
+
+  // ======================================================================
+  // MODULE PREREQUISITES
+  // ======================================================================
+  console.log('\n🔄 Setting up module prerequisites...');
 
   // Create prerequisites for modules
   await prisma.modulePrerequisite.create({
@@ -121,9 +140,12 @@ async function main() {
     }
   });
 
+  console.log(`Set up 4 module prerequisites`);
 
-  // LESSONS FOR GREETINGS MODULE
-  console.log('\n📖 Creating lessons for Greetings module...')
+  // ======================================================================
+  // LESSONS
+  // ======================================================================
+  console.log('\n📖 Creating lessons for all modules...');
   
   // Lesson 1: Basic Greetings
   const lessonBasicGreetings = await prisma.lesson.create({
@@ -149,7 +171,7 @@ async function main() {
     }
   });
 
-  console.log(`Created lessons: ${lessonBasicGreetings.title} and ${lessonIntroductions.title}`)
+  console.log(`Created lessons: ${lessonBasicGreetings.title} and ${lessonIntroductions.title}`);
 
   // LESSONS FOR NUMBERS MODULE
   const lessonNumbers1 = await prisma.lesson.create({
@@ -167,19 +189,20 @@ async function main() {
   const lessonNumbers2 = await prisma.lesson.create({
     data: {
       moduleId: moduleNumbers.id,
-      title: "Numbers 20-100",
-      description: "Learn to count from 10 to 100 in German",
+      title: "Numbers 21-100",
+      description: "Learn to count from 21 to 100 in German",
       order: 2,
       xpReward: 15,
       estimatedTime: 25,
     }
   });
 
+  console.log(`Created lessons for numbers module: ${lessonNumbers1.title} and ${lessonNumbers2.title}`);
 
   // ======================================================================
   // EXERCISES FOR BASIC GREETINGS LESSON
   // ======================================================================
-  console.log('\n🧩 Creating exercises for Basic Greetings lesson...')
+  console.log('\n🧩 Creating exercises for Basic Greetings lesson...');
 
   // Exercise 1: Multiple Choice - Hello
   const exerciseHelloMC = await prisma.exercise.create({
@@ -201,7 +224,8 @@ async function main() {
       }
     }
   });
-// Exercise 2: Fill in Blank - Hello Dialog
+
+  // Exercise 2: Fill in Blank - Hello Dialog
   const exerciseHelloFillBlank = await prisma.exercise.create({
     data: {
       lessonId: lessonBasicGreetings.id,
@@ -212,16 +236,16 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "Hallo", isCorrect: true,  order: 1 },
+          { text: "Hallo", isCorrect: true, order: 1 },
           { text: "Tschüss", isCorrect: false, order: 2 },
-          { text: "Danke", isCorrect: false,  order: 3 },
+          { text: "Danke", isCorrect: false, order: 3 },
           { text: "Bitte", isCorrect: false, order: 4 }
         ]
       }
     }
   });
 
-   // Exercise 3: Multiple Choice - Goodbye
+  // Exercise 3: Multiple Choice - Goodbye
   const exerciseGoodbyeMC = await prisma.exercise.create({
     data: {
       lessonId: lessonBasicGreetings.id,
@@ -261,10 +285,10 @@ async function main() {
     }
   });
 
- // ======================================================================
+  // ======================================================================
   // EXERCISES FOR INTRODUCTIONS LESSON
   // ======================================================================
-  console.log('\n🧩 Creating exercises for Introductions lesson...')
+  console.log('\n🧩 Creating exercises for Introductions lesson...');
 
   // Exercise 1: How to ask someone's name
   const exerciseAskName = await prisma.exercise.create({
@@ -297,7 +321,7 @@ async function main() {
       xpReward: 3,
       exerciseOptions: {
         create: [
-          { text: "heiße", isCorrect: true,  order: 1 },
+          { text: "heiße", isCorrect: true, order: 1 },
           { text: "bin", isCorrect: false, order: 2 },
           { text: "komme", isCorrect: false, order: 3 },
           { text: "mache", isCorrect: false, order: 4 }
@@ -323,7 +347,7 @@ async function main() {
     }
   });
 
-   // Exercise 4: Formal vs Informal Introduction
+  // Exercise 4: Formal vs Informal Introduction
   const exerciseFormalIntro = await prisma.exercise.create({
     data: {
       lessonId: lessonIntroductions.id,
@@ -343,10 +367,10 @@ async function main() {
     }
   });
 
-// ======================================================================
+  // ======================================================================
   // EXERCISES FOR NUMBERS 0-20 LESSON
   // ======================================================================
-  console.log('\n🧩 Creating exercises for Numbers 0-20 lesson...')
+  console.log('\n🧩 Creating exercises for Numbers 0-20 lesson...');
 
   // Exercise 1: Basic Numbers
   const exerciseBasicNumbers = await prisma.exercise.create({
@@ -389,7 +413,7 @@ async function main() {
     }
   });
 
-// Exercise 3: Fill in Blank - Count Sequence
+  // Exercise 3: Fill in Blank - Count Sequence
   const exerciseCountSequence = await prisma.exercise.create({
     data: {
       lessonId: lessonNumbers1.id,
@@ -421,7 +445,7 @@ async function main() {
       exerciseOptions: {
         create: [
           { text: "10", isCorrect: true, order: 1 },
-          { text: "7", isCorrect: false,  order: 2 },
+          { text: "7", isCorrect: false, order: 2 },
           { text: "17", isCorrect: false, order: 3 },
           { text: "11", isCorrect: false, order: 4 }
         ]
@@ -429,10 +453,10 @@ async function main() {
     }
   });
 
- // ======================================================================
+  // ======================================================================
   // EXERCISES FOR NUMBERS 21-100 LESSON
   // ======================================================================
-  console.log('\n🧩 Creating exercises for Numbers 21-100 lesson...')
+  console.log('\n🧩 Creating exercises for Numbers 21-100 lesson...');
 
   // Exercise 1: Tens Pattern
   const exerciseTens = await prisma.exercise.create({
@@ -474,7 +498,7 @@ async function main() {
     }
   });
 
-   // Exercise 3: Larger Numbers
+  // Exercise 3: Larger Numbers
   const exerciseLargerNumbers = await prisma.exercise.create({
     data: {
       lessonId: lessonNumbers2.id,
@@ -514,122 +538,221 @@ async function main() {
     }
   });
 
-/** ====================================================================================================== */
+  // ======================================================================
+  // PRONUNCIATION TAB (SEPARATE FEATURE)
+  // ======================================================================
+  console.log('\n🔊 Creating pronunciation tab elements...');
 
+  // Vowels
+  const soundA = await prisma.germanSound.create({
+    data: {
+      symbol: "a",
+      exampleWord: "Mann",
+      audioSrc: "",
+      type: "VOWEL",
+    }
+  });
 
-// Vowels
-const soundA = await prisma.germanSound.create({
-  data: {
-    symbol: "a",
-    exampleWord: "Mann",
-    audioSrc: "",
-    type: "VOWEL",
-  }
-});
+  const soundE = await prisma.germanSound.create({
+    data: {
+      symbol: "e",
+      exampleWord: "essen",
+      audioSrc: "",
+      type: "VOWEL",
+    }
+  });
 
-const soundE = await prisma.germanSound.create({
-  data: {
-    symbol: "e",
-    exampleWord: "essen",
-    audioSrc: "",
-    type: "VOWEL",
-  }
-});
+  const soundI = await prisma.germanSound.create({
+    data: {
+      symbol: "i",
+      exampleWord: "bitter",
+      audioSrc: "",
+      type: "VOWEL",
+    }
+  });
 
-// Umlauts
-const soundUmlautA = await prisma.germanSound.create({
-  data: {
-    symbol: "ä",
-    exampleWord: "Männer",
-    audioSrc: "",
-    type: "UMLAUT",
-  }
-});
+  const soundO = await prisma.germanSound.create({
+    data: {
+      symbol: "o",
+      exampleWord: "Sonne",
+      audioSrc: "",
+      type: "VOWEL",
+    }
+  });
 
-const soundUmlautO = await prisma.germanSound.create({
-  data: {
-    symbol: "ö",
-    exampleWord: "schön",
-    audioSrc: "",
-    type: "UMLAUT",
-  }
-});
+  const soundU = await prisma.germanSound.create({
+    data: {
+      symbol: "u",
+      exampleWord: "Mutter",
+      audioSrc: "",
+      type: "VOWEL",
+    }
+  });
 
-const soundUmlautU = await prisma.germanSound.create({
-  data: {
-    symbol: "ü",
-    exampleWord: "über",
-    audioSrc: "",
-    type: "UMLAUT",
-  }
-});
+  // Umlauts
+  const soundUmlautA = await prisma.germanSound.create({
+    data: {
+      symbol: "ä",
+      exampleWord: "Männer",
+      audioSrc: "",
+      type: "UMLAUT",
+    }
+  });
 
-// Sound Groups
-const vowelGroup = await prisma.soundGroup.create({
-  data: {
-    name: "Basic Vowels",
-    order: 1
-  }
-});
+  const soundUmlautO = await prisma.germanSound.create({
+    data: {
+      symbol: "ö",
+      exampleWord: "schön",
+      audioSrc: "",
+      type: "UMLAUT",
+    }
+  });
 
-const umlautGroup = await prisma.soundGroup.create({
-  data: {
-    name: "Umlauts",
-    order: 2
-  }
-});
+  const soundUmlautU = await prisma.germanSound.create({
+    data: {
+      symbol: "ü",
+      exampleWord: "über",
+      audioSrc: "",
+      type: "UMLAUT",
+    }
+  });
 
-// Associate sounds with groups
-await Promise.all([
-  prisma.soundGroupSound.create({
-    data: { soundId: soundA.id, groupId: vowelGroup.id }
-  }),
-  prisma.soundGroupSound.create({
-    data: { soundId: soundE.id, groupId: vowelGroup.id }
-  }),
-  prisma.soundGroupSound.create({
-    data: { soundId: soundUmlautA.id, groupId: umlautGroup.id }
-  }),
-  prisma.soundGroupSound.create({
-    data: { soundId: soundUmlautO.id, groupId: umlautGroup.id }
-  }),
-  prisma.soundGroupSound.create({
-    data: { soundId: soundUmlautU.id, groupId: umlautGroup.id }
-  })
-]);
+  // Special consonants
+  const soundEszett = await prisma.germanSound.create({
+    data: {
+      symbol: "ß",
+      exampleWord: "straße",
+      audioSrc: "",
+      type: "CONSONANT",
+    }
+  });
 
-// Create a pronunciation module and lesson
-const modulePronunciation = await prisma.module.create({
-  data: {
-    courseId: courseA1_1.id,
-    title: "German Pronunciation",
-    description: "Master German sounds and pronunciation",
-    order: 0, // Make it the first module
-    xpReward: 15,
-    estimatedTime: 30,
-    isLocked: false,
-  }
-});
+  const soundCH = await prisma.germanSound.create({
+    data: {
+      symbol: "ch",
+      exampleWord: "ich",
+      audioSrc: "",
+      type: "CONSONANT",
+    }
+  });
 
-const lessonVowels = await prisma.lesson.create({
-  data: {
-    moduleId: modulePronunciation.id,
-    title: "German Vowels & Umlauts",
-    description: "Learn the basic vowel sounds and umlauts",
-    order: 1,
-    xpReward: 5,
-    estimatedTime: 15,
-  }
-});
+  // Sound Groups
+  const vowelGroup = await prisma.soundGroup.create({
+    data: {
+      name: "Basic Vowels",
+      order: 1
+    }
+  });
 
-  console.log("Test data created!");
+  const umlautGroup = await prisma.soundGroup.create({
+    data: {
+      name: "Umlauts",
+      order: 2
+    }
+  });
+
+  const specialConsonantsGroup = await prisma.soundGroup.create({
+    data: {
+      name: "Special Consonants",
+      order: 3
+    }
+  });
+
+  // Associate sounds with groups
+  await Promise.all([
+    // Vowels
+    prisma.soundGroupSound.create({
+      data: { soundId: soundA.id, groupId: vowelGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundE.id, groupId: vowelGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundI.id, groupId: vowelGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundO.id, groupId: vowelGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundU.id, groupId: vowelGroup.id }
+    }),
+    
+    // Umlauts
+    prisma.soundGroupSound.create({
+      data: { soundId: soundUmlautA.id, groupId: umlautGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundUmlautO.id, groupId: umlautGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundUmlautU.id, groupId: umlautGroup.id }
+    }),
+    
+    // Special consonants
+    prisma.soundGroupSound.create({
+      data: { soundId: soundEszett.id, groupId: specialConsonantsGroup.id }
+    }),
+    prisma.soundGroupSound.create({
+      data: { soundId: soundCH.id, groupId: specialConsonantsGroup.id }
+    })
+  ]);
+
+  console.log(`Created ${await prisma.germanSound.count()} German sounds in ${await prisma.soundGroup.count()} sound groups`);
+
+  // ======================================================================
+  // EXERCISE PROGRESS (SAMPLE DATA)
+  // ======================================================================
+  console.log('\n📊 Creating sample exercise progress records...');
+
+  // Create some sample progress data
+  await prisma.exerciseProgress.create({
+    data: {
+      exerciseId: exerciseHelloMC.id,
+      completed: true,
+      completedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
+    }
+  });
+
+  await prisma.exerciseProgress.create({
+    data: {
+      exerciseId: exerciseHelloFillBlank.id,
+      completed: true,
+      completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
+    }
+  });
+
+  await prisma.exerciseProgress.create({
+    data: {
+      exerciseId: exerciseGoodbyeMC.id,
+      completed: false
+    }
+  });
+
+  console.log(`Created ${3} exercise progress records`);
+
+  // ======================================================================
+  // SUMMARY
+  // ======================================================================
+  console.log('\n✅ Database seeding completed successfully!');
+  console.log(`
+Summary of created data:
+- ${await prisma.course.count()} courses
+- ${await prisma.module.count()} modules
+- ${await prisma.lesson.count()} lessons
+- ${await prisma.exercise.count()} exercises
+- ${await prisma.exerciseOption.count()} exercise options
+- ${await prisma.germanSound.count()} German sounds
+- ${await prisma.soundGroup.count()} sound groups
+- ${await prisma.exerciseProgress.count()} exercise progress records
+  `);
 }
 
 main()
   .catch(e => {
-    console.error(e)
-    process.exit(1)
+    console.error('Error during seeding:', e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    console.log('Disconnecting from database...');
+    await prisma.$disconnect();
+  });
