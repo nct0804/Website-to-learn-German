@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { BadRequestError } from '../utils/errors';
 
-/**
- * Middleware to validate lesson creation requests
- */
 export const validateCreateLesson = (req: Request, res: Response, next: NextFunction) => {
   const { moduleId, title, order } = req.body;
   const errors = [];
@@ -39,9 +36,6 @@ export const validateCreateLesson = (req: Request, res: Response, next: NextFunc
   next();
 };
 
-/**
- * Middleware to validate lesson update requests
- */
 export const validateUpdateLesson = (req: Request, res: Response, next: NextFunction) => {
   const { title, order, xpReward, estimatedTime } = req.body;
   const errors = [];
