@@ -31,11 +31,7 @@ router.get('/module/:moduleId', async (req, res) => {
   }
 });
 
-router.post(
-  '/', 
-  authenticate, 
-  checkRole(['admin']), 
-  validateCreateLesson, 
+router.post('/', authenticate, checkRole(['admin']), validateCreateLesson, 
   async (req, res) => {
     try {
       await LessonController.createLesson(req, res);
@@ -46,10 +42,7 @@ router.post(
 );
 
 router.put(
-  '/:id', 
-  authenticate, 
-  checkRole(['admin']), 
-  validateUpdateLesson, 
+  '/:id', authenticate, checkRole(['admin']), validateUpdateLesson, 
   async (req, res) => {
     try {
       await LessonController.updateLesson(req, res);
@@ -59,10 +52,7 @@ router.put(
   }
 );
 
-router.delete(
-  '/:id', 
-  authenticate, 
-  checkRole(['admin']), 
+router.delete('/:id', authenticate, checkRole(['admin']), 
   async (req, res) => {
     try {
       await LessonController.deleteLesson(req, res);
