@@ -27,7 +27,7 @@ export default function QuotePanel() {
     }, [])
 
     return (
-        <div className="w-full bg-yellow-50 rounded-lg pl-4 pr-4 pt-2 pb-2 flex items-center space-x-4 mt-6 min-h-[20%]">
+        <div className="w-full bg-[#FFFBF3] rounded-lg pl-4 pr-4 pt-2 pb-2 flex items-center space-x-4 mt-6 min-h-[20%]">
             <img
                 src="https://source.unsplash.com/random/80x80?funny,germany"
                 alt="Random visual"
