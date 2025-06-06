@@ -1,8 +1,8 @@
-import prisma from '../../lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import { NotFoundError } from '../../utils/errors';
 import { Course } from '@prisma/client';
 
-
+const prisma = new PrismaClient();
 interface FindCoursesParams {
   level?: string;
   searchTerm?: string;
