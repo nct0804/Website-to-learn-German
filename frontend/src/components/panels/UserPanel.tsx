@@ -1,10 +1,10 @@
 import { Heart } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import AvatarIcon from '../assets/icons/avatar.png'
+import AvatarIcon from '../../assets/avatar.png'
 
 export default function UserPanel({ user, logout }: { user: any; logout: () => void }) {
     return (
-        <div className="w-full bg-[#fefbe8] rounded-lg p-4 shadow flex justify-around items-center">
+        <div className="w-full bg-[#fefbe8] rounded-lg p-4 flex justify-around items-center">
             <div className="flex flex-col space-y-2">
                 <div className="font-semibold text-gray-800">{user.name}</div>
                 <div className="text-xs text-yellow-500 font-bold">Level {user.level}</div>

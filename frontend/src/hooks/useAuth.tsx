@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import type { ReactNode } from 'react'
-import AvatarIcon from '../assets/icons/avatar.png'
+import AvatarIcon from '../assets/avatar.png'
 
 export interface User {
   name: string

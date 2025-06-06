@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { useAuth } from '../hooks/useAuth'
-import { Button } from '@/components/ui/button'
+import { useAuth } from '../../hooks/useAuth'
+import { Button } from '@/components/ui/Button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+} from '@/components/ui/Card'
+import { Input } from '@/components/ui/Input'
+import { Label } from '@/components/ui/Label'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons'
 

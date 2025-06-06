@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
-import { LoginModal } from './LoginModal'
+import { useAuth } from '../../hooks/useAuth'
+import { LoginModal } from '../login/LoginModal'
 import UserPanel from './UserPanel'
 
 export default function HeaderPanel() {
@@ -11,7 +11,7 @@ export default function HeaderPanel() {
   if (!user) {
     // Chưa đăng nhập
     return (
-      <div className="w-full bg-[#fefbe8] rounded-lg p-4 shadow space-y-4 flex flex-col items-center">
+      <div className="w-full bg-[#fefbe8] rounded-lg p-4 space-y-4 flex flex-col items-center">
         <h2 className="text-center text-sm font-semibold text-gray-700">
           Create a profile to save your progress!
         </h2>
