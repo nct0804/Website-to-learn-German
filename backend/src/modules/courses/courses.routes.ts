@@ -2,6 +2,7 @@ import express from 'express';
 import * as CourseController from './courses.controller';
 import { authenticate, checkRole } from '../../middleware/auth.middleware';
 import { handleError } from '../../utils/errors';
+import { validateCreateCourse, validateUpdateCourse } from '../../middleware/courses.validation';
 
 const router = express.Router();
 
@@ -23,10 +24,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // with ADMIN
-router.post(
-  '/', 
-  authenticate, 
-  checkRole(['admin']), 
+router.post('/', authenticate, checkRole(['admin']), validateCreateCourse,
   async (req, res) => {
     try {
       await CourseController.createCourse(req, res);
@@ -36,10 +34,7 @@ router.post(
   }
 );
 
-router.put(
-  '/:id', 
-  authenticate, 
-  checkRole(['admin']), 
+router.put('/:id', authenticate, checkRole(['admin']), validateUpdateCourse,
   async (req, res) => {
     try {
       await CourseController.updateCourse(req, res);
@@ -49,10 +44,7 @@ router.put(
   }
 );
 
-router.delete(
-  '/:id', 
-  authenticate, 
-  checkRole(['admin']), 
+router.delete('/:id', authenticate, checkRole(['admin']), 
   async (req, res) => {
     try {
       await CourseController.deleteCourse(req, res);
