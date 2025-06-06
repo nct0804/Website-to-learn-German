@@ -53,7 +53,7 @@ export default function LeftBar() {
               Profile
             </Link>
             <Link
-              to="/about"
+              to="/aboutus"
               className="block px-2 py-1 rounded hover:bg-[#fbb12422] text-gray-800">
               About us
             </Link>

@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Lesson from './pages/Lesson';
 import Ranking from './pages/Ranking';
 import Profile from './pages/Profile';
+import AboutUs from './pages/AboutUs';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="lesson" element={<Lesson />} />
         <Route path="ranking" element={<Ranking />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="aboutus" element={<AboutUs />} />
       </Route>
     </Routes>
   );

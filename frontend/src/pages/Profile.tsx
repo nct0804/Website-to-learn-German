@@ -1,4 +1,4 @@
-// src/pages/Home.tsx
+
 export default function Profile() {
   return (
     <div className="bg-white rounded-lg p-6">

@@ -8,8 +8,8 @@ export default function ProgressBar() {
                 <span></span>
             </div>
             {/* Bar */}
-            <div className="h-2 w-full bg-gray-200 rounded-full mb-1">
-                <div className="h-2 bg-yellow-400 rounded-full" style={{ width: '20%' }} />
+            <div className="h-4 w-full bg-gray-200 rounded-full mb-1">
+                <div className="h-4 bg-yellow-400 rounded-full" style={{ width: '20%' }} />
             </div>
             {/* Bottom: XP Text */}
             <div className="flex justify-between mt-0">
