@@ -4,6 +4,7 @@ import Training from '../../assets/training.png';
 import Ranking from '../../assets/ranking-page.png';
 import More from '../../assets/more-page.png';
 import clsx from 'clsx';
+import { useEffect, useRef, useState } from 'react';
 
 const menuItems = [
   { to: '/', icon: Home, label: 'Home' },
@@ -13,11 +14,25 @@ const menuItems = [
 
 export default function LeftBar() {
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <aside className="h-full flex flex-col justify-center border-r-[3px] border-[#FFF4E1] w-30 transition-all duration-300">
       <div className="flex flex-col justify-between items-center h-full py-4">
-        <div className="flex flex-col items-center gap-4 mt-4">
+        <div className="flex flex-col items-center gap-3 mt-4">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.to;
             return (
@@ -37,42 +52,44 @@ export default function LeftBar() {
           })}
         </div>
 
-        <div className="relative group mt-auto">
+        <div className="relative mt-auto flex items-center" ref={menuRef}>
           <button
+            onClick={() => setMenuOpen(!menuOpen)}
             className="p-1 rounded hover:bg-[#fbb024ae] transition-transform transform hover:scale-110 duration-300"
-            tabIndex={0}
             aria-haspopup="true"
           >
             <img src={More} alt="More" className="w-8 h-8" />
           </button>
-          <div
-            className="absolute left-11 top-1/2 -translate-y-1/2 flex-col gap-1 bg-white shadow-lg rounded-lg py-4 px-6 min-w-[170px] z-20 hidden group-hover:flex"
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <Link
-              to="/profile"
-              className="block px-2 py-1 rounded hover:bg-[#fbb12422] text-gray-800"
-            >
-              Profile
-            </Link>
-            <Link
-              to="/aboutus"
-              className="block px-2 py-1 rounded hover:bg-[#fbb12422] text-gray-800"
-            >
-              About us
-            </Link>
-            <button
-              className="block px-2 py-1 rounded hover:bg-[#fbb12422] text-left w-full text-gray-800"
-              onClick={() => {
-                // logout logic
-              }}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
 
+          {menuOpen && (
+            <div className="absolute left-full top-1/2 -translate-y-[70%] ml-1 flex flex-col gap-1 bg-white shadow-xl rounded-lg py-4 px-4 min-w-[170px] z-50">
+              <Link
+                to="/profile"
+                className="block px-2 py-1 rounded text-gray-800 hover:text-[#fbb124] transition-colors"
+              >
+                Profile
+              </Link>
+              <Link
+                to="/aboutus"
+                className="block px-2 py-1 rounded text-gray-800 hover:text-[#fbb124] transition-colors"
+              >
+                About us
+              </Link>
+              <button
+                className="block px-2 py-1 rounded text-left w-full text-gray-800 hover:text-[#fbb124] transition-colors"
+                onClick={() => {
+                  // logout logic
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+
+
+      </div>
     </aside>
   );
 }
