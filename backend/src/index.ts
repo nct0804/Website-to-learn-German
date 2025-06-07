@@ -4,6 +4,10 @@ import lessonsRoutes from './modules/lessons/lessons.routes';
 import coursesRoutes from './modules/courses/courses.routes';
 import modulesRoutes from './modules/modules/modules.routes';
 
+import exercisesRoutes from './modules/exercises/exercises.routes';
+import exerciseOptionsRoutes from './modules/exercisesOptions/exercisesOptions.routes';
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -12,6 +16,9 @@ app.use(express.json());
 app.use('/api/lesson', lessonsRoutes);
 app.use('/api/courses', coursesRoutes);
 app.use('/api/modules', modulesRoutes);
+
+app.use('/api/exercises', exercisesRoutes);
+app.use('/api/exercise-options', exerciseOptionsRoutes);
 
 //Root
 app.get('/', (_, res) => {
