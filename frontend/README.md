@@ -1,54 +1,86 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+install Reactrouter
+```bash
+npm install react-router-dom lucide-react clsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+install shadcn
+```bash 
+npx shadcn-ui@latest init
+npx shadcn@latest add button                         
+npx shadcn@latest add input
+npx shadcn@latest add card
+npx shadcn@latest add label
+npm install -D @types/node
 ```
+
+install fontawesome 
+```bash 
+npm install --save @fortawesome/fontawesome-svg-core 
+npm install --save @fortawesome/free-solid-svg-icons
+npm install --save @fortawesome/react-fontawesome
+npm install --save @fortawesome/free-brands-svg-icons
+```
+Mọi component trong app giờ có thể gọi:
+const { user, login, logout } = useAuth()
+
+## ** Component Structure **
+
+**`App.tsx`** :Main app entry, routing setup
+
+**`App.css`**  :Global CSS (optional, can be replaced by Tailwind)
+
+**`index.css`** :Tailwind & CSS resets
+
+**`main.tsx`** :ReactDOM entry point
+
+**`src/assets/`** :All images, icons, and static assets
+
+**`components/pages/`** :Route-level components (pages)
+
+    Home.tsx
+    Lesson.tsx
+    Profile.tsx
+    Ranking.tsx
+    More.tsx (Profile/AboutUs/Logout)
+
+**`components/layout/`** :Layout components: wrappers, bars, main structure
+
+    LeftBar.tsx: Main vertical sidebar with navigation links to HOME, TRAINING, RANKING and MORE menu.
+    MainContent.tsx: Wrapper for the center area where LEARNING PATHS are rendered.
+    MainLayout.tsx
+    RightBar.tsx: Panels shown on the right side of the screen for extra information (not final version): FUN FACTS, TIPS, REWEDENDUNGEN.
+    TopBar.tsx: LOGO, STATS, XP PROGRESS, and PROFILE infos (LOGO is not final, just for placeholder, still changeable)
+
+**`components/login/`** :Login modals and authentication UIs
+
+    LoginModal.tsx
+    LoginModalJWT.tsx
+
+**`components/panels/`** :Information and dashboard panels
+
+    HeaderPanel.tsx
+    QuotePanel.tsx
+    UserPanel.tsx
+
+**`components/top-bar/`** :TopBar subcomponents (logo, profile, progress, etc.)
+
+    Logo.tsx
+    ProfileAndStats.tsx
+    ProgressBar.tsx
+
+**`components/ui/`** :All basic, styled, and reusable UI widgets. (buttons, inputs, etc.)
+
+    button.tsx
+    card.tsx
+    input.tsx
+    label.tsx
+
+**`components/hooks/`** :Custom React hooks for logic reuse
+
+    useAuth.tsx
+    useAuthJWT.tsx
+
+**`components/libs/`** :General utility/helper functions
+
+    utils.tsx
