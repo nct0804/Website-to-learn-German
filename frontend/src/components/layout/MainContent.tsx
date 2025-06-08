@@ -1,24 +1,16 @@
-import LearningStep from "../learning-path/LearningStep";
-import CompoundLine from "../learning-path/CompoundLine";
+import LineAroundText from "../learning-path/LineAroundText";
 import StarIcon from '../../assets/star.png';
 import EarIcon from '../../assets/ear.png';
 import SoundwaveIcon from '../../assets/soundwave.png';
 import ChestIcon from '../../assets/chest.png';
+import LessonHeader from "../learning-path/LessonHeader";
+import VerticalStep from "../learning-path/VerticalStep";
 
 const steps = [
-  {
-    icon: <img src={StarIcon} alt="Star" className="h-9 w-9" />,
-    active: true,
-  },
-  {
-    icon: <img src={EarIcon} alt="Ear" className="h-9 w-9" />,
-  },
-  {
-    icon: <img src={SoundwaveIcon} alt="Soundwave" className="h-9 w-9" />,
-  },
-  {
-    icon: <img src={ChestIcon} alt="Chest" className="h-9 w-9" />,
-  },
+  {icon: <img src={StarIcon} alt="" className="h-9 w-9" />,active: true},
+  {icon: <img src={EarIcon} alt="" className="h-9 w-9" />,active: false},
+  {icon: <img src={SoundwaveIcon} alt="" className="h-9 w-9" />,active: false},
+  {icon: <img src={ChestIcon} alt="" className="h-9 w-9" />,active: false},
 ];
 
 export default function MainContent() {
@@ -26,26 +18,9 @@ export default function MainContent() {
     <div className="flex-1 relative flex justify-center overflow-auto h-full custom-scroll px-4 mx-auto max-w-3xl">
       <div className="w-full max-w-3xl px-4 mx-auto py-8">
 
-        {/* Lesson Header */}
-        <div className="bg-[#fbb124] text-white font-bold rounded-2xl shadow px-8 py-8 mb-12 w-full">
-          <div className="text-sm font-medium">Lesson 2, Unit 2</div>
-          <div className="text-xl font-bold">ä, ö, ü sound</div>
-        </div>
-
-        {/* Vertical Stepper */}
-        <div className="flex flex-col items-center relative gap-10 min-h-[400px]">
-          {steps.map((step, i) => (
-            <LearningStep
-              key={i}
-              {...step}
-              first={i === 0}
-              last={i === steps.length - 1}
-            />
-          ))}
-        </div>
-        
-        {/* Compound line under the steps */}
-        <CompoundLine label="compound sound" />
+        <LessonHeader title="ä, ö, ü sound" subtitle="Lesson 2, Unit 2" />
+        <VerticalStep steps={steps} />
+        <LineAroundText label="compound sound" />
       </div>
       
       <style>
