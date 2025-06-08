@@ -26,7 +26,7 @@ Chỉ cần chạy lệnh npm start ở root mà ko cần phải vào từng fol
     ```
     and create a .env file with following variables:
     ```
-
+    DATABASE_URL="postgresql://germangains:germangains@localhost:5432/germangainsdb?schema=public"
     ```
 3. Navigate to frontend directory 
     ```
