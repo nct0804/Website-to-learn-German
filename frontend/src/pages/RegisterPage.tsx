@@ -9,8 +9,12 @@ export default function RegisterPage() {
       <div className="flex items-center justify-center bg-white">
         <RegisterLeftPanel />
       </div>
-<div className="flex items-center justify-center bg-gradient-to-br from-[#f9a200] to-[#ffbb00]">    <LoginRightPanel />
+      <div
+        className="flex items-center justify-center blink-gradient"
+      >
+        <LoginRightPanel />
       </div>
     </div>
   );
 }
+

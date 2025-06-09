@@ -1,0 +1,24 @@
+@keyframes blinkGradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.blink-gradient {
+  background: linear-gradient(
+    270deg,
+    #f9a200,
+    #ffbb00,
+    #ffaa00,
+    #f99700,
+    #f9a200
+  );
+  background-size: 600% 600%;
+  animation: blinkGradientMove 10s ease-in-out infinite;
+}

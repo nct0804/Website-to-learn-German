@@ -4,6 +4,7 @@ import App from './App'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import './App.css'
+import "./style/custom.css"
 
 async function enableMocks() {
   if (import.meta.env.DEV) {
