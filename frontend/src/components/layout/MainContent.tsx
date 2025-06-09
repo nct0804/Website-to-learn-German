@@ -1,17 +1,7 @@
 import LineAroundText from "../learning-path/LineAroundText";
-import StarIcon from '../../assets/star.png';
-import EarIcon from '../../assets/ear.png';
-import SoundwaveIcon from '../../assets/soundwave.png';
-import ChestIcon from '../../assets/chest.png';
 import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
-
-const steps = [
-  {icon: <img src={StarIcon} alt="" className="h-9 w-9" />,active: true},
-  {icon: <img src={EarIcon} alt="" className="h-9 w-9" />,active: false},
-  {icon: <img src={SoundwaveIcon} alt="" className="h-9 w-9" />,active: false},
-  {icon: <img src={ChestIcon} alt="" className="h-9 w-9" />,active: false},
-];
+import steps from "../learning-path/stepData";
 
 export default function MainContent() {
   return (
