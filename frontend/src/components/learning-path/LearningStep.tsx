@@ -2,6 +2,7 @@ import { useState } from "react";
 import StartBubble from "./StartBubble";
 import DetailBubble from "./DetailBubble";
 import LockedBubble from "./LockedBubble";
+import { useNavigate } from "react-router-dom";
 
 export default function LearningStep({
   icon,
@@ -12,7 +13,6 @@ export default function LearningStep({
   selected = false,
   title = "",
   subtitle = "",
-  xp = "",
   onClick,
   bubbleRef,
   blockedBubbleRef,
@@ -26,13 +26,21 @@ export default function LearningStep({
   selected?: boolean;
   title?: string;
   subtitle?: string;
-  xp?: string;
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
   blockedBubbleRef?: (el: HTMLDivElement | null) => void;
   nodeWrapperRef?: (el: HTMLDivElement | null) => void;
 }) {
   const [pressed, setPressed] = useState(false);
+  const navigate = useNavigate();
+
+  const handleStartClick = () => {
+    navigate("/learn");
+  };
+
+  const handlePracticeClick = () => {
+    navigate("/learn");
+  };
 
   return (
     <div className="flex flex-col items-center relative">
@@ -84,6 +92,7 @@ export default function LearningStep({
               backgroundColor: "white",
               color: '#fbb124',
             }}
+            onClick={handleStartClick}
           />
         ) : learned ? (
           <DetailBubble
@@ -96,6 +105,7 @@ export default function LearningStep({
               backgroundColor: "#3B6978",
               color: "white",
             }}
+            onClick={handlePracticeClick}
           />
         ) : (
           <LockedBubble ref={blockedBubbleRef} message="You need to complete previous steps first." />
