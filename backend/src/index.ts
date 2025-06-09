@@ -3,6 +3,7 @@ import cors from 'cors';
 import lessonsRoutes from './modules/lessons/lessons.routes';
 import coursesRoutes from './modules/courses/courses.routes';
 import modulesRoutes from './modules/modules/modules.routes';
+import vocabularyRoutes from './modules/vocabulary/vocabulary.routes';
 
 import exercisesRoutes from './modules/exercises/exercises.routes';
 import exerciseOptionsRoutes from './modules/exercisesOptions/exercisesOptions.routes';
@@ -61,7 +62,7 @@ app.get("/test-db", async (_, res) => {
 app.use('/api/lesson', lessonsRoutes);
 app.use('/api/courses', coursesRoutes);
 app.use('/api/modules', modulesRoutes);
-
+app.use('/api/vocabulary', vocabularyRoutes);
 app.use('/api/exercises', exercisesRoutes);
 app.use('/api/exercise-options', exerciseOptionsRoutes);
 
