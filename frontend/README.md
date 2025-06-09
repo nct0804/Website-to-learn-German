@@ -11,6 +11,7 @@ npx shadcn@latest add button
 npx shadcn@latest add input
 npx shadcn@latest add card
 npx shadcn@latest add label
+npx shadcn@latest add checkbox
 npm install -D @types/node
 ```
 
@@ -21,8 +22,11 @@ npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
 npm install --save @fortawesome/free-brands-svg-icons
 ```
-Mọi component trong app giờ có thể gọi:
-const { user, login, logout } = useAuth()
+install Mock jwt 
+```bash 
+npm install msw --save-dev
+```
+
 
 ## ** Component Structure **
 
