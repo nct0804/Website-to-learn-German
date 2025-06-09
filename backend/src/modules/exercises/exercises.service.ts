@@ -273,7 +273,7 @@ export const deleteExercise = async (id: number) => {
   });
 };
 
-export const checkAnswer = async (id: number, answer: string | number | string[]) => {
+export const checkAnswer = async (id: number, answer: string | number | string[], userId: any) => {
   const exercise = await prisma.exercise.findUnique({
     where: { id },
     include: {
@@ -339,6 +339,7 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
   await prisma.exerciseProgress.create({
     data: {
       exerciseId: id,
+      userId,
       completed: isCorrect,
       completedAt: isCorrect ? new Date() : null
     }

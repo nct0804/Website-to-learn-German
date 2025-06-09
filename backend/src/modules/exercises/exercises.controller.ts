@@ -151,7 +151,13 @@ export const checkExerciseAnswer = async (req: Request, res: Response) => {
       throw new BadRequestError('An answer must be provided');
     }
     
-    const result = await ExerciseService.checkAnswer(exerciseId, answer);
+    const userId = (req as any).user?.id;
+    
+    if (!userId) {
+      throw new BadRequestError('User must be authenticated to check answers');
+    }
+    
+    const result = await ExerciseService.checkAnswer(exerciseId, answer, userId);
     
     return res.status(200).json({
       success: true,

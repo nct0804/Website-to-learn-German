@@ -35,7 +35,7 @@ router.get('/lesson/:lessonId', async (req, res) => {
 });
 
 // POST /api/exercises/:id/check
-router.post('/:id/check', async (req, res) => {
+router.post('/:id/check',authenticate, async (req, res) => {
   try {
     await ExerciseController.checkExerciseAnswer(req, res);
   } catch (error) {
