@@ -19,19 +19,20 @@ export default function LoginLeftPanel() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      await login({ username, password });
-      navigate(from, { replace: true });
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
+  setError(null)
+  setLoading(true)
+  try {
+    await login({ email: username, password })
+    navigate(from, { replace: true })
+  } catch (err: unknown) {
+    setError(err instanceof Error ? err.message : 'Login failed')
+  } finally {
+    setLoading(false)
+  }
+}
+
 
   return (
     <Card className="w-4/5 max-w-md p-8 bg-white rounded-lg border-none shadow-none">

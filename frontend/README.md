@@ -24,8 +24,16 @@ npm install --save @fortawesome/free-brands-svg-icons
 ```
 install Mock jwt 
 ```bash 
-npm install msw --save-dev
+npm install msw@1 --save-dev
 ```
+Tạo file mockServiceWorker.js
+```bash 
+npx msw init public/ --save
+```
+## ** Mock data to test login **
+test@example.com
+123456
+
 
 
 ## ** Component Structure **

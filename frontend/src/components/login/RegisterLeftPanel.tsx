@@ -22,8 +22,7 @@ export default function RegisterLeftPanel() {
     setError(null);
     setLoading(true);
     try {
-      // mock signup bằng login
-      await login({ username: email, password });
+    await login({ email, password })
       navigate('/', { replace: true });
     } catch (err: any) {
       setError(err.message);
