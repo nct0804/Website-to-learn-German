@@ -19,7 +19,7 @@ services:
       context: ./backend
     container_name: germangains-backend
     ports:
-      - '5000:5000'
+      - '3000:3000'
     depends_on:
       - db
     volumes:
