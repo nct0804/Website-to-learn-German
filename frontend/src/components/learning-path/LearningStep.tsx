@@ -1,34 +1,98 @@
-// src/components/LearningStep.tsx
-import React from "react";
-
-interface LearningStepProps {
-  icon: React.ReactNode;
-  first?: boolean;
-  last?: boolean;
-  active?: boolean;
-}
+import { useState } from "react";
+import StartBubble from "./StartBubble";
+import DetailBubble from "./DetailBubble";
+import LockedBubble from "./LockedBubble";
 
 export default function LearningStep({
   icon,
   first = false,
   last = false,
   active = false,
-}: LearningStepProps) {
+  learned = false,
+  selected = false,
+  title = "",
+  subtitle = "",
+  xp = "",
+  onClick,
+  bubbleRef,
+  blockedBubbleRef,
+  nodeWrapperRef,
+}: {
+  icon: React.ReactNode;
+  first?: boolean;
+  last?: boolean;
+  active?: boolean;
+  learned?: boolean;
+  selected?: boolean;
+  title?: string;
+  subtitle?: string;
+  xp?: string;
+  onClick?: () => void;
+  bubbleRef?: (el: HTMLDivElement | null) => void;
+  blockedBubbleRef?: (el: HTMLDivElement | null) => void;
+  nodeWrapperRef?: (el: HTMLDivElement | null) => void;
+}) {
+  const [pressed, setPressed] = useState(false);
+
   return (
     <div className="flex flex-col items-center relative">
-      {/* Top line (hidden for first) */}
+      {active && !selected && <StartBubble />}
+
       {!first && (
         <div className="w-1 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
       )}
-      <div
-        className={`
-          w-16 h-16 rounded-full flex items-center justify-center shadow-lg z-10
-          ${active ? "bg-[#29547B]" : "bg-[#FFF4E1]"}
-        `}
-      >
-        {icon}
+
+      <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
+        <div
+          className={`
+            absolute w-20 h-19 rounded-full z-0
+            bg-[#3b6978a7] left-1/2 -translate-x-1/2
+            transition-all duration-100 pointer-events-none
+            ${pressed ? "translate-y-4 opacity-0" : "translate-y-3 opacity-80"}
+          `}
+          style={{ top: 0 }}
+        />
+
+        <button
+          className={`
+            relative z-10 w-20 h-19 rounded-full flex items-center justify-center
+            transition-all duration-100
+            shadow-md
+            cursor-pointer
+            ${pressed ? "translate-y-4" : ""}
+            ${active || learned ? "bg-[#3B6978] border-[6px] border-[#E5E5E5]" : "bg-[#FFFBF3] border-none"}
+          `}
+          onClick={onClick}
+          onMouseDown={() => setPressed(true)}
+          onMouseUp={() => setPressed(false)}
+          onMouseLeave={() => setPressed(false)}
+        >
+          <span className="relative z-20">{icon}</span>
+        </button>
       </div>
-      {/* Bottom line (hidden for last) */}
+
+      {/* BUBBLES */}
+      {selected && (
+        active ? (
+          <DetailBubble
+            ref={bubbleRef}
+            title={title}
+            subtitle={subtitle || ""}
+            buttonLabel="START"
+            xp={xp}
+          />
+        ) : learned ? (
+          <DetailBubble
+            ref={bubbleRef}
+            title={title}
+            subtitle={subtitle || ""}
+            buttonLabel="PRACTICE"
+            xp={xp}
+          />
+        ) : (
+          <LockedBubble ref={blockedBubbleRef} message="You need to complete previous steps first." />
+        )
+      )}
       {!last && (
         <div className="w-1 h-5 bg-[#E5E5E5] absolute -bottom-5 left-1/2 -translate-x-1/2"></div>
       )}

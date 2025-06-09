@@ -1,7 +1,7 @@
-import LineAroundText from "../learning-path/LineAroundText";
+import HintTextForNextLesson from "../learning-path/HintTextForNextLesson";
 import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
-import steps from "../learning-path/stepData";
+import steps from "../learning-path/StepData";
 
 export default function MainContent() {
   return (
@@ -10,7 +10,7 @@ export default function MainContent() {
 
         <LessonHeader title="ä, ö, ü sound" subtitle="Lesson 2, Unit 2" />
         <VerticalStep steps={steps} />
-        <LineAroundText label="compound sound" />
+        <HintTextForNextLesson label="compound sound" />
       </div>
       
       <style>
