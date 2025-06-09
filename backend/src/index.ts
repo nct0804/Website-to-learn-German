@@ -66,7 +66,7 @@ app.use('/api/vocabulary', vocabularyRoutes);
 app.use('/api/exercises', exercisesRoutes);
 app.use('/api/exercise-options', exerciseOptionsRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running successfully on http://localhost:${PORT}`);
 });
