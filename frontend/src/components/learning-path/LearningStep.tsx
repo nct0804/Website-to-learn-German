@@ -79,7 +79,11 @@ export default function LearningStep({
             title={title}
             subtitle={subtitle || ""}
             buttonLabel="START"
-            xp={xp}
+            xp="+10XP"
+            style={{
+              backgroundColor: "white",
+              color: '#fbb124',
+            }}
           />
         ) : learned ? (
           <DetailBubble
@@ -87,7 +91,11 @@ export default function LearningStep({
             title={title}
             subtitle={subtitle || ""}
             buttonLabel="PRACTICE"
-            xp={xp}
+            xp="+5XP"
+            style={{
+              backgroundColor: "#3B6978",
+              color: "white",
+            }}
           />
         ) : (
           <LockedBubble ref={blockedBubbleRef} message="You need to complete previous steps first." />

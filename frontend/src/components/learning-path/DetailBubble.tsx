@@ -5,17 +5,24 @@ const DetailBubble = forwardRef<HTMLDivElement, {
   subtitle: string;
   buttonLabel: string;
   xp?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
   ref?: React.RefObject<HTMLDivElement>;
-}>(({ title, subtitle, buttonLabel, xp }, ref) => (
-  <div ref={ref} className="absolute top-[120%] left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
+}>(({ title, subtitle, buttonLabel, xp, style, onClick }, ref) => (
+  <div ref={ref} className="absolute top-[120%] left-1/2 -translate-x-1/2 flex flex-col items-center z-30">
     <div className="bg-[#fbb124] text-white rounded-xl px-6 py-4 shadow-lg relative w-[230px]">
       <div className="absolute left-1/2 -top-2 -translate-x-1/2">
         <div className="w-4 h-4 bg-[#fbb124] rotate-45" />
       </div>
       <div className="mb-2"><span className="font-bold text-base">{title}</span></div>
       <div className="mb-3 text-sm">{subtitle}</div>
-      <button className="bg-white text-[#fbb124] font-bold rounded-full px-6 py-1 text-base w-full text-center">
-        {buttonLabel} {xp}
+      <button
+        className="flex rounded-full px-14 py-2 gap-1.5 text-base w-full text-center justify-center transition hover:bg-[#fff3d1] active:scale-95"
+        style={style}
+        onClick={onClick}
+      >
+        <span>{buttonLabel}</span>
+        <span className="font-bold">{xp}</span>
       </button>
     </div>
   </div>
