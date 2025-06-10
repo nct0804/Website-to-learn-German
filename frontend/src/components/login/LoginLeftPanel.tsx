@@ -87,6 +87,10 @@ export default function LoginLeftPanel() {
         <p className="text-center mt-6 text-sm">
           Don’t have an account? <Link to="/register" className="text-primary underline">Sign Up</Link>
         </p>
+
+        {/* <div className="mt-6 text-xs text-center text-gray-400 italic">
+          „Wer fremde Sprachen nicht kennt, weiß nichts von seiner eigenen.“ – Goethe
+        </div> */}
       </CardContent>
     </Card>
   );

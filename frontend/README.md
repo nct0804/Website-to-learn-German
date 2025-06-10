@@ -34,6 +34,11 @@ npx msw init public/ --save
 test@example.com
 123456
 
+Install Gsap
+```bash 
+npm install gsap
+```
+
 
 
 ## ** Component Structure **
