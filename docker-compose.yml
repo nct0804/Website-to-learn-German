@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: germangains-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: germangains
+      POSTGRES_PASSWORD: germangains
+      POSTGRES_DB: germangainsdb
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: germangains-backend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql://germangains:germangains@db:5432/germangainsdb
+    restart: unless-stopped
+
+volumes:
+  pgdata:

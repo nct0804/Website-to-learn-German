@@ -1,14 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
-import Home from '../../assets/home.png';
-import Training from '../../assets/training.png';
-import Ranking from '../../assets/ranking-page.png';
-import More from '../../assets/more-page.png';
+import Home from '../../assets/home2.png';
+import Training from '../../assets/training2.png';
+import Ranking from '../../assets/ranking2.png';
+import More from '../../assets/more2.png';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 
 const menuItems = [
   { to: '/', icon: Home, label: 'Home' },
-  { to: '/lesson', icon: Training, label: 'Lesson' },
+  { to: '/pronunciation', icon: Voice, label: 'Pronunciation' },
+  { to: '/training', icon: Training, label: 'Training' },
   { to: '/ranking', icon: Ranking, label: 'Ranking' },
 ];
 
