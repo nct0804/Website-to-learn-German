@@ -11,7 +11,6 @@ npx shadcn@latest add button
 npx shadcn@latest add input
 npx shadcn@latest add card
 npx shadcn@latest add label
-npx shadcn@latest add checkbox
 npm install -D @types/node
 ```
 
@@ -22,24 +21,8 @@ npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
 npm install --save @fortawesome/free-brands-svg-icons
 ```
-install Mock jwt 
-```bash 
-npm install msw@1 --save-dev
-```
-Tạo file mockServiceWorker.js
-```bash 
-npx msw init public/ --save
-```
-## ** Mock data to test login **
-test@example.com
-123456
-
-Install Gsap
-```bash 
-npm install gsap
-```
-
-
+Mọi component trong app giờ có thể gọi:
+const { user, login, logout } = useAuth()
 
 ## ** Component Structure **
 

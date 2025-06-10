@@ -7,7 +7,7 @@ export default function RightBar() {
         <QuotePanel />
         <QuotePanel />
         <QuotePanel />
-        <HeaderPanel/>
+        <QuotePanel />
       </aside>
     )
 }
