@@ -1,750 +1,605 @@
 import { PrismaClient, ExerciseType, LanguageLevel, SoundType } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
-// use `prisma` in your application to read and write data in your DB
 
 async function main() {
-  console.log('🌱 Starting database seed...');
+  console.log('Starting database seeding...');
 
-  // ======================================================================
-  // COURSES
-  // ======================================================================
-  console.log('\n🎓 Creating courses...');
+  // Clean existing data to prevent duplicates
+  await cleanDatabase();
 
-  const courseA1_1 = await prisma.course.create({
+  // Create a demo user account
+  const demoUser = await createUser();
+
+  // Create course progression (A1.1 - A2.2)
+  const courses = await createCourses();
+
+  // Create modules for A1.1 (first unlocked, second locked)
+  const modules = await createModules(courses[0].id);
+
+  // Create lessons for first module (first unlocked, others locked)
+  const lessons = await createFirstModuleLessons(modules[0].id);
+
+  // Create lessons for second module (all locked - placeholders)
+  await createSecondModuleLessons(modules[1].id);
+
+  // Create exercises for first lesson
+  await createExercisesForFirstLesson(lessons[0].id);
+
+  // Create pronunciation data
+  await createPronunciationData();
+
+  console.log('Database seeding completed successfully!');
+}
+
+/**
+ * Cleans existing database entries to prevent conflicts
+ */
+async function cleanDatabase() {
+  console.log('Cleaning existing database records...');
+  
+  // Delete in correct order (respecting foreign key constraints)
+  await prisma.exerciseProgress.deleteMany();
+  await prisma.soundGroupSound.deleteMany();
+  await prisma.germanSound.deleteMany();
+  await prisma.soundGroup.deleteMany();
+  await prisma.exerciseOption.deleteMany();
+  await prisma.exercise.deleteMany();
+  await prisma.lesson.deleteMany();
+  await prisma.modulePrerequisite.deleteMany();
+  await prisma.module.deleteMany();
+  await prisma.course.deleteMany();
+  await prisma.userProgress.deleteMany();
+  await prisma.refreshToken.deleteMany();
+  await prisma.user.deleteMany();
+  
+  console.log('Database cleaned successfully.');
+}
+
+/**
+ * Creates a demo user for testing the application
+ */
+async function createUser() {
+  console.log('Creating demo user...');
+  
+  const hashedPassword = await bcrypt.hash('password123', 10);
+  
+  const user = await prisma.user.create({
     data: {
-      title: "German A1.1",
-      description: "Beginner German course - first level",
-      level: "A1_1",
-      imageSrc: "",
-      order: 1,
+      email: 'demo@germangains.com',
+      username: 'demouser',
+      password: hashedPassword,
+      firstName: 'Demo',
+      lastName: 'User',
+      level: 1,
+      xp: 0,
+      streak: 0
     }
   });
   
-  const courseA1_2 = await prisma.course.create({
-    data: {
-      title: "German A1.2",
-      description: "Beginner German course - second level",
-      imageSrc: "",
-      level: "A1_2",
-      order: 2,
-    }
-  });
+  console.log(`Created demo user: ${user.username}`);
+  return user;
+}
 
-  console.log(`Created courses: ${courseA1_1.title}, ${courseA1_2.title}`);
-
-  // ======================================================================
-  // MODULES
-  // ======================================================================
-  console.log('\n📚 Creating modules...');
-
-  // Modules A1.1
-  const moduleGreetings = await prisma.module.create({
-    data: {
-      courseId: courseA1_1.id,
-      title: "Greetings and Introductions",
-      description: "Learn how to greet people and introduce yourself in German",
-      order: 1,
-      xpReward: 20,
-      estimatedTime: 5, // minutes
-      isLocked: false,
-    }
-  });
-
-  const moduleNumbers = await prisma.module.create({
-    data: {
-      courseId: courseA1_1.id,
-      title: "Numbers and Counting",
-      description: "Learn German numbers from 0 to 100",
-      order: 2,
-      xpReward: 25,
-      estimatedTime: 5,
-      isLocked: true, // Will require the greetings module to be completed first
-    }
-  });
-
-  const moduleFamily = await prisma.module.create({
-    data: {
-      courseId: courseA1_1.id,
-      title: "Family and Relationships",
-      description: "Learn vocabulary for family members and describing relationships",
-      order: 3,
-      xpReward: 30,
-      estimatedTime: 60,
-      isLocked: true,
-    }
-  });
-
-  // Modules A1.2
-  const moduleDailyActivities = await prisma.module.create({
-    data: {
-      courseId: courseA1_2.id,
-      title: "Daily Activities",
-      description: "Learn to talk about your daily routine in German",
-      order: 1,
-      xpReward: 30,
-      estimatedTime: 60,
-      isLocked: true, // This will require A1.1 modules to be completed
-    }
-  });
-
-  // Module 2: Food and Drinks
-  const moduleFood = await prisma.module.create({
-    data: {
-      courseId: courseA1_2.id,
-      title: "Food and Drinks",
-      description: "Learn vocabulary for ordering food and drinks in German",
-      order: 2,
-      xpReward: 35,
-      estimatedTime: 70,
-      isLocked: true,
-    }
-  });
-
-  console.log(`Created ${5} modules`);
-
-  // ======================================================================
-  // MODULE PREREQUISITES
-  // ======================================================================
-  console.log('\n🔄 Setting up module prerequisites...');
-
-  // Create prerequisites for modules
-  await prisma.modulePrerequisite.create({
-    data: {
-      moduleId: moduleNumbers.id,
-      prerequisiteId: moduleGreetings.id
-    }
-  });
-
-  // Family module requires Numbers module
-  await prisma.modulePrerequisite.create({
-    data: {
-      moduleId: moduleFamily.id,
-      prerequisiteId: moduleNumbers.id
-    }
-  });
-
-  // Daily Activities module requires completion of Family module from A1.1
-  await prisma.modulePrerequisite.create({
-    data: {
-      moduleId: moduleDailyActivities.id,
-      prerequisiteId: moduleFamily.id
-    }
-  });
-
-  // Food module requires Daily Activities module
-  await prisma.modulePrerequisite.create({
-    data: {
-      moduleId: moduleFood.id,
-      prerequisiteId: moduleDailyActivities.id
-    }
-  });
-
-  console.log(`Set up 4 module prerequisites`);
-
-  // ======================================================================
-  // LESSONS
-  // ======================================================================
-  console.log('\n📖 Creating lessons for all modules...');
+/**
+ * Creates German courses with progression
+ */
+async function createCourses() {
+  console.log('Creating German language courses...');
   
-  // Lesson 1: Basic Greetings
-  const lessonBasicGreetings = await prisma.lesson.create({
+  const courses = await Promise.all([
+    // A1.1 - Unlocked (beginner course)
+    prisma.course.create({
+      data: {
+        title: 'German A1.1',
+        description: 'Start your German journey with essential vocabulary, basic greetings, and simple phrases.',
+        level: 'A1_1',
+        imageSrc: '',
+        order: 1,
+        isActive: true
+      }
+    }),
+    
+    // A1.2 - Locked (progression)
+    prisma.course.create({
+      data: {
+        title: 'German A1.2',
+        description: 'Continue building your foundation with more vocabulary and basic conversation practice.',
+        level: 'A1_2',
+        imageSrc: '',
+        order: 2,
+        isActive: true
+      }
+    }),
+    
+    // A2.1 - Locked (progression)
+    prisma.course.create({
+      data: {
+        title: 'German A2.1',
+        description: 'Begin intermediate German with more complex grammar and everyday situations.',
+        level: 'A2_1',
+        imageSrc: '',
+        order: 3,
+        isActive: true
+      }
+    }),
+    
+    // A2.2 - Locked (progression)
+    prisma.course.create({
+      data: {
+        title: 'German A2.2',
+        description: 'Complete your basic proficiency with advanced vocabulary and practical conversation skills.',
+        level: 'A2_2',
+        imageSrc: '',
+        order: 4,
+        isActive: true
+      }
+    })
+  ]);
+  
+  console.log(`Created ${courses.length} German courses with progression path.`);
+  return courses;
+}
+
+/**
+ * Creates modules for the A1.1 course
+ */
+async function createModules(courseId: number) {
+  console.log('Creating modules for German A1.1...');
+  
+  const modules = await Promise.all([
+    // First module - Unlocked
+    prisma.module.create({
+      data: {
+        courseId: courseId,
+        title: 'Greetings and Introductions',
+        description: 'Learn how to greet people and introduce yourself in German.',
+        order: 1,
+        requiredXP: 0,
+        xpReward: 50,
+        estimatedTime: 60, // minutes
+        isLocked: false
+      }
+    }),
+    
+    // Second module - Locked
+    prisma.module.create({
+      data: {
+        courseId: courseId,
+        title: 'Numbers and Counting',
+        description: 'Learn German numbers and how to count from 1 to 100.',
+        order: 2,
+        requiredXP: 50, // Requires XP from first module
+        xpReward: 50,
+        estimatedTime: 45, // minutes
+        isLocked: true
+      }
+    })
+  ]);
+  
+  // Set prerequisite relationship: Second module requires first module
+  await prisma.modulePrerequisite.create({
     data: {
-      moduleId: moduleGreetings.id,
-      title: "Basic Greetings",
-      description: "Learn to say hello and goodbye in German",
-      order: 1,
-      xpReward: 10,
-      estimatedTime: 15,
+      moduleId: modules[1].id,
+      prerequisiteId: modules[0].id
     }
   });
+  
+  console.log(`Created ${modules.length} modules with prerequisites established.`);
+  return modules;
+}
 
-  // Lesson 2: Introducing Yourself
-  const lessonIntroductions = await prisma.lesson.create({
+/**
+ * Creates lessons for the first module (greetings)
+ */
+async function createFirstModuleLessons(moduleId: number) {
+  console.log('Creating lessons for Greetings and Introductions module...');
+  
+  const lessons = await Promise.all([
+    // Lesson 1: Basic Greetings - Unlocked
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Basic Greetings',
+        description: 'Learn essential German greetings for different times of day.',
+        order: 1,
+        xpReward: 10,
+        estimatedTime: 15 // minutes
+      }
+    }),
+    
+    // Lesson 2: Introducing Yourself - Locked
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Introducing Yourself',
+        description: "Learn how to introduce yourself and ask someone's name in German.",
+        order: 2,
+        xpReward: 10,
+        estimatedTime: 15 // minutes
+      }
+    }),
+    
+    // Lesson 3: Formal vs Informal - Locked
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Formal vs Informal Speech',
+        description: 'Learn the difference between formal and informal speech in German.',
+        order: 3,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    }),
+    
+    // Lesson 4: Asking Simple Questions - Locked
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Asking Simple Questions',
+        description: 'Learn how to ask basic questions in German conversations.',
+        order: 4,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    }),
+    
+    // Lesson 5: Common Phrases - Locked
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Common Everyday Phrases',
+        description: 'Essential phrases for daily German conversations.',
+        order: 5,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    })
+  ]);
+  
+  console.log(`Created ${lessons.length} lessons for first module.`);
+  return lessons;
+}
+
+/**
+ * Creates placeholder lessons for the second module
+ */
+async function createSecondModuleLessons(moduleId: number) {
+  console.log('Creating placeholder lessons for Numbers and Counting module...');
+  
+  const lessons = await Promise.all([
+    // Lesson 1: Numbers 1-10
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Numbers 1-10',
+        description: 'Learn how to count from one to ten in German.',
+        order: 1,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    }),
+    
+    // Lesson 2: Numbers 11-20
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Numbers 11-20',
+        description: 'Learn how to count from eleven to twenty in German.',
+        order: 2,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    }),
+    
+    // Lesson 3: Numbers 21-100
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Numbers 21-100',
+        description: 'Learn how to count from twenty-one to one hundred in German.',
+        order: 3,
+        xpReward: 10,
+        estimatedTime: 15 // minutes
+      }
+    }),
+    
+    // Lesson 4: Ordinal Numbers
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Ordinal Numbers',
+        description: 'Learn ordinal numbers in German (first, second, third, etc.).',
+        order: 4,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    }),
+    
+    // Lesson 5: Talking About Age
+    prisma.lesson.create({
+      data: {
+        moduleId: moduleId,
+        title: 'Talking About Age',
+        description: 'Learn how to talk about your age and ask others in German.',
+        order: 5,
+        xpReward: 10,
+        estimatedTime: 10 // minutes
+      }
+    })
+  ]);
+  
+  console.log(`Created ${lessons.length} placeholder lessons for second module.`);
+  return lessons;
+}
+
+/**
+ * Creates exercises for the first unlocked lesson
+ */
+async function createExercisesForFirstLesson(lessonId: number) {
+  console.log('Creating exercises for Basic Greetings lesson...');
+  
+  // Exercise 1: Multiple Choice
+  const exercise1 = await prisma.exercise.create({
     data: {
-      moduleId: moduleGreetings.id,
-      title: "Introducing Yourself",
-      description: "Learn to introduce yourself and ask for someone's name",
-      order: 2,
-      xpReward: 10,
-      estimatedTime: 15,
-    }
-  });
-
-  console.log(`Created lessons: ${lessonBasicGreetings.title} and ${lessonIntroductions.title}`);
-
-  // LESSONS FOR NUMBERS MODULE
-  const lessonNumbers1 = await prisma.lesson.create({
-    data: {
-      moduleId: moduleNumbers.id,
-      title: "Numbers 0-20",
-      description: "Learn to count from 0 to 20 in German",
-      order: 1,
-      xpReward: 10,
-      estimatedTime: 20,
-    }
-  });
-
-  // Lesson 2: Numbers 20-100
-  const lessonNumbers2 = await prisma.lesson.create({
-    data: {
-      moduleId: moduleNumbers.id,
-      title: "Numbers 21-100",
-      description: "Learn to count from 21 to 100 in German",
-      order: 2,
-      xpReward: 15,
-      estimatedTime: 25,
-    }
-  });
-
-  console.log(`Created lessons for numbers module: ${lessonNumbers1.title} and ${lessonNumbers2.title}`);
-
-  // ======================================================================
-  // EXERCISES FOR BASIC GREETINGS LESSON
-  // ======================================================================
-  console.log('\n🧩 Creating exercises for Basic Greetings lesson...');
-
-  // Exercise 1: Multiple Choice - Hello
-  const exerciseHelloMC = await prisma.exercise.create({
-    data: {
-      lessonId: lessonBasicGreetings.id,
-      type: "MULTIPLE_CHOICE",
-      question: "What does 'Hallo' mean in English?",
-      instruction: "Select the correct translation",
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'What does "Hallo" mean in English?',
+      instruction: 'Choose the correct translation',
       order: 1,
       xpReward: 2,
-      timeLimit: 30, // seconds
-      exerciseOptions: {
-        create: [
-          { text: "Hello", isCorrect: true, order: 1 },
-          { text: "Goodbye", isCorrect: false, order: 2 },
-          { text: "Please", isCorrect: false, order: 3 },
-          { text: "Thank you", isCorrect: false, order: 4 }
-        ]
-      }
+      timeLimit: 15 // seconds
     }
   });
-
-  // Exercise 2: Fill in Blank - Hello Dialog
-  const exerciseHelloFillBlank = await prisma.exercise.create({
+  
+  // Options for Exercise 1
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise1.id, text: 'Hello', isCorrect: true, order: 1 },
+      { exerciseId: exercise1.id, text: 'Goodbye', isCorrect: false, order: 2 },
+      { exerciseId: exercise1.id, text: 'Thank you', isCorrect: false, order: 3 },
+      { exerciseId: exercise1.id, text: 'Please', isCorrect: false, order: 4 }
+    ]
+  });
+  
+  // Exercise 2: Fill in the Blank
+  const exercise2 = await prisma.exercise.create({
     data: {
-      lessonId: lessonBasicGreetings.id,
-      type: "FILL_IN_BLANK",
-      question: "Complete the dialog: \"_____, wie geht's?\"",
-      instruction: "Fill in the blank with the appropriate greeting",
+      lessonId: lessonId,
+      type: 'FILL_IN_BLANK',
+      question: 'Complete the morning greeting: G_____ Morgen!',
+      instruction: 'Fill in the missing letters',
       order: 2,
-      xpReward: 3,
-      exerciseOptions: {
-        create: [
-          { text: "Hallo", isCorrect: true, order: 1 },
-          { text: "Tschüss", isCorrect: false, order: 2 },
-          { text: "Danke", isCorrect: false, order: 3 },
-          { text: "Bitte", isCorrect: false, order: 4 }
-        ]
-      }
+      xpReward: 2,
+      timeLimit: 20 // seconds
     }
   });
-
-  // Exercise 3: Multiple Choice - Goodbye
-  const exerciseGoodbyeMC = await prisma.exercise.create({
+  
+  // Options for Exercise 2
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise2.id, text: 'uten', isCorrect: true, order: 1 }
+    ]
+  });
+  
+  // Exercise 3: Multiple Choice
+  const exercise3 = await prisma.exercise.create({
     data: {
-      lessonId: lessonBasicGreetings.id,
-      type: "MULTIPLE_CHOICE",
-      question: "How do you say 'goodbye' in German?",
-      instruction: "Select the correct translation",
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you say "goodbye" in German?',
+      instruction: 'Select the correct answer',
       order: 3,
       xpReward: 2,
-      exerciseOptions: {
-        create: [
-          { text: "Tschüss", isCorrect: true, order: 1 },
-          { text: "Hallo", isCorrect: false, order: 2 },
-          { text: "Guten Tag", isCorrect: false, order: 3 },
-          { text: "Danke schön", isCorrect: false, order: 4 }
-        ]
-      }
+      timeLimit: 15 // seconds
     }
   });
-
-  // Exercise 4: Vocabulary Check - Formal vs Informal
-  const exerciseGreetingTypes = await prisma.exercise.create({
-    data: {
-      lessonId: lessonBasicGreetings.id,
-      type: "VOCABULARY_CHECK",
-      question: "Match the formal and informal greetings",
-      instruction: "Select the formal equivalent of each informal greeting",
-      order: 4,
-      xpReward: 4,
-      exerciseOptions: {
-        create: [
-          { text: "Hallo → Guten Tag", isCorrect: true, order: 1 },
-          { text: "Tschüss → Auf Wiedersehen", isCorrect: true, order: 2 },
-          { text: "Hallo → Auf Wiedersehen", isCorrect: false, order: 3 },
-          { text: "Tschüss → Guten Tag", isCorrect: false, order: 4 }
-        ]
-      }
-    }
+  
+  // Options for Exercise 3
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise3.id, text: 'Auf Wiedersehen', isCorrect: true, order: 1 },
+      { exerciseId: exercise3.id, text: 'Guten Tag', isCorrect: false, order: 2 },
+      { exerciseId: exercise3.id, text: 'Danke schön', isCorrect: false, order: 3 },
+      { exerciseId: exercise3.id, text: 'Wie geht\'s', isCorrect: false, order: 4 }
+    ]
   });
-
-  // ======================================================================
-  // EXERCISES FOR INTRODUCTIONS LESSON
-  // ======================================================================
-  console.log('\n🧩 Creating exercises for Introductions lesson...');
-
-  // Exercise 1: How to ask someone's name
-  const exerciseAskName = await prisma.exercise.create({
+  
+  // Exercise 4: Vocabulary Check
+  const exercise4 = await prisma.exercise.create({
     data: {
-      lessonId: lessonIntroductions.id,
-      type: "MULTIPLE_CHOICE",
-      question: "How do you ask someone's name in German?",
-      instruction: "Select the correct phrase",
-      order: 1,
-      xpReward: 2,
-      exerciseOptions: {
-        create: [
-          { text: "Wie heißt du?", isCorrect: true, order: 1 },
-          { text: "Wer bist du?", isCorrect: false, order: 2 },
-          { text: "Woher kommst du?", isCorrect: false, order: 3 },
-          { text: "Was machst du?", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 2: Saying your name
-  const exerciseSayName = await prisma.exercise.create({
-    data: {
-      lessonId: lessonIntroductions.id,
-      type: "FILL_IN_BLANK",
-      question: "Complete the sentence: \"Ich _____ Anna.\"",
-      instruction: "Fill in the blank with the correct word",
-      order: 2,
-      xpReward: 3,
-      exerciseOptions: {
-        create: [
-          { text: "heiße", isCorrect: true, order: 1 },
-          { text: "bin", isCorrect: false, order: 2 },
-          { text: "komme", isCorrect: false, order: 3 },
-          { text: "mache", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 3: Sentence Order
-  const exerciseIntroductionOrder = await prisma.exercise.create({
-    data: {
-      lessonId: lessonIntroductions.id,
-      type: "SENTENCE_ORDER",
-      question: "Arrange the words to form a proper introduction",
-      instruction: "Put the words in the correct order",
-      order: 3,
-      xpReward: 4,
-      exerciseOptions: {
-        create: [
-          { text: "Hallo, ich heiße Maria. Wie heißt du?", isCorrect: true, order: 1 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 4: Formal vs Informal Introduction
-  const exerciseFormalIntro = await prisma.exercise.create({
-    data: {
-      lessonId: lessonIntroductions.id,
-      type: "MULTIPLE_CHOICE",
-      question: "How would you formally ask someone's name?",
-      instruction: "Select the formal way to ask someone's name",
+      lessonId: lessonId,
+      type: 'VOCABULARY_CHECK',
+      question: 'Match the German greetings with their meanings',
+      instruction: 'Drag each greeting to its correct translation',
       order: 4,
       xpReward: 3,
-      exerciseOptions: {
-        create: [
-          { text: "Wie heißen Sie?", isCorrect: true, order: 1 },
-          { text: "Wie heißt du?", isCorrect: false, order: 2 },
-          { text: "Wer sind Sie?", isCorrect: false, order: 3 },
-          { text: "Wie ist dein Name?", isCorrect: false, order: 4 }
-        ]
-      }
+      timeLimit: 30 // seconds
     }
   });
-
-  // ======================================================================
-  // EXERCISES FOR NUMBERS 0-20 LESSON
-  // ======================================================================
-  console.log('\n🧩 Creating exercises for Numbers 0-20 lesson...');
-
-  // Exercise 1: Basic Numbers
-  const exerciseBasicNumbers = await prisma.exercise.create({
+  
+  // Options for Exercise 4
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise4.id, text: 'Guten Morgen = Good morning', isCorrect: true, order: 1 },
+      { exerciseId: exercise4.id, text: 'Guten Tag = Good day', isCorrect: true, order: 2 },
+      { exerciseId: exercise4.id, text: 'Guten Abend = Good evening', isCorrect: true, order: 3 },
+      { exerciseId: exercise4.id, text: 'Gute Nacht = Good night', isCorrect: true, order: 4 }
+    ]
+  });
+  
+  // Exercise 5: Multiple Choice
+  const exercise5 = await prisma.exercise.create({
     data: {
-      lessonId: lessonNumbers1.id,
-      type: "MULTIPLE_CHOICE",
-      question: "What is the German word for 'five'?",
-      instruction: "Select the correct translation",
-      order: 1,
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'When would you use "Gute Nacht"?',
+      instruction: 'Choose the most appropriate situation',
+      order: 5,
       xpReward: 2,
-      exerciseOptions: {
-        create: [
-          { text: "fünf", isCorrect: true, order: 1 },
-          { text: "vier", isCorrect: false, order: 2 },
-          { text: "sechs", isCorrect: false, order: 3 },
-          { text: "sieben", isCorrect: false, order: 4 }
-        ]
-      }
+      timeLimit: 20 // seconds
     }
   });
-
-  // Exercise 2: Number to Word
-  const exerciseNumberToWord = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers1.id,
-      type: "VOCABULARY_CHECK",
-      question: "Match the number with its German word",
-      instruction: "Select the correct German word for each number",
-      order: 2,
-      xpReward: 3,
-      exerciseOptions: {
-        create: [
-          { text: "1 = eins", isCorrect: true, order: 1 },
-          { text: "2 = zwei", isCorrect: true, order: 2 },
-          { text: "3 = drei", isCorrect: true, order: 3 },
-          { text: "4 = vier", isCorrect: true, order: 4 },
-          { text: "5 = sechs", isCorrect: false, order: 5 }
-        ]
-      }
-    }
+  
+  // Options for Exercise 5
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise5.id, text: 'When someone is going to sleep', isCorrect: true, order: 1 },
+      { exerciseId: exercise5.id, text: 'When meeting someone in the morning', isCorrect: false, order: 2 },
+      { exerciseId: exercise5.id, text: 'When greeting someone in the afternoon', isCorrect: false, order: 3 },
+      { exerciseId: exercise5.id, text: 'When saying goodbye in the evening', isCorrect: false, order: 4 }
+    ]
   });
+  
+  console.log('Created 5 diverse exercises for the first lesson.');
+}
 
-  // Exercise 3: Fill in Blank - Count Sequence
-  const exerciseCountSequence = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers1.id,
-      type: "FILL_IN_BLANK",
-      question: "Complete the sequence: eins, zwei, drei, ____, fünf",
-      instruction: "Fill in the missing number",
-      order: 3,
-      xpReward: 2,
-      exerciseOptions: {
-        create: [
-          { text: "vier", isCorrect: true, order: 1 },
-          { text: "sechs", isCorrect: false, order: 2 },
-          { text: "sieben", isCorrect: false, order: 3 },
-          { text: "acht", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 4: Listening Comprehension (simulated)
-  const exerciseListeningNumbers = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers1.id,
-      type: "MULTIPLE_CHOICE",
-      question: "If you hear 'zehn', what number is being said?",
-      instruction: "Select the number you would hear",
-      order: 4,
-      xpReward: 3,
-      exerciseOptions: {
-        create: [
-          { text: "10", isCorrect: true, order: 1 },
-          { text: "7", isCorrect: false, order: 2 },
-          { text: "17", isCorrect: false, order: 3 },
-          { text: "11", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // ======================================================================
-  // EXERCISES FOR NUMBERS 21-100 LESSON
-  // ======================================================================
-  console.log('\n🧩 Creating exercises for Numbers 21-100 lesson...');
-
-  // Exercise 1: Tens Pattern
-  const exerciseTens = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers2.id,
-      type: "MULTIPLE_CHOICE",
-      question: "How do you say '30' in German?",
-      instruction: "Select the correct translation",
-      order: 1,
-      xpReward: 2,
-      exerciseOptions: {
-        create: [
-          { text: "dreißig", isCorrect: true, order: 1 },
-          { text: "dreizehn", isCorrect: false, order: 2 },
-          { text: "dreizig", isCorrect: false, order: 3 },
-          { text: "dreiundzwanzig", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 2: Two-digit Numbers
-  const exerciseTwoDigit = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers2.id,
-      type: "FILL_IN_BLANK",
-      question: "Complete: 25 in German is '________'",
-      instruction: "Fill in the blank with the correct German number",
-      order: 2,
-      xpReward: 3,
-      exerciseOptions: {
-        create: [
-          { text: "fünfundzwanzig", isCorrect: true, order: 1 },
-          { text: "zwanzigfünf", isCorrect: false, order: 2 },
-          { text: "zwanzigundfünf", isCorrect: false, order: 3 },
-          { text: "fünfzwanzig", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 3: Larger Numbers
-  const exerciseLargerNumbers = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers2.id,
-      type: "MULTIPLE_CHOICE",
-      question: "How do you say '99' in German?",
-      instruction: "Select the correct translation",
-      order: 3,
-      xpReward: 4,
-      exerciseOptions: {
-        create: [
-          { text: "neunundneunzig", isCorrect: true, order: 1 },
-          { text: "neunzigneun", isCorrect: false, order: 2 },
-          { text: "neunneunzig", isCorrect: false, order: 3 },
-          { text: "neunzigundneun", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // Exercise 4: Practical Application
-  const exerciseNumberUse = await prisma.exercise.create({
-    data: {
-      lessonId: lessonNumbers2.id,
-      type: "FILL_IN_BLANK",
-      question: "Complete: 'Ich bin _____________ Jahre alt.' (42 years old)",
-      instruction: "Fill in with the German word for 42",
-      order: 4,
-      xpReward: 4,
-      exerciseOptions: {
-        create: [
-          { text: "zweiundvierzig", isCorrect: true, order: 1 },
-          { text: "vierzigzwei", isCorrect: false, order: 2 },
-          { text: "vierzig-zwei", isCorrect: false, order: 3 },
-          { text: "zweiviertzig", isCorrect: false, order: 4 }
-        ]
-      }
-    }
-  });
-
-  // ======================================================================
-  // PRONUNCIATION TAB (SEPARATE FEATURE)
-  // ======================================================================
-  console.log('\n🔊 Creating pronunciation tab elements...');
-
-  // Vowels
-  const soundA = await prisma.germanSound.create({
-    data: {
-      symbol: "a",
-      exampleWord: "Mann",
-      audioSrc: "",
-      type: "VOWEL",
-    }
-  });
-
-  const soundE = await prisma.germanSound.create({
-    data: {
-      symbol: "e",
-      exampleWord: "essen",
-      audioSrc: "",
-      type: "VOWEL",
-    }
-  });
-
-  const soundI = await prisma.germanSound.create({
-    data: {
-      symbol: "i",
-      exampleWord: "bitter",
-      audioSrc: "",
-      type: "VOWEL",
-    }
-  });
-
-  const soundO = await prisma.germanSound.create({
-    data: {
-      symbol: "o",
-      exampleWord: "Sonne",
-      audioSrc: "",
-      type: "VOWEL",
-    }
-  });
-
-  const soundU = await prisma.germanSound.create({
-    data: {
-      symbol: "u",
-      exampleWord: "Mutter",
-      audioSrc: "",
-      type: "VOWEL",
-    }
-  });
-
-  // Umlauts
-  const soundUmlautA = await prisma.germanSound.create({
-    data: {
-      symbol: "ä",
-      exampleWord: "Männer",
-      audioSrc: "",
-      type: "UMLAUT",
-    }
-  });
-
-  const soundUmlautO = await prisma.germanSound.create({
-    data: {
-      symbol: "ö",
-      exampleWord: "schön",
-      audioSrc: "",
-      type: "UMLAUT",
-    }
-  });
-
-  const soundUmlautU = await prisma.germanSound.create({
-    data: {
-      symbol: "ü",
-      exampleWord: "über",
-      audioSrc: "",
-      type: "UMLAUT",
-    }
-  });
-
-  // Special consonants
-  const soundEszett = await prisma.germanSound.create({
-    data: {
-      symbol: "ß",
-      exampleWord: "straße",
-      audioSrc: "",
-      type: "CONSONANT",
-    }
-  });
-
-  const soundCH = await prisma.germanSound.create({
-    data: {
-      symbol: "ch",
-      exampleWord: "ich",
-      audioSrc: "",
-      type: "CONSONANT",
-    }
-  });
-
-  // Sound Groups
+/**
+ * Creates pronunciation data (sound groups and sounds)
+ */
+async function createPronunciationData() {
+  console.log('Creating pronunciation data...');
+  
+  // Create sound groups
   const vowelGroup = await prisma.soundGroup.create({
     data: {
-      name: "Basic Vowels",
+      name: 'German Vowels',
       order: 1
     }
   });
-
+  
   const umlautGroup = await prisma.soundGroup.create({
     data: {
-      name: "Umlauts",
+      name: 'German Umlauts',
       order: 2
     }
   });
-
-  const specialConsonantsGroup = await prisma.soundGroup.create({
+  
+  const consonantGroup = await prisma.soundGroup.create({
     data: {
-      name: "Special Consonants",
+      name: 'Special Consonants',
       order: 3
     }
   });
-
+  
+  // Create vowel sounds
+  const vowelA = await prisma.germanSound.create({
+    data: {
+      symbol: 'a',
+      exampleWord: 'Mann (man)',
+      type: 'VOWEL',
+      audioSrc: '/audio/german/vowels/a.mp3'
+    }
+  });
+  
+  const vowelE = await prisma.germanSound.create({
+    data: {
+      symbol: 'e',
+      exampleWord: 'Bett (bed)',
+      type: 'VOWEL',
+      audioSrc: '/audio/german/vowels/e.mp3'
+    }
+  });
+  
+  const vowelI = await prisma.germanSound.create({
+    data: {
+      symbol: 'i',
+      exampleWord: 'Kind (child)',
+      type: 'VOWEL',
+      audioSrc: '/audio/german/vowels/i.mp3'
+    }
+  });
+  
+  const vowelO = await prisma.germanSound.create({
+    data: {
+      symbol: 'o',
+      exampleWord: 'Sonne (sun)',
+      type: 'VOWEL',
+      audioSrc: '/audio/german/vowels/o.mp3'
+    }
+  });
+  
+  const vowelU = await prisma.germanSound.create({
+    data: {
+      symbol: 'u',
+      exampleWord: 'Mutter (mother)',
+      type: 'VOWEL',
+      audioSrc: '/audio/german/vowels/u.mp3'
+    }
+  });
+  
+  // Create umlaut sounds
+  const umlautA = await prisma.germanSound.create({
+    data: {
+      symbol: 'ä',
+      exampleWord: 'Mädchen (girl)',
+      type: 'UMLAUT',
+      audioSrc: '/audio/german/umlauts/a-umlaut.mp3'
+    }
+  });
+  
+  const umlautO = await prisma.germanSound.create({
+    data: {
+      symbol: 'ö',
+      exampleWord: 'schön (beautiful)',
+      type: 'UMLAUT',
+      audioSrc: '/audio/german/umlauts/o-umlaut.mp3'
+    }
+  });
+  
+  const umlautU = await prisma.germanSound.create({
+    data: {
+      symbol: 'ü',
+      exampleWord: 'Tür (door)',
+      type: 'UMLAUT',
+      audioSrc: '/audio/german/umlauts/u-umlaut.mp3'
+    }
+  });
+  
+  // Create special consonant sounds
+  const consonantCH = await prisma.germanSound.create({
+    data: {
+      symbol: 'ch',
+      exampleWord: 'ich (I)',
+      type: 'CONSONANT',
+      audioSrc: '/audio/german/consonants/ch.mp3'
+    }
+  });
+  
+  const consonantSZ = await prisma.germanSound.create({
+    data: {
+      symbol: 'ß',
+      exampleWord: 'Straße (street)',
+      type: 'CONSONANT',
+      audioSrc: '/audio/german/consonants/ss.mp3'
+    }
+  });
+  
   // Associate sounds with groups
+  // Vowels
   await Promise.all([
-    // Vowels
-    prisma.soundGroupSound.create({
-      data: { soundId: soundA.id, groupId: vowelGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundE.id, groupId: vowelGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundI.id, groupId: vowelGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundO.id, groupId: vowelGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundU.id, groupId: vowelGroup.id }
-    }),
-    
-    // Umlauts
-    prisma.soundGroupSound.create({
-      data: { soundId: soundUmlautA.id, groupId: umlautGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundUmlautO.id, groupId: umlautGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundUmlautU.id, groupId: umlautGroup.id }
-    }),
-    
-    // Special consonants
-    prisma.soundGroupSound.create({
-      data: { soundId: soundEszett.id, groupId: specialConsonantsGroup.id }
-    }),
-    prisma.soundGroupSound.create({
-      data: { soundId: soundCH.id, groupId: specialConsonantsGroup.id }
-    })
+    prisma.soundGroupSound.create({ data: { soundId: vowelA.id, groupId: vowelGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: vowelE.id, groupId: vowelGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: vowelI.id, groupId: vowelGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: vowelO.id, groupId: vowelGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: vowelU.id, groupId: vowelGroup.id } })
   ]);
-
-  console.log(`Created ${await prisma.germanSound.count()} German sounds in ${await prisma.soundGroup.count()} sound groups`);
-
-  // ======================================================================
-  // EXERCISE PROGRESS (SAMPLE DATA)
-  // ======================================================================
-  console.log('\n📊 Creating sample exercise progress records...');
-
-  // Create some sample progress data
-  await prisma.exerciseProgress.create({
-    data: {
-      exerciseId: exerciseHelloMC.id,
-      completed: true,
-      completedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
-    }
-  });
-
-  await prisma.exerciseProgress.create({
-    data: {
-      exerciseId: exerciseHelloFillBlank.id,
-      completed: true,
-      completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
-    }
-  });
-
-  await prisma.exerciseProgress.create({
-    data: {
-      exerciseId: exerciseGoodbyeMC.id,
-      completed: false
-    }
-  });
-
-  console.log(`Created ${3} exercise progress records`);
-
-  // ======================================================================
-  // SUMMARY
-  // ======================================================================
-  console.log('\n✅ Database seeding completed successfully!');
-  console.log(`
-Summary of created data:
-- ${await prisma.course.count()} courses
-- ${await prisma.module.count()} modules
-- ${await prisma.lesson.count()} lessons
-- ${await prisma.exercise.count()} exercises
-- ${await prisma.exerciseOption.count()} exercise options
-- ${await prisma.germanSound.count()} German sounds
-- ${await prisma.soundGroup.count()} sound groups
-- ${await prisma.exerciseProgress.count()} exercise progress records
-  `);
+  
+  // Umlauts
+  await Promise.all([
+    prisma.soundGroupSound.create({ data: { soundId: umlautA.id, groupId: umlautGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: umlautO.id, groupId: umlautGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: umlautU.id, groupId: umlautGroup.id } })
+  ]);
+  
+  // Special consonants
+  await Promise.all([
+    prisma.soundGroupSound.create({ data: { soundId: consonantCH.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantSZ.id, groupId: consonantGroup.id } })
+  ]);
+  
+  console.log('Created pronunciation data with 3 sound groups and 10 German sounds.');
 }
 
 main()
