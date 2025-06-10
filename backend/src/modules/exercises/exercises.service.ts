@@ -345,6 +345,26 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
     }
   });
 
+    if (isCorrect) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          xp: { increment: xpReward },
+          streak: { increment: 1 }, // Increment streak for correct answers
+          updatedAt: new Date()
+        }
+      });
+    } else {
+      // Reset streak to 0 for incorrect answers
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          streak: 0,
+          updatedAt: new Date()
+        }
+      });
+    }
+
   return {
     isCorrect,
     xpReward,
