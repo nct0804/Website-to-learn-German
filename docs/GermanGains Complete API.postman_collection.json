@@ -1,0 +1,1229 @@
+{
+	"info": {
+		"_postman_id": "41e88643-505d-4f5a-9897-e627d19532d9",
+		"name": "GermanGains Complete API Copy",
+		"description": "API collection for GermanGains German learning platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "44407978",
+		"_collection_link": "https://chithien-4528100.postman.co/workspace/Chi-Thien's-Workspace~4bea45cb-dacd-44b8-88df-0f9b2d022fad/collection/44407978-41e88643-505d-4f5a-9897-e627d19532d9?action=share&source=collection_link&creator=44407978"
+	},
+	"item": [
+		{
+			"name": "DEMO USER JOURNEY",
+			"item": [
+				{
+					"name": "1. Register Demo User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Registration successful\", function() {",
+									"    pm.response.to.have.status(201);",
+									"    pm.response.to.be.json;",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"demo123@germangains.com\", \n  \"password\": \"password123\",\n  \"username\": \"demouser\",\n  \"firstName\": \"Demo\",\n  \"lastName\": \"User\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/users/register",
+						"description": "Register using the demo user from our seed file"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login Demo User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"accessToken\", jsonData.data.accessToken);",
+									"pm.environment.set(\"refreshToken\", jsonData.data.refreshToken);",
+									"",
+									"pm.test(\"Login successful\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    pm.expect(jsonData.data.accessToken).to.be.a('string');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"demo@germangains.com\",\n  \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/users/login",
+						"description": "Login with the demo user credentials"
+					},
+					"response": []
+				},
+				{
+					"name": "3. View Available Courses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Courses loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    // Store the first course ID (A1.1)",
+									"    const courses = jsonData.data;",
+									"    if(courses && courses.length > 0) {",
+									"        pm.environment.set(\"courseA1_1_id\", courses[0].id);",
+									"    }",
+									"    ",
+									"    // Verify we have 4 courses as per our seed file",
+									"    pm.expect(courses.length).to.equal(4);",
+									"    ",
+									"    // A1.1 should be first and unlocked",
+									"    pm.expect(courses[0].title).to.include('A1.1');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/courses",
+						"description": "Get all available courses - A1.1 should be unlocked"
+					},
+					"response": []
+				},
+				{
+					"name": "4. View A1.1 Course Modules",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Modules loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const modules = jsonData.data;",
+									"    ",
+									"    // Should have 2 modules as per our seed file",
+									"    pm.expect(modules.length).to.equal(2);",
+									"    ",
+									"    // First module should be unlocked",
+									"    pm.expect(modules[0].isLocked).to.equal(false);",
+									"    ",
+									"    // Second module should be locked",
+									"    pm.expect(modules[1].isLocked).to.equal(true);",
+									"    ",
+									"    // Store first module ID for next requests",
+									"    pm.environment.set(\"firstModuleId\", modules[0].id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/modules/course/{{courseA1_1_id}}",
+						"description": "Get modules for A1.1 - should show first module unlocked, second locked"
+					},
+					"response": []
+				},
+				{
+					"name": "5. View First Module Lessons",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Lessons loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const lessons = jsonData.data;",
+									"    ",
+									"    // Should have 5 lessons as per our seed file",
+									"    pm.expect(lessons.length).to.equal(5);",
+									"    ",
+									"    // Store the first lesson ID for next request",
+									"    pm.environment.set(\"firstLessonId\", lessons[0].id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/lesson/module/{{firstModuleId}}",
+						"description": "Get lessons for the first module - shows all 5 lessons"
+					},
+					"response": []
+				},
+				{
+					"name": "6. View First Lesson Exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Exercises loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const exercises = jsonData.data;",
+									"    ",
+									"    // Should have 5 exercises as per our seed file",
+									"    pm.expect(exercises.length).to.equal(5);",
+									"    ",
+									"    // Store the first exercise ID for next request",
+									"    pm.environment.set(\"firstExerciseId\", exercises[0].id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/exercises/lesson/{{firstLessonId}}",
+						"description": "Get all exercises for the first lesson"
+					},
+					"response": []
+				},
+				{
+					"name": "7. Get First Exercise Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Exercise details loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const exercise = jsonData.data;",
+									"    pm.expect(exercise.options.length).to.be.greaterThan(0);",
+									"    ",
+									"    // Find the correct answer (we need this since we're answering as the user)",
+									"    // In a real app, the frontend wouldn't know which is correct",
+									"    const options = exercise.options;",
+									"    const correctOption = options.find(option => option.text === \"Hello\");",
+									"    if (correctOption) {",
+									"        pm.environment.set(\"correctOptionId\", correctOption.id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/exercises/{{firstExerciseId}}",
+						"description": "Get details for the first exercise"
+					},
+					"response": []
+				},
+				{
+					"name": "8. Submit Correct Answer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Answer submitted successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    pm.expect(jsonData.data.isCorrect).to.be.true;",
+									"    pm.expect(jsonData.data.xpGained).to.be.above(0);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"answer\": \"{{correctOptionId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercises/{{firstExerciseId}}/check",
+						"description": "Submit a correct answer to the first exercise"
+					},
+					"response": []
+				},
+				{
+					"name": "9. Check User Progress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Progress data loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    // Should have XP from the exercise we just completed",
+									"    const user = jsonData.data;",
+									"    pm.expect(user.xp).to.be.above(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/users/me",
+						"description": "Check user progress after completing exercise"
+					},
+					"response": []
+				},
+				{
+					"name": "10. View Pronunciation Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Pronunciation groups loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const groups = jsonData.data;",
+									"    ",
+									"    // Should have 3 groups as per our seed file",
+									"    pm.expect(groups.length).to.equal(3);",
+									"    ",
+									"    // Store first group ID for next request",
+									"    pm.environment.set(\"firstSoundGroupId\", groups[0].id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/vocabulary/groups",
+						"description": "Get all pronunciation sound groups"
+					},
+					"response": []
+				},
+				{
+					"name": "11. View Vowels Group Sounds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Sound group details loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const group = jsonData.data;",
+									"    ",
+									"    // Should have vowel sounds",
+									"    pm.expect(group.sounds.length).to.be.above(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/vocabulary/groups/{{firstSoundGroupId}}",
+						"description": "Get details for the vowels sound group"
+					},
+					"response": []
+				}
+			],
+			"description": "Test the complete user learning flow based on seeded data"
+		},
+		{
+			"name": "USER (Chi Quynh)",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/users/register",
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"accessToken\", jsonData.data.accessToken);",
+									"pm.environment.set(\"refreshToken\", jsonData.data.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/users/login",
+						"description": "Login with existing account"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/users/me",
+						"description": "Get profile of the currently logged in user"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/users/logout",
+						"description": "Logout and invalidate current token"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/users/refresh-token",
+						"description": "Get a new access token using refresh token"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Get All Courses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/courses",
+						"description": "Get all available language courses"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/courses/2",
+						"description": "Get a specific course by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Course (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"German A2.1\",\n  \"description\": \"Intermediate German course - first level\",\n  \"level\": \"A2_1\",\n  \"imageSrc\": \"https://example.com/german-a2.jpg\",\n  \"order\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/courses",
+						"description": "Create a new course (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Course (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"German A1.1 - Updated\",\n  \"description\": \"Updated description for beginner German course\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/courses/1",
+						"description": "Update an existing course (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/courses/3",
+						"description": "Delete a course (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Course management endpoints"
+		},
+		{
+			"name": "Modules",
+			"item": [
+				{
+					"name": "Get All Modules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/modules",
+						"description": "Get all learning modules"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Modules By Course ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/modules/course/1",
+						"description": "Get all modules for a specific course"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/modules/1",
+						"description": "Get a specific module by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Module (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"courseId\": 1,\n  \"title\": \"Food and Drinks\",\n  \"description\": \"Learn vocabulary for ordering food and drinks in German\",\n  \"order\": 3,\n  \"xpReward\": 30,\n  \"estimatedTime\": 45,\n  \"isLocked\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/modules",
+						"description": "Create a new module (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Module (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Module Title\",\n  \"description\": \"Updated module description\",\n  \"isLocked\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/modules/1",
+						"description": "Update an existing module (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Module (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/modules/3",
+						"description": "Delete a module (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Module management endpoints"
+		},
+		{
+			"name": "Lessons",
+			"item": [
+				{
+					"name": "Get All Lessons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/lesson",
+						"description": "Get all lessons across all modules"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lessons By Module ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/lesson/module/2",
+						"description": "Get all lessons for a specific module"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lesson By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/lesson/1",
+						"description": "Get a specific lesson with its exercises"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Lesson (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"moduleId\": 1,\n  \"title\": \"Saying Hello\",\n  \"description\": \"Learn basic greeting expressions in German\",\n  \"order\": 1,\n  \"xpReward\": 10,\n  \"estimatedTime\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/lesson",
+						"description": "Create a new lesson (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Lesson (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Lesson Title\",\n  \"description\": \"Updated lesson description\",\n  \"xpReward\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/lesson/1",
+						"description": "Update an existing lesson (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Lesson (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/lesson/3",
+						"description": "Delete a lesson (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Lesson management endpoints"
+		},
+		{
+			"name": "Exercises",
+			"item": [
+				{
+					"name": "Get All Exercises",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/exercises",
+						"description": "Get all exercises across all lessons"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Exercises By Lesson ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/exercises/lesson/1",
+						"description": "Get all exercises for a specific lesson"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Exercise By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/exercises/1",
+						"description": "Get a specific exercise by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Exercise Answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"answer\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercises/1/check",
+						"description": "Submit an answer and check if it's correct"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Exercise (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"lessonId\": 1,\n  \"type\": \"MULTIPLE_CHOICE\",\n  \"question\": \"What is 'hello' in German?\",\n  \"instruction\": \"Choose the correct translation\",\n  \"order\": 1,\n  \"xpReward\": 2,\n  \"timeLimit\": 30,\n  \"options\": [\n    {\n      \"text\": \"Tschüss\",\n      \"isCorrect\": false,\n      \"order\": 1\n    },\n    {\n      \"text\": \"Hallo\",\n      \"isCorrect\": true,\n      \"order\": 2\n    },\n    {\n      \"text\": \"Danke\",\n      \"isCorrect\": false,\n      \"order\": 3\n    },\n    {\n      \"text\": \"Bitte\",\n      \"isCorrect\": false,\n      \"order\": 4\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercises",
+						"description": "Create a new exercise (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Exercise (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"question\": \"What is the German word for 'hello'?\",\n  \"xpReward\": 3,\n  \"options\": [\n    {\n      \"text\": \"Tschüss\",\n      \"isCorrect\": false,\n      \"order\": 1\n    },\n    {\n      \"text\": \"Hallo\",\n      \"isCorrect\": true,\n      \"order\": 2\n    },\n    {\n      \"text\": \"Danke\",\n      \"isCorrect\": false,\n      \"order\": 3\n    },\n    {\n      \"text\": \"Bitte\",\n      \"isCorrect\": false,\n      \"order\": 4\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercises/1",
+						"description": "Update an existing exercise (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Exercise (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/exercises/3",
+						"description": "Delete an exercise (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Exercise management endpoints"
+		},
+		{
+			"name": "Exercise Options",
+			"item": [
+				{
+					"name": "Get Options By Exercise ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/exercise-options/exercise/1",
+						"description": "Get all options for a specific exercise"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Option (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"exerciseId\": 1,\n  \"text\": \"Guten Tag\",\n  \"isCorrect\": false,\n  \"order\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercise-options",
+						"description": "Create a new exercise option (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Option (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"text\": \"Hallo (Hello)\",\n  \"isCorrect\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercise-options/2",
+						"description": "Update an exercise option (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Option (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/exercise-options/5",
+						"description": "Delete an option (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Exercise option management endpoints"
+		},
+		{
+			"name": "Vocabulary",
+			"item": [
+				{
+					"name": "Get All Sound Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/vocabulary/groups",
+						"description": "Get all sound groups"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sound Group By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/vocabulary/groups/1",
+						"description": "Get a specific sound group by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Sounds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/vocabulary/sounds",
+						"description": "Get all German sounds"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sound By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/vocabulary/sounds/1",
+						"description": "Get a specific sound by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sound Group (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Umlauts\",\n  \"order\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/vocabulary/groups",
+						"description": "Create a new sound group (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sound (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"symbol\": \"ö\",\n  \"exampleWord\": \"schön\",\n  \"type\": \"UMLAUT\",\n  \"audioSrc\": \"https://example.com/audio/o-umlaut.mp3\",\n  \"groupIds\": [2]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/vocabulary/sounds",
+						"description": "Create a new German sound (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Sound (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"exampleWord\": \"schön (beautiful)\",\n  \"audioSrc\": \"https://example.com/audio/o-umlaut-updated.mp3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/vocabulary/sounds/1",
+						"description": "Update a German sound (Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "Vocabulary/pronunciation feature endpoints"
+		},
+		{
+			"name": "General",
+			"item": [
+				{
+					"name": "API Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/health",
+						"description": "Check if the API is operational"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Database Connection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/test-db",
+						"description": "Check database connectivity"
+					},
+					"response": []
+				},
+				{
+					"name": "API Root",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}",
+						"description": "Get API information and available routes"
+					},
+					"response": []
+				}
+			],
+			"description": "General API endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

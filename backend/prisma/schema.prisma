@@ -127,12 +127,13 @@ model ExerciseOption {
 
 model ExerciseProgress {
   id          Int       @id @default(autoincrement())
-  // userId      String
+  userId      String
   exerciseId  Int?
   completed   Boolean   @default(false)
   completedAt DateTime? @map("completed_at")
 
   Exercise Exercise? @relation(fields: [exerciseId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
 }
 
 /**
@@ -183,36 +184,37 @@ model SoundGroupSound {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  username  String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
+  username  String    @unique
   password  String
   firstName String?
   lastName  String?
-  level     Int      @default(1)
-  xp        Int      @default(0)
-  streak    Int      @default(0)
+  level     Int       @default(1)
+  xp        Int       @default(0)
+  streak    Int       @default(0)
   lastLogin DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   // Lernfortschritt
-  progress UserProgress[]
-  
+  progress         UserProgress[]
+  ExerciseProgress ExerciseProgress[]
+
   @@map("users")
 }
 
 model UserProgress {
-  id         String   @id @default(cuid())
-  userId     String
-  lessonId   String
-  exerciseId String?
-  completed  Boolean  @default(false)
-  score      Int?
-  attempts   Int      @default(0)
+  id          String    @id @default(cuid())
+  userId      String
+  lessonId    String
+  exerciseId  String?
+  completed   Boolean   @default(false)
+  score       Int?
+  attempts    Int       @default(0)
   completedAt DateTime?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -226,6 +228,6 @@ model RefreshToken {
   userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())
-  
+
   @@map("refresh_tokens")
 }
