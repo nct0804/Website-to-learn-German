@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { LoginModal } from '../login/LoginModal'
+// import { LoginModal } from '../login/LoginModal'
 import UserPanel from './UserPanel'
 
 export default function HeaderPanel() {
@@ -36,12 +36,12 @@ export default function HeaderPanel() {
           LOGIN
         </button>
 
-        {showModal && (
+        {/* {showModal && (
           <LoginModal
             isSignup={isSignup}
             onClose={() => setShowModal(false)}
           />
-        )}
+        )} */}
       </div>
 
     )
