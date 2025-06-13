@@ -1,18 +1,47 @@
+import React, { useState } from "react";
 import HintTextForNextLesson from "../learning-path/HintTextForNextLesson";
 import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
 import steps from "../learning-path/StepData";
+import LessonCard from "../learning-path/LessonCard";
+import LessonData from "../learning-path/LessonData";
+
+// lessons array and LessonCard from before...
 
 export default function MainContent() {
+  const [selectedLesson, setSelectedLesson] = useState<number | null>(null);
+
   return (
     <div className="flex-1 relative flex justify-center overflow-auto h-full custom-scroll px-4 mx-auto max-w-3xl">
       <div className="w-full max-w-3xl px-4 mx-auto py-8">
-
-        <LessonHeader title="ä, ö, ü sound" subtitle="Lesson 2, Unit 2" />
-        <VerticalStep steps={steps} />
-        <HintTextForNextLesson label="compound sound" />
+        {!selectedLesson ? (
+          <>
+            <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1>
+            <div>
+              {LessonData().map((lesson) => (
+                <LessonCard
+                  key={lesson.id}
+                  lesson={lesson}
+                  onClick={() => setSelectedLesson(lesson.id)}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Flex row: Back button + LessonHeader */}
+            <div className="flex items-center mb-4">
+              
+              
+              <div className="flex-1">
+                <LessonHeader title="ä, ö, ü sound" subtitle="Lesson 2, Unit 2" setSelectedLesson={setSelectedLesson} />
+              </div>
+            </div>
+            <VerticalStep steps={steps} />
+            <HintTextForNextLesson label="compound sound" />
+          </>
+        )}
       </div>
-      
       <style>
         {`
           .custom-scroll::-webkit-scrollbar {
