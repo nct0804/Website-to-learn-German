@@ -64,7 +64,7 @@ Ensure that the relevant ports are free on your system.
 2. Make sure to create a .env file for both backend and frontend:
 -   **Backend**
     ```
-    DATABASE_URL="postgresql://germangains:germangains@localhost:5432/germangainsdb?schema=public"
+    DATABASE_URL="postgresql://germangains:germangains@db:5432/germangainsdb?schema=public"
     PORT=3000
     ```
 -   **Frontend**
