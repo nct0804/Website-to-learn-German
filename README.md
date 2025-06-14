@@ -82,6 +82,14 @@ Ensure that the relevant ports are free on your system.
 
     ```
 
+### Docker trouble shooting
+If it occurs either the following errors, make sure to clean your docker images by using `docker-compose prune -a` 
+
+```
+    The database can't reach to db:5432
+    
+    Error: P1010: User was denied access on the database ⁠ (not available) ⁠
+```
 ### Stop running the app
 To stop the app when running with Docker:
 
