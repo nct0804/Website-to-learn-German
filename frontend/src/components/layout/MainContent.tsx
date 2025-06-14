@@ -4,12 +4,14 @@ import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
 import steps from "../learning-path/StepData";
 import LessonCard from "../learning-path/LessonCard";
-import LessonData from "../learning-path/LessonData";
-
-// lessons array and LessonCard from before...
+import { useLessonData } from "../../hooks/useLessonData";
 
 export default function MainContent() {
   const [selectedLesson, setSelectedLesson] = useState<number | null>(null);
+  const { lessons, isLoading, error } = useLessonData();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="flex-1 relative flex justify-center overflow-auto h-full custom-scroll px-4 mx-auto max-w-3xl">
@@ -18,7 +20,7 @@ export default function MainContent() {
           <>
             <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1>
             <div>
-              {LessonData().map((lesson) => (
+              {lessons.map((lesson) => (
                 <LessonCard
                   key={lesson.id}
                   lesson={lesson}
