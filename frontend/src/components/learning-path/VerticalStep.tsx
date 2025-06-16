@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import LearningStep from "./LearningStep";
 
+
 export default function VerticalStep({ steps }: { steps: any[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,15 +42,24 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
 
   return (
     <div
-      className="flex flex-col items-center relative gap-10 min-h-[400px] w-0 mx-auto"
+      className="flex flex-col items-center relative gap-10 min-h-[400px] w-0 mx-auto my-45"
       ref={containerRef}
     >
       {steps.map((step, i) => (
         <LearningStep
           key={i}
+          title={step.title}
+          description={step.description || ""}
           {...step}
+          icon={
+            step.icon ? (
+              <img src={step.icon} alt={step.title} className="w-18 h-18" />
+            ) : null
+          }
           first={i === 0}
           last={i === steps.length - 1}
+          active={i === 0}             
+          learned={false} 
           selected={selectedIndex === i}
           onClick={() => handleNodeClick(i)}
           nodeWrapperRef={el => (nodeRefs.current[i] = el)}

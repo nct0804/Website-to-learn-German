@@ -11,8 +11,8 @@ export default function LearningStep({
   learned = false,
   selected = false,
   title = "",
-  subtitle = "",
-  xp = "",
+  description = "",
+  xpReward,
   onClick,
   bubbleRef,
   blockedBubbleRef,
@@ -25,8 +25,8 @@ export default function LearningStep({
   learned?: boolean;
   selected?: boolean;
   title?: string;
-  subtitle?: string;
-  xp?: string;
+  description?: string;
+  xpReward: string,
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
   blockedBubbleRef?: (el: HTMLDivElement | null) => void;
@@ -37,15 +37,18 @@ export default function LearningStep({
   return (
     <div className="flex flex-col items-center relative">
       {active && !selected && <StartBubble />}
-
+      
+      {/* Connection Path */}
       {!first && (
-        <div className="w-1 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
+        <div className="w-2 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
       )}
 
       <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
+        
+        {/* Shadow */}
         <div
           className={`
-            absolute w-20 h-19 rounded-full z-0
+            absolute w-30 h-29 rounded-full z-0
             bg-[#3b6978a7] left-1/2 -translate-x-1/2
             transition-all duration-100 pointer-events-none
             ${pressed ? "translate-y-4 opacity-0" : "translate-y-3 opacity-80"}
@@ -53,9 +56,10 @@ export default function LearningStep({
           style={{ top: 0 }}
         />
 
+        {/* Circle lesson node*/}
         <button
           className={`
-            relative z-10 w-20 h-19 rounded-full flex items-center justify-center
+            relative z-10 w-30 h-29 rounded-full flex items-center justify-center
             transition-all duration-100
             shadow-md
             cursor-pointer
@@ -73,36 +77,46 @@ export default function LearningStep({
 
       {/* BUBBLES */}
       {selected && (
-        active ? (
+        active ? ( // Wait for backend to isLearned variable
           <DetailBubble
             ref={bubbleRef}
             title={title}
-            subtitle={subtitle || ""}
+            subtitle={description || ""}
             buttonLabel="START"
-            xp="+10XP"
+            xp={`+` + xpReward + `XP`}
             style={{
               backgroundColor: "white",
               color: '#fbb124',
             }}
           />
-        ) : learned ? (
+        ) : learned ? ( // Wait for backend to isLearned variable
           <DetailBubble
             ref={bubbleRef}
             title={title}
-            subtitle={subtitle || ""}
+            subtitle={description || ""}
             buttonLabel="PRACTICE"
-            xp="+5XP"
+            xp={`+` + xpReward + `XP`}
             style={{
               backgroundColor: "#3B6978",
               color: "white",
             }}
           />
         ) : (
-          <LockedBubble ref={blockedBubbleRef} message="You need to complete previous steps first." />
+          <DetailBubble
+            ref={blockedBubbleRef}
+            title={title}
+            subtitle={description || ""}
+            blockedStyle={{
+              backgroundColor: "#E5E5E5",
+              color: "black",
+            }}
+          />
         )
       )}
+      
+      {/* Connection Path */}
       {!last && (
-        <div className="w-1 h-5 bg-[#E5E5E5] absolute -bottom-5 left-1/2 -translate-x-1/2"></div>
+        <div className="w-2 h-5 bg-[#E5E5E5] absolute -bottom-5 left-1/2 -translate-x-1/2"></div>
       )}
     </div>
   );

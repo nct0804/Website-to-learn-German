@@ -1,9 +1,21 @@
-export default function LessonHeader({title, subtitle, setSelectedLesson}: {title: string, subtitle: string, setSelectedLesson: (lesson: number | null) => void}) {
+export default function LessonHeader({
+    title,
+    description,
+    lessonId, 
+    setSelectedLesson
+}: {
+    title: string, 
+    description: string | undefined,
+    lessonId: number, 
+    setSelectedLesson: (lesson: number | null) => void
+}) {
     return (
         <> 
-            {/* Lesson Header */}
-            <div className="bg-[#fbb124] text-white font-bold rounded-2xl shadow px-8 py-8 mb-12 w-full flex items-center">
-                {/* Left arrow icon (SVG) */}
+            <div className="bg-[#fbb124] 
+            text-white font-bold rounded-2xl shadow px-8 py-8 
+            mb-12 w-full flex items-center 
+            sticky top-0 z-30 bg-[#fbb124] rounded-2xl shadow">
+                {/* Left arrow icon */}
                 <button
                     className="mr-4 transition flex items-center"
                     onClick={() => setSelectedLesson(null)}
@@ -13,9 +25,10 @@ export default function LessonHeader({title, subtitle, setSelectedLesson}: {titl
                         <path d="M15 18l-6-6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
+
                 <div className="flex-1">
-                    <p className="text-sm text-white mb-2">{subtitle}</p>
-                    <h1 className="text-2xl font-bold">{title}</h1>
+                    <p className="text-sm text-white mb-2 font-normal">{description}</p>
+                    <h1 className="text-2xl font-bold">{`Lesson ` + lessonId + `: ` + title}</h1>
                 </div>
             </div>
         </>
