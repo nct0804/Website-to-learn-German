@@ -121,6 +121,14 @@
 }
 
 html {
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
+
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+.custom-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

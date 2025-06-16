@@ -69,6 +69,15 @@ npm install gsap
     RightBar.tsx: Panels shown on the right side of the screen for extra information (not final version): FUN FACTS, TIPS, REWEDENDUNGEN.
     TopBar.tsx: LOGO, STATS, XP PROGRESS, and PROFILE infos (LOGO is not final, just for placeholder, still changeable)
 
+**`components/learning-path/`** :Learning Path
+
+    LearningStep.tsx: Logics for StartBubble, DetailBubble and LockedBubble
+    CourseCard.tsx: CourseCard to choose from in HOME to learn (A1.1, A1.2, B1.1, B1.2)
+    LessonHeader.tsx: Infos for the module (Lesson1, Title...) sticking fixed on top
+    VerticalStep.tsx: Vertical learning path with nodes 
+    StartBubble.tsx: Indicating the active node
+    DetailBubble.tsx: Infos of the clicked node
+
 **`components/login/`** :Login modals and authentication UIs
 
     LoginModal.tsx
@@ -97,7 +106,10 @@ npm install gsap
 
     useAuth.tsx
     useAuthJWT.tsx
+    useCoursesData.tsx: fetch data for courses through /api/courses
+    useModulesWithLessons.tsx fetch data for modules through api/modules/ and api/modules/${courseId}
 
 **`components/libs/`** :General utility/helper functions
 
     utils.tsx
+
