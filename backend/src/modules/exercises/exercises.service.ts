@@ -369,6 +369,6 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
     isCorrect,
     xpReward,
     correctAnswer,
-    feedback: isCorrect ? 'Correct!' : 'Incorrect. Try again.'
+    feedback: isCorrect ? 'Correct!' : 'Uh Oh. Try again.'
   };
 };
