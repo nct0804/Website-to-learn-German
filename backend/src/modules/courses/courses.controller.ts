@@ -111,3 +111,46 @@ export const deleteCourse = async (req: Request, res: Response) => {
     throw error;
   }
 };
+
+export const getCourseWithProgress = async (req: Request, res: Response) => {
+  try {
+    const courseId = Number(req.params.id);
+    
+    if (isNaN(courseId)) {
+      throw new BadRequestError('Invalid course ID');
+    }
+    
+    // Get user ID from the authenticated request
+    const userId = (req as any).user?.id;
+    
+    if (!userId) {
+      throw new BadRequestError('User must be authenticated');
+    }
+    
+    const course = await CourseService.getCourseWithProgress(courseId, userId);
+    
+    return res.status(200).json({
+      success: true,
+      data: course
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllCoursesWithProgress = async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        throw new BadRequestError('User must be authenticated');
+      }
+      const courses = await CourseService.getAllCoursesWithProgress(userId);
+
+      return res.status(200).json({
+        success: true,
+        data: courses
+      });
+    } catch (error) {
+      throw error;
+    }
+};

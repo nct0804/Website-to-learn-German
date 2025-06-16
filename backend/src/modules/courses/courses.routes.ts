@@ -54,4 +54,21 @@ router.delete('/:id', authenticate, checkRole(['admin']),
   }
 );
 
+router.get('/:id/progress', authenticate, async (req, res) => {
+  try {
+    await CourseController.getCourseWithProgress(req, res);
+  } catch (error) {
+    handleError(error, res);
+  }
+});
+
+router.get('/progress/all', authenticate, async (req, res) => {
+  try {
+    await CourseController.getAllCoursesWithProgress(req, res);
+  } catch (error) {
+    handleError(error, res);
+  }
+});
+
+
 export default router;
