@@ -333,9 +333,25 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
   
   // Get XP reward only if correct
   const xpReward = isCorrect ? exercise.xpReward : 0;
+  
+  const existingProgress = await prisma.exerciseProgress.findFirst({
+    where: {
+      userId,
+      exerciseId: id
+    }
+  });
 
   // Store progress in database
   // This could be extended to include userId when implementing user authentication
+  if (existingProgress) {
+  await prisma.exerciseProgress.update({
+    where: { id: existingProgress.id },
+    data: {
+      completed: isCorrect,
+      completedAt: isCorrect ? new Date() : null
+    }
+  });
+  } else {
   await prisma.exerciseProgress.create({
     data: {
       exerciseId: id,
@@ -344,7 +360,7 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
       completedAt: isCorrect ? new Date() : null
     }
   });
-
+  }
     if (isCorrect) {
       await prisma.user.update({
         where: { id: userId },
@@ -364,11 +380,94 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
         }
       });
     }
+    let completionMessage = null;
+    if (isCorrect) {
+      const exercise = await prisma.exercise.findUnique({
+        where: { id },
+        include: { lesson: true }
+      });
+      
+      if (exercise) {
+        // Count total exercises in this lesson
+        const totalExercises = await prisma.exercise.count({
+          where: { lessonId: exercise.lessonId }
+        });
+        
+        // Count completed exercises in this lesson
+        const completedExercises = await prisma.exerciseProgress.count({
+          where: {
+            userId,
+            completed: true,
+            Exercise: {
+              lessonId: exercise.lessonId
+            }
+          }
+        });
+        
+        // If all exercises are completed, add completion message
+        if (completedExercises >= totalExercises) {
+          completionMessage = `Congratulations! You've completed all exercises in "${exercise.lesson.title}" lesson. You can now move to the next lesson or practice this one again.`;
+        }
+      }
+    }
 
   return {
     isCorrect,
     xpReward,
     correctAnswer,
-    feedback: isCorrect ? 'Correct!' : 'Uh Oh. Try again.'
+    feedback: isCorrect ? 'Correct!' : 'Uh Oh. Try again.',
+    completionMessage
+  };
+};
+
+export const getExercisesWithStatus = async (lessonId: number, userId: string) => {
+  // Get all exercises for the lesson
+  const exercises = await prisma.exercise.findMany({
+    where: { lessonId },
+    orderBy: { order: 'asc' },
+    include: {
+      exerciseOptions: {
+        orderBy: { order: 'asc' },
+        select: {
+          id: true,
+          text: true,
+          order: true,
+          // Don't include isCorrect to avoid revealing answers
+        }
+      }
+    }
+  });
+
+  // Get completion status for each exercise
+  const exercisesWithStatus = await Promise.all(
+    exercises.map(async (exercise) => {
+      const progress = await prisma.exerciseProgress.findFirst({
+        where: {
+          userId,
+          exerciseId: exercise.id,
+          completed: true
+        }
+      });
+
+      return {
+        ...exercise,
+        isCompleted: !!progress,
+        completedAt: progress?.completedAt || null
+      };
+    })
+  );
+
+  // Calculate overall lesson completion
+  const totalExercises = exercises.length;
+  const completedExercises = exercisesWithStatus.filter(e => e.isCompleted).length;
+  const progress = totalExercises > 0 ? completedExercises / totalExercises : 0;
+  const isLessonCompleted = completedExercises === totalExercises && totalExercises > 0;
+
+  return {
+    exercises: exercisesWithStatus,
+    progress,
+    completedExercises,
+    totalExercises,
+    isCompleted: isLessonCompleted
   };
 };
