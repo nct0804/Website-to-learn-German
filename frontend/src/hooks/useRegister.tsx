@@ -1,4 +1,3 @@
-// src/hooks/useRegister.ts
 import { useState } from 'react';
 
 export interface RegisterData {

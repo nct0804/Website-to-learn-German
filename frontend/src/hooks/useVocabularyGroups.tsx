@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
-interface Sound {
+// ----- Types -----
+export interface Sound {
   id: number;
   symbol: string;
   exampleWord: string;
@@ -9,14 +10,14 @@ interface Sound {
   createdAt: string;
 }
 
-interface SoundGroup {
+export interface SoundGroup {
   id: number;
   soundId: number;
   groupId: number;
   sound: Sound;
 }
 
-interface VocabularyGroup {
+export interface VocabularyGroup {
   id: number;
   name: string;
   order: number;
@@ -39,23 +40,31 @@ export function useVocabularyGroups(refreshToken: string) {
       try {
         setLoading(true);
         const res = await fetch(
-          'http://localhost:3000/api/vocabulary/groups',
-          { headers: { Cookie: `refreshToken=${refreshToken}` } }
+          "http://localhost:3000/api/vocabulary/groups",
+          {
+            headers: { Cookie: `refreshToken=${refreshToken}` },
+          }
         );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data: ApiResponse = await res.json();
         if (data.success && data.data.length) {
           setGroups(data.data.sort((a, b) => a.order - b.order));
         } else {
-          throw new Error('No data received');
+          throw new Error("No data received");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load');
+        setError(err instanceof Error ? err.message : "Failed to load");
       } finally {
         setLoading(false);
       }
     };
-    fetchGroups();
+
+    if (refreshToken) {
+      fetchGroups();
+    } else {
+      setError("No refresh token");
+      setLoading(false);
+    }
   }, [refreshToken]);
 
   return { groups, loading, error };

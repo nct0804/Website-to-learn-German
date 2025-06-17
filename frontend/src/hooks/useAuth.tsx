@@ -40,7 +40,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  // On mount: đọc token + user từ localStorage hoặc sessionStorage
   useEffect(() => {
     const tok =
       localStorage.getItem('accessToken') ||
