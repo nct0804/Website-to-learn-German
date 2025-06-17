@@ -5,7 +5,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
-import Notification from '../notification/notificationRegister'; // Adjust path as needed
+import Notification from '../notification/notificationRegister'; 
 
 export default function RegisterLeftPanel() {
   const { register, loading, error } = useRegister();
@@ -32,26 +32,23 @@ export default function RegisterLeftPanel() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !password.trim() || !username.trim()) {
-      return; // Form validation will handle this
+      return; 
     }
     
-    // Password validation
     if (password.length < 8) {
-      return; // HTML validation will show the error
+      return; 
     }
     
-    // Username validation
     if (username.length < 3) {
-      return; // HTML validation will show the error
+      return; 
     }
     
     try {
       const registrationData = {
         email: email.trim(),
         password,
-        username: username.trim().toLowerCase(), // Normalize username
+        username: username.trim().toLowerCase(), 
         firstName: firstName.trim(),
         lastName: lastName.trim(),
       };
@@ -60,7 +57,6 @@ export default function RegisterLeftPanel() {
       
       await register(registrationData);
       
-      // Show success notification
       setNotification({
         show: true,
         type: 'success',
@@ -68,7 +64,6 @@ export default function RegisterLeftPanel() {
         message: 'Your account has been created. Redirecting to login page...',
       });
       
-      // Delay navigation to show notification
       setTimeout(() => {
         navigate('/login', { 
           replace: true,
@@ -77,7 +72,6 @@ export default function RegisterLeftPanel() {
       }, 2000);
       
     } catch (err) {
-      // Show error notification
       setNotification({
         show: true,
         type: 'error',
@@ -90,7 +84,6 @@ export default function RegisterLeftPanel() {
 
   return (
     <>
-      {/* Notification */}
       <Notification
         show={notification.show}
         type={notification.type}
@@ -99,7 +92,6 @@ export default function RegisterLeftPanel() {
         onClose={() => setNotification(prev => ({ ...prev, show: false }))}
       />
       
-      {/* Main Form Container - Responsive */}
       <div className="w-full h-full flex items-center scale-80 justify-center p-4 md:p-6 lg:p-8">
         <div className="w-full max-w-md mx-auto">
           <div className="text-center mb-6">
@@ -119,7 +111,6 @@ export default function RegisterLeftPanel() {
               </div>
             )}
 
-            {/* First Name & Last Name Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <div className="space-y-1">
                 <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
@@ -236,7 +227,6 @@ export default function RegisterLeftPanel() {
               <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters long</p>
             </div>
 
-            {/* Submit */}
             <Button
               type="submit"
               className="w-full h-9 md:h-10 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105 focus:scale-95 disabled:opacity-50 disabled:cursor-not-allowed mt-4 md:mt-6"
@@ -252,7 +242,6 @@ export default function RegisterLeftPanel() {
               )}
             </Button>
 
-            {/* Footer */}
             <p className="mt-3 md:mt-4 text-center text-sm text-gray-600">
               Already have an account?{' '}
               <Link to="/login" className="text-orange-600 hover:underline">

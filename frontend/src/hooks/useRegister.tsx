@@ -42,7 +42,7 @@ export function useRegister(): UseRegisterResult {
     setError(null);
     
     try {
-      console.log('Sending registration data:', data); // Debug log
+      console.log('Sending registration data:', data); 
       
       const response = await fetch('http://localhost:3000/api/users/register', {
         method: 'POST',
@@ -53,23 +53,19 @@ export function useRegister(): UseRegisterResult {
         body: JSON.stringify(data),
       });
 
-      console.log('Response status:', response.status); // Debug log
-      console.log('Response headers:', response.headers.get('content-type')); // Debug log
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers.get('content-type')); 
 
-      // Check if response is JSON
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
         const textResponse = await response.text();
         console.error('Non-JSON response:', textResponse);
         
-        // Try to extract error message from HTML response
         let errorMessage = 'Server error occurred';
         
-        // Look for common error patterns in HTML
         if (textResponse.includes('Password min 8 chars')) {
           errorMessage = 'Password must be at least 8 characters long';
         } else if (textResponse.includes('Validation failed')) {
-          // Try to extract validation error from HTML
           const match = textResponse.match(/Validation failed: \[{[^}]*"message":"([^"]*)"[^}]*}\]/);
           if (match && match[1]) {
             errorMessage = match[1];
@@ -90,10 +86,9 @@ export function useRegister(): UseRegisterResult {
       }
 
       const payload = await response.json();
-      console.log('Response payload:', payload); // Debug log
+      console.log('Response payload:', payload); 
 
       if (!response.ok) {
-        // Handle different error formats
         let errorMessage = 'Registration failed';
         
         if (payload.message) {
@@ -104,7 +99,6 @@ export function useRegister(): UseRegisterResult {
           errorMessage = payload;
         }
         
-        // Handle specific Prisma errors
         if (errorMessage.includes('Unique constraint failed') && errorMessage.includes('username')) {
           errorMessage = 'Username already exists. Please choose a different username.';
         } else if (errorMessage.includes('Unique constraint failed') && errorMessage.includes('email')) {
@@ -127,7 +121,7 @@ export function useRegister(): UseRegisterResult {
         errorMessage = err.message || 'Unknown error occurred';
       }
       
-      console.error('Registration error:', err); // Debug log
+      console.error('Registration error:', err); 
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {
