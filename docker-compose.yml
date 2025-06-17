@@ -28,7 +28,7 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      - DATABASE_URL=postgresql://germangains:germangains@db:5432/germangainsdb
+      - DATABASE_URL=postgresql://germangains:germangains@db:5432/germangainsdb?schema=public
     restart: unless-stopped
 
 volumes:
