@@ -140,3 +140,104 @@ export const deleteLesson = async (id: number) => {
     where: { id }
   });
 };
+
+/**
+ * Get lessons with user progress information
+ */
+export const getLessonsWithProgress = async (moduleId: number, userId: string) => {
+  // Get all lessons for the module
+  const lessons = await prisma.lesson.findMany({
+    where: { moduleId },
+    orderBy: { order: 'asc' },
+    include: {
+      _count: {
+        select: {
+          exercises: true
+        }
+      }
+    }
+  });
+
+  if (lessons.length === 0) {
+    return [];
+  }
+
+  // Get user's completed exercise progress for this module's lessons
+  const completedProgress = await prisma.exerciseProgress.findMany({
+    where: {
+      userId,
+      completed: true,
+      Exercise: {
+        lesson: {
+          moduleId
+        }
+      }
+    },
+    include: {
+      Exercise: {
+        select: {
+          lessonId: true
+        }
+      }
+    }
+  });
+
+  // Create a map of lessonId -> count of completed exercises
+  const completedExercisesByLesson = new Map<number, Set<number>>();
+  
+  completedProgress.forEach(progress => {
+    if (!progress.Exercise) return;
+    
+    const lessonId = progress.Exercise.lessonId;
+    if (!completedExercisesByLesson.has(lessonId)) {
+      completedExercisesByLesson.set(lessonId, new Set());
+    }
+    
+    completedExercisesByLesson.get(lessonId)!.add(progress.exerciseId!);
+  });
+
+  // Calculate lesson unlock status - first lesson is always unlocked
+  let previousLessonCompleted = true; // First lesson is always accessible
+
+  // Process each lesson with progress information
+  const lessonsWithProgress = await Promise.all(
+    lessons.map(async (lesson, index) => {
+      // Get count of completed exercises for this lesson
+      const completedExercises = completedExercisesByLesson.get(lesson.id)?.size || 0;
+      const totalExercises = lesson._count.exercises;
+      
+      // Calculate progress percentage
+      const progress = totalExercises > 0 ? completedExercises / totalExercises : 0;
+      
+      // Determine if lesson is completed
+      const isCompleted = progress === 1 && totalExercises > 0;
+      
+      // Determine lesson status (locked/learn/practice)
+      // First lesson is always unlocked, others require previous lesson to be completed
+      const isLocked = index > 0 && !previousLessonCompleted;
+      
+      // Update for next iteration
+      if (isCompleted) {
+        previousLessonCompleted = true;
+      }
+
+      // Determine lesson status and action label
+      let status = isLocked ? "locked" : (isCompleted ? "practice" : "learn");
+      let actionLabel = isLocked ? "LOCKED" : (isCompleted ? "PRACTICE" : "LEARN");
+
+      return {
+        ...lesson,
+        progress,
+        completedExercises,
+        totalExercises,
+        isCompleted,
+        isLocked,
+        status, 
+        actionLabel,
+        isLearned: isCompleted // This is the flag frontend needs
+      };
+    })
+  );
+
+  return lessonsWithProgress;
+};

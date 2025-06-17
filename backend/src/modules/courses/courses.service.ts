@@ -135,3 +135,132 @@ export const deleteCourse = async (id: number): Promise<Course> => {
     where: { id }
   });
 };
+
+export const getCourseWithProgress = async (id: number, userId: string) => {
+  const course = await prisma.course.findUnique({
+    where: { id },
+    include: {
+      modules: {
+        orderBy: { order: 'asc' },
+        include: {
+          lessons: {
+            include: {
+              exercises: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!course) {
+    throw new NotFoundError(`Course with id ${id} not found`);
+  }
+
+  // Calculate progress metrics
+  let totalExercises = 0;
+  let completedExercises = 0;
+
+  // Get all completed exercises for this user
+  const userProgress = await prisma.exerciseProgress.findMany({
+    where: {
+      userId,
+      completed: true,
+      Exercise: {
+        lesson: {
+          module: {
+            courseId: id
+          }
+        }
+      }
+    }
+  });
+
+  // Create a Set of completed exercise IDs for quick lookups
+  const completedExerciseIds = new Set(
+    userProgress.map(progress => progress.exerciseId)
+  );
+
+  // Process each module, lesson, and exercise
+  for (const module of course.modules) {
+    for (const lesson of module.lessons) {
+      for (const exercise of lesson.exercises) {
+        totalExercises++;
+        if (completedExerciseIds.has(exercise.id)) {
+          completedExercises++;
+        }
+      }
+    }
+  }
+
+  // Calculate progress percentage (0 to 1)
+  const progress = totalExercises > 0 ? completedExercises / totalExercises : 0;
+  
+  // Determine course status
+  let status = "locked";
+  let actionLabel = "LOCKED";
+  
+  // First course is always unlocked
+  if (course.order === 1) {
+    status = completedExercises > 0 ? "continue" : "learn";
+    actionLabel = completedExercises > 0 ? "CONTINUE" : "START";
+  } 
+  // Other courses are unlocked if the previous course has progress
+  else if (progress > 0) {
+    status = progress === 1 ? "practice" : "continue";
+    actionLabel = progress === 1 ? "PRACTICE" : "CONTINUE";
+  } else {
+    // Check if previous course has sufficient progress
+    const previousCourse = await prisma.course.findFirst({
+      where: {
+        order: course.order - 1
+      }
+    });
+    
+    if (previousCourse) {
+      const previousCourseProgress = await getCourseWithProgress(previousCourse.id, userId);
+      if (previousCourseProgress.progress >= 1) { // 100% completion unlocks next course
+        status = "learn";
+        actionLabel = "START";
+      }
+    }
+  }
+
+  return {
+    ...course,
+    progress,
+    completedExercises,
+    totalExercises,
+    isCompleted: progress === 1,
+    status,
+    actionLabel
+  };
+};
+
+export const getAllCoursesWithProgress = async (userId: string) => {
+  const courses = await prisma.course.findMany({
+    orderBy: { order: 'asc' }
+  });
+
+  // Add progress info to each course
+  const coursesWithProgress = await Promise.all(
+    courses.map(async (course) => {
+      try {
+        return await getCourseWithProgress(course.id, userId);
+      } catch (error) {
+        console.error(`Error getting progress for course ${course.id}:`, error);
+        return {
+          ...course,
+          progress: 0,
+          completedExercises: 0, 
+          totalExercises: 0,
+          isCompleted: false,
+          status: course.order === 1 ? "learn" : "locked",
+          actionLabel: course.order === 1 ? "START" : "LOCKED"
+        };
+      }
+    })
+  );
+
+  return coursesWithProgress;
+};

@@ -62,5 +62,12 @@ router.delete('/:id', authenticate, checkRole(['admin']),
   }
 );
 
+router.get('/module/:moduleId/progress', authenticate, async (req, res) => {
+  try {
+    await LessonController.getLessonsWithProgress(req, res);
+  } catch (error) {
+    handleError(error, res);
+  }
+});
 
 export default router;
