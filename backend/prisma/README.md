@@ -1,5 +1,7 @@
 # README FOR STRUCTURES AND DATABASE
 
+By default, our seed script preserves user progress while refreshing course content. To reset all data including user progress, uncomment the "// await cleanDatabase();" lines for user tables in prisma/seed.ts before running the seed command.
+
 Ý tưởng xây dựng Database ()
 
 Core Data Structure:
