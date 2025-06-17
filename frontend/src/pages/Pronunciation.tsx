@@ -124,7 +124,7 @@ export default function Pronunciation() {
       setTimeout(() => {
         setActiveVowel(null);
         setIsPlaying(false);
-      }, 500); // Giảm thời gian hiển thị lỗi xuống 0.5s
+      }, 500); 
     }
   };
 
@@ -160,7 +160,6 @@ export default function Pronunciation() {
   return (
     <div className="bg-white py-6 px-4">
       <div className="max-w-3xl mx-auto">
-        {/* Header Section */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-3">
             <Volume2 className="w-5 h-5 text-white" />
@@ -174,7 +173,6 @@ export default function Pronunciation() {
           </p>
         </div>
 
-        {/* Vowels Grid với hiệu ứng nhanh hơn */}
         <div className="grid grid-cols-5 gap-3 mb-4">
           {vowels.map((vowel) => {
             const color = vowelColors[vowel.symbol] || "from-gray-400 to-gray-600";
@@ -196,7 +194,6 @@ export default function Pronunciation() {
                 `}
                 style={{ minHeight: '120px' }}
               >
-                {/* Gradient Background - Tăng tốc độ */}
                 <div className={`
                   absolute inset-0 bg-gradient-to-br ${color} 
                   transition-opacity duration-300
