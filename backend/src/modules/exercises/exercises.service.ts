@@ -341,6 +341,16 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
     }
   });
 
+  if (existingProgress && existingProgress.completed) {
+    return {
+      isCorrect,
+      xpReward: 0, // No XP for already completed exercises
+      correctAnswer,
+      alreadyCompleted: true,
+      feedback: isCorrect ? 'Correct! (already completed)' : 'Incorrect. Try again.'
+    };
+  }
+
   // Store progress in database
   // This could be extended to include userId when implementing user authentication
   if (existingProgress) {
