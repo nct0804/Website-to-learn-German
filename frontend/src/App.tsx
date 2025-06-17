@@ -5,7 +5,6 @@ import Lesson from './pages/Lesson';
 import Ranking from './pages/Ranking';
 import Profile from './pages/Profile';
 import AboutUs from './pages/AboutUs';
-import Pronunciation from './pages/Pronunciation';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
@@ -25,7 +24,6 @@ export default function App() {
           <Route path="ranking" element={<Ranking />} />
           <Route path="profile" element={<Profile />} />
           <Route path="aboutus" element={<AboutUs />} />
-          <Route path='pronunciation' element={<Pronunciation/>} />
         </Route>
       </Route>
     </Routes>
