@@ -64,7 +64,7 @@ Ensure that the relevant ports are free on your system.
 2. Make sure to create a .env file for both backend and frontend:
 -   **Backend**
     ```
-    DATABASE_URL="postgresql://germangains:germangains@localhost:5432/germangainsdb?schema=public"
+    DATABASE_URL="postgresql://germangains:germangains@db:5432/germangainsdb?schema=public"
     PORT=3000
     ```
 -   **Frontend**
@@ -82,6 +82,14 @@ Ensure that the relevant ports are free on your system.
 
     ```
 
+### Docker trouble shooting
+If it occurs either the following errors, make sure to clean your docker images by using `docker-compose prune -a` 
+
+```
+    The database can't reach to db:5432
+    
+    Error: P1010: User was denied access on the database ⁠ (not available) ⁠
+```
 ### Stop running the app
 To stop the app when running with Docker:
 
