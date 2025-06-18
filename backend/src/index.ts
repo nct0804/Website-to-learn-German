@@ -4,7 +4,7 @@ import lessonsRoutes from './modules/lessons/lessons.routes';
 import coursesRoutes from './modules/courses/courses.routes';
 import modulesRoutes from './modules/modules/modules.routes';
 import vocabularyRoutes from './modules/vocabulary/vocabulary.routes';
-
+import path from 'path';
 import exercisesRoutes from './modules/exercises/exercises.routes';
 import exerciseOptionsRoutes from './modules/exercisesOptions/exercisesOptions.routes';
 import cookieParser from "cookie-parser";
@@ -15,6 +15,7 @@ import userRoutes from "./modules/user/user.routes";
 dotenv.config();
 
 const app = express();
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
 app.use(
   cors({

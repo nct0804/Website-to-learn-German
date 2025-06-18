@@ -8,7 +8,7 @@ async function main() {
 
   //  !!!!!!! CLEANING DATA, UNCOMMENT THIS LINE BELOW TO RESET DATABASE!!!!!!!!!!
 
-  // await cleanDatabase();
+  await cleanDatabase();
 
   // Create a demo user account
   const demoUser = await createUser();
@@ -484,7 +484,7 @@ async function createPronunciationData() {
       symbol: 'a',
       exampleWord: 'Mann',
       type: 'VOWEL',
-      audioSrc: '../../assets/audio/a-Mann.mp3'
+      audioSrc: '/assets/sounds/a-Mann.mp3'
     }
   });
   
@@ -493,7 +493,7 @@ async function createPronunciationData() {
       symbol: 'e',
       exampleWord: 'Bett',
       type: 'VOWEL',
-      audioSrc: '../../assets/audio/e-Bett.mp3'
+      audioSrc: '/assets/sounds/e-Bett.mp3'
     }
   });
   
@@ -502,7 +502,7 @@ async function createPronunciationData() {
       symbol: 'i',
       exampleWord: 'Kind',
       type: 'VOWEL',
-      audioSrc: '../../assets/audio/i-Kind.mp3'
+      audioSrc: '/assets/sounds/i-Kind.mp3'
     }
   });
   
@@ -511,7 +511,7 @@ async function createPronunciationData() {
       symbol: 'o',
       exampleWord: 'Sonne',
       type: 'VOWEL',
-      audioSrc: '../../assets/audio/o-Sonne.mp3'
+      audioSrc: '/assets/sounds/o-Sonne.mp3'
     }
   });
   
@@ -520,7 +520,7 @@ async function createPronunciationData() {
       symbol: 'u',
       exampleWord: 'Mutter',
       type: 'VOWEL',
-      audioSrc: '../../assets/audio/u-Mutter.mp3'
+      audioSrc: '/assets/sounds/u-Mutter.mp3'
     }
   });
   
@@ -530,7 +530,7 @@ async function createPronunciationData() {
       symbol: 'ä',
       exampleWord: 'Mädchen',
       type: 'UMLAUT',
-      audioSrc: '../../assets/audio/ä-Mädchen.mp3'
+      audioSrc: '/assets/sounds/ä-Mädchen.mp3'
     }
   });
   
@@ -539,7 +539,7 @@ async function createPronunciationData() {
       symbol: 'ö',
       exampleWord: 'schön',
       type: 'UMLAUT',
-      audioSrc: '../../assets/audio/ö-schön.mp3'
+      audioSrc: '/assets/sounds/ö-schön.mp3'
     }
   });
   
@@ -548,7 +548,7 @@ async function createPronunciationData() {
       symbol: 'ü',
       exampleWord: 'Tür',
       type: 'UMLAUT',
-      audioSrc: '../../assets/audio/ü-Tür.mp3'
+      audioSrc: '/assets/sounds/ü-Tür.mp3'
     }
   });
   
@@ -558,7 +558,7 @@ async function createPronunciationData() {
       symbol: 'ch',
       exampleWord: 'ich (I)',
       type: 'CONSONANT',
-      audioSrc: '../../assets/audio/ich.mp3'
+      audioSrc: '/assets/sounds/ich.mp3'
     }
   });
   
@@ -567,7 +567,7 @@ async function createPronunciationData() {
       symbol: 'ß',
       exampleWord: 'Straße',
       type: 'CONSONANT',
-      audioSrc: '../../assets/audio/ß-Straße.mp3'
+      audioSrc: '/assets/sounds/ß-Straße.mp3'
     }
   });
   
