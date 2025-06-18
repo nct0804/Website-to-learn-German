@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// ----- Types -----
 export interface Sound {
   id: number;
   symbol: string;

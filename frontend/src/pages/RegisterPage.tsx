@@ -2,6 +2,8 @@
 import React from 'react';
 import RegisterLeftPanel from '../components/login/RegisterLeftPanel';
 import LoginRightPanel from '../components/login/LoginRightPanel';
+import AnimatedBackgroundEffects from '../components/custom/AnimatedBackgroundEffects';
+
 
 export default function RegisterPage() {
   return (
@@ -9,10 +11,11 @@ export default function RegisterPage() {
       <div className="flex items-center justify-center bg-white">
         <RegisterLeftPanel />
       </div>
-      <div
-        className="flex items-center justify-center blink-gradient"
-      >
-        <LoginRightPanel />
+      <div className="blink-gradient relative overflow-hidden">
+        <AnimatedBackgroundEffects />
+        <div className="flex items-center justify-center h-full relative z-10">
+          <LoginRightPanel />
+        </div>
       </div>
     </div>
   );
