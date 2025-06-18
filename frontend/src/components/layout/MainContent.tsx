@@ -16,18 +16,20 @@ import Number1120Icon from "../../assets/Number12.png"
 import Number100Icon from "../../assets/number100.png"
 import AgeIcon from "../../assets/age.png"
 
-const lessonIcons: Record<number, string> = {
-  4: GreetingIcon,                // Basic Greeting
-  1: IntroductionIcon,            // Introducing Yourself
-  2: FormalVsInformalIcon,        // Formal vs Informal Speech
-  3: QuestionIcon,                // Asking Simple Questions
-  5: EveryDayPhrasesIcon,         // Common Everyday Phrases
-  7: NumberIcon,                  // Numbers 1-10
-  6: Number1120Icon,              // Number 11-20
-  8: OrdinalNumberIcon,           //Ordinal Number
-  9: Number100Icon,               // Number 21-100
-  10: AgeIcon                     //Talking about age
-}
+const lessonIcons = [
+  IntroductionIcon,            // Introducing Yourself
+  FormalVsInformalIcon,        // Formal vs Informal Speech
+  QuestionIcon,                // Asking Simple Questions
+  GreetingIcon,                // Basic Greeting
+  EveryDayPhrasesIcon,         // Common Everyday Phrases
+  Number1120Icon,              // Number 11-20
+  NumberIcon,                  // Numbers 1-10
+  OrdinalNumberIcon,           //Ordinal Number
+  Number100Icon,               // Number 21-100
+  AgeIcon                     //Talking about age
+]
+  
+
 
 export default function MainContent() {
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
@@ -69,11 +71,11 @@ export default function MainContent() {
               <VerticalStep
                 steps={
                   Array.isArray(module.lessons)
-                    ? module.lessons.map((lesson) => ({
+                    ? module.lessons.map((lesson, index) => ({
                         title: lesson.title,
                         xpReward: lesson.xpReward,
                         ...lesson,
-                        icon: lessonIcons[lesson.id],
+                        icon: lessonIcons[index],
                       }))
                     : []
                 }
