@@ -6,38 +6,31 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Starting database seeding...');
 
-  // Clean existing data to prevent duplicates
-  await cleanDatabase();
+  //  !!!!!!! CLEANING DATA, UNCOMMENT THIS LINE BELOW TO RESET DATABASE!!!!!!!!!!
+
+  // await cleanDatabase();
 
   // Create a demo user account
   const demoUser = await createUser();
-
   // Create course progression (A1.1 - A2.2)
   const courses = await createCourses();
-
   // Create modules for A1.1 (first unlocked, second locked)
   const modules = await createModules(courses[0].id);
-
   // Create lessons for first module (first unlocked, others locked)
   const lessons = await createFirstModuleLessons(modules[0].id);
-
   // Create lessons for second module (all locked - placeholders)
   await createSecondModuleLessons(modules[1].id);
-
   // Create exercises for first lesson
   await createExercisesForFirstLesson(lessons[0].id);
-
   // Create pronunciation data
   await createPronunciationData();
 
   console.log('Database seeding completed successfully!');
 }
 
-/**
- * Cleans existing database entries to prevent conflicts
- */
 async function cleanDatabase() {
   console.log('Cleaning existing database records...');
+  
   
   // Delete in correct order (respecting foreign key constraints)
   await prisma.exerciseProgress.deleteMany();
@@ -65,9 +58,11 @@ async function createUser() {
   
   const hashedPassword = await bcrypt.hash('password123', 10);
   
-  const user = await prisma.user.create({
-    data: {
-      email: 'demo@germangains.com',
+  const user = await prisma.user.upsert({
+  where: { email: "demo@germangains.com" },
+  update: {}, // No changes if it exists
+  create: {
+    email: "demo@germangains.com",
       username: 'demouser',
       password: hashedPassword,
       firstName: 'Demo',

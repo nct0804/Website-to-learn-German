@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "41e88643-505d-4f5a-9897-e627d19532d9",
-		"name": "GermanGains Complete API Copy",
+		"_postman_id": "633a6953-5192-4fad-9db6-92ef411dc359",
+		"name": "GermanGains Complete API Copy 2",
 		"description": "API collection for GermanGains German learning platform",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "44407978",
-		"_collection_link": "https://chithien-4528100.postman.co/workspace/Chi-Thien's-Workspace~4bea45cb-dacd-44b8-88df-0f9b2d022fad/collection/44407978-41e88643-505d-4f5a-9897-e627d19532d9?action=share&source=collection_link&creator=44407978"
+		"_collection_link": "https://chithien-4528100.postman.co/workspace/Chi-Thien's-Workspace~4bea45cb-dacd-44b8-88df-0f9b2d022fad/collection/44407978-633a6953-5192-4fad-9db6-92ef411dc359?action=share&source=collection_link&creator=44407978"
 	},
 	"item": [
 		{
@@ -27,6 +27,13 @@
 								],
 								"type": "text/javascript",
 								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -324,7 +331,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"answer\": \"{{correctOptionId}}\"\n}",
+							"raw": "{\n  \"answer\": \"{{ID}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -448,6 +455,335 @@
 				}
 			],
 			"description": "Test the complete user learning flow based on seeded data"
+		},
+		{
+			"name": "PROGRESS TRACKING",
+			"item": [
+				{
+					"name": "Get Course Progress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Course progress loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const progress = jsonData.data;",
+									"    pm.expect(progress).to.have.property('progress');",
+									"    pm.expect(progress).to.have.property('completedExercises');",
+									"    pm.expect(progress).to.have.property('totalExercises');",
+									"    pm.expect(progress).to.have.property('isCompleted');",
+									"    pm.expect(progress).to.have.property('status');",
+									"    pm.expect(progress).to.have.property('actionLabel');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/courses/{{courseA1_1_id}}/progress",
+						"description": "Get detailed progress information for a specific course"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Courses with Progress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"All courses with progress loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const courses = jsonData.data;",
+									"    pm.expect(courses).to.be.an('array');",
+									"    pm.expect(courses.length).to.be.at.least(1);",
+									"    ",
+									"    // Check first course has progress data",
+									"    const firstCourse = courses[0];",
+									"    pm.expect(firstCourse).to.have.property('progress');",
+									"    pm.expect(firstCourse).to.have.property('status');",
+									"    pm.expect(firstCourse).to.have.property('actionLabel');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/courses/progress/all",
+						"description": "Get all courses with their progress information"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module Lessons with Progress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Lessons with progress loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const lessons = jsonData.data;",
+									"    pm.expect(lessons).to.be.an('array');",
+									"    pm.expect(lessons.length).to.be.at.least(1);",
+									"    ",
+									"    // Check first lesson has progress data",
+									"    const firstLesson = lessons[0];",
+									"    pm.expect(firstLesson).to.have.property('progress');",
+									"    pm.expect(firstLesson).to.have.property('isCompleted');",
+									"    pm.expect(firstLesson).to.have.property('isLocked');",
+									"    pm.expect(firstLesson).to.have.property('status');",
+									"    pm.expect(firstLesson).to.have.property('actionLabel');",
+									"    pm.expect(firstLesson).to.have.property('isLearned');",
+									"    pm.expect(firstLesson).to.have.property('completedExercises');",
+									"    pm.expect(firstLesson).to.have.property('totalExercises');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/lesson/module/{{firstModuleId}}/progress",
+						"description": "Get lessons with progress information for a specific module"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Exercises with Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Exercises with status loaded successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const data = jsonData.data;",
+									"    pm.expect(data).to.have.property('exercises').that.is.an('array');",
+									"    pm.expect(data).to.have.property('progress');",
+									"    pm.expect(data).to.have.property('completedExercises');",
+									"    pm.expect(data).to.have.property('totalExercises');",
+									"    pm.expect(data).to.have.property('isCompleted');",
+									"    ",
+									"    // Check the exercise has completion status",
+									"    if (data.exercises.length > 0) {",
+									"        pm.expect(data.exercises[0]).to.have.property('isCompleted');",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/exercises/status/lesson/{{firstLessonId}}",
+						"description": "Get exercises with completion status for a specific lesson"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Exercise Completion Message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Answer submitted successfully\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    pm.expect(jsonData.data).to.have.property('isCorrect');",
+									"    ",
+									"    // Check for completion message if answer is correct",
+									"    if (jsonData.data.isCorrect) {",
+									"        // Completion message may be null if this isn't the last exercise",
+									"        if (jsonData.data.completionMessage) {",
+									"            pm.expect(jsonData.data.completionMessage).to.include('Congratulations');",
+									"            console.log('Lesson completion message: ' + jsonData.data.completionMessage);",
+									"        }",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"answer\": \"{{correctOptionId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercises/{{firstExerciseId}}/check",
+						"description": "Submit a correct answer and check for completion message"
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Multiple Exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// This is a pre-request script that will run for each request",
+									"// Store current exercise index and progressions",
+									"const exerciseIndex = pm.variables.get(\"currentExerciseIndex\") || 0;",
+									"",
+									"pm.test(\"Exercise answer submission successful\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    // Log progress for monitoring",
+									"    console.log(`Completed exercise ${parseInt(exerciseIndex) + 1} of 5`);",
+									"    ",
+									"    // If this is the last exercise, check for completion message",
+									"    if (parseInt(exerciseIndex) === 4) {",
+									"        if (jsonData.data.completionMessage) {",
+									"            console.log('LESSON COMPLETED: ' + jsonData.data.completionMessage);",
+									"            pm.environment.set(\"lessonCompleted\", true);",
+									"        }",
+									"    }",
+									"    ",
+									"    // Set up for next exercise",
+									"    const nextIndex = parseInt(exerciseIndex) + 1;",
+									"    if (nextIndex < 5) { // Assuming 5 exercises per lesson",
+									"        pm.variables.set(\"currentExerciseIndex\", nextIndex);",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"answer\": \"{{correctOptionId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/exercises/{{exerciseIds[currentExerciseIndex]}}/check",
+						"description": "Complete multiple exercises in sequence to trigger completion logic"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Lesson Status Changed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Lesson status changed to PRACTICE\", function() {",
+									"    pm.response.to.have.status(200);",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    ",
+									"    const lessons = jsonData.data;",
+									"    const firstLesson = lessons[0];",
+									"    ",
+									"    // First lesson should now be completed and marked as PRACTICE",
+									"    if (pm.environment.get(\"lessonCompleted\")) {",
+									"        pm.expect(firstLesson.isCompleted).to.be.true;",
+									"        pm.expect(firstLesson.actionLabel).to.equal(\"PRACTICE\");",
+									"        pm.expect(firstLesson.status).to.equal(\"practice\");",
+									"        pm.expect(firstLesson.isLearned).to.be.true;",
+									"        console.log('Lesson successfully marked as PRACTICE');",
+									"    }",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{baseUrl}}/api/lesson/module/{{firstModuleId}}/progress",
+						"description": "Verify that a completed lesson is now marked as PRACTICE"
+					},
+					"response": []
+				}
+			],
+			"description": "Test the progress tracking and completion status features"
 		},
 		{
 			"name": "USER (Chi Quynh)",

@@ -143,3 +143,30 @@ export const getLessonsByModuleId = async (req: Request, res: Response) => {
     throw error;
   }
 };
+
+export const getLessonsWithProgress = async (req: Request, res: Response) => {
+  try {
+    const moduleId = Number(req.params.moduleId);
+    
+    if (isNaN(moduleId)) {
+      throw new BadRequestError('Invalid module ID');
+    }
+    
+    // Get user ID from the authenticated request
+    const userId = (req as any).user?.id;
+    
+    if (!userId) {
+      throw new BadRequestError('User must be authenticated');
+    }
+    
+    const lessons = await LessonService.getLessonsWithProgress(moduleId, userId);
+    
+    return res.status(200).json({
+      success: true,
+      data: lessons
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+

@@ -1,7 +1,8 @@
 import express from 'express';
 import * as ExerciseController from './exercises.controller';
+import * as ExerciseService from './exercises.service';
 import { authenticate, checkRole } from '../../middleware/auth.middleware';
-import { handleError } from '../../utils/errors';
+import { handleError, BadRequestError } from '../../utils/errors';
 import { validateCreateExercise, validateUpdateExercise } from '../../middleware/exercises.validation';
 
 const router = express.Router();
@@ -24,6 +25,34 @@ router.get('/:id', async (req, res) => {
     handleError(error, res);
   }
 });
+
+router.get(
+  '/status/lesson/:lessonId',
+  authenticate,
+  async (req, res) => {
+    try {
+      const lessonId = Number(req.params.lessonId);
+      const userId = (req as any).user?.id;
+
+      if (isNaN(lessonId)) {
+        throw new BadRequestError('Invalid lesson ID');
+      }
+
+      if (!userId) {
+        throw new BadRequestError('User must be authenticated');
+      }
+
+      const exercisesWithStatus = await ExerciseService.getExercisesWithStatus(lessonId, userId);
+      
+      res.status(200).json({
+        success: true,
+        data: exercisesWithStatus
+      });
+    } catch (error) {
+      handleError(error, res);
+    }
+  }
+);
 
 // /api/lessons/:lessonId/exercises
 router.get('/lesson/:lessonId', async (req, res) => {
@@ -101,5 +130,8 @@ router.delete(
     }
   }
 );
+
+
+
 
 export default router;
