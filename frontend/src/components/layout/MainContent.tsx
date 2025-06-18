@@ -30,7 +30,6 @@ const lessonIcons = [
 ]
   
 
-
 export default function MainContent() {
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
 
@@ -60,11 +59,10 @@ export default function MainContent() {
             </div>
           </>
         ) : (
-          Array.isArray(modules) && modules.length > 0 && modules.map((module) => (
+          Array.isArray(modules) && modules.length > 0 && modules.map((module, moduleIndex) => (
             <div key={module.id} className="mb-12">
               <LessonHeader
-                title={module.title}
-                lessonId={module.id}
+                title={`Lesson ${moduleIndex + 1}`}
                 description={module.description}
                 setSelectedLesson={setSelectedCourse}
               />

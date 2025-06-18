@@ -1,12 +1,10 @@
 export default function LessonHeader({
     title,
     description,
-    lessonId, 
     setSelectedLesson
 }: {
     title: string, 
     description: string | undefined,
-    lessonId: number, 
     setSelectedLesson: (lesson: number | null) => void
 }) {
     return (
@@ -28,7 +26,7 @@ export default function LessonHeader({
 
                 <div className="flex-1">
                     <p className="text-sm text-white mb-2 font-normal">{description}</p>
-                    <h1 className="text-2xl font-bold">{`Lesson ` + lessonId + `: ` + title}</h1>
+                    <h1 className="text-2xl font-bold">{title}</h1>
                 </div>
             </div>
         </>
