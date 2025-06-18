@@ -482,45 +482,45 @@ async function createPronunciationData() {
   const vowelA = await prisma.germanSound.create({
     data: {
       symbol: 'a',
-      exampleWord: 'Mann (man)',
+      exampleWord: 'Mann',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/a.mp3'
+      audioSrc: '../../assets/audio/a-Mann.mp3'
     }
   });
   
   const vowelE = await prisma.germanSound.create({
     data: {
       symbol: 'e',
-      exampleWord: 'Bett (bed)',
+      exampleWord: 'Bett',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/e.mp3'
+      audioSrc: '../../assets/audio/e-Bett.mp3'
     }
   });
   
   const vowelI = await prisma.germanSound.create({
     data: {
       symbol: 'i',
-      exampleWord: 'Kind (child)',
+      exampleWord: 'Kind',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/i.mp3'
+      audioSrc: '../../assets/audio/i-Kind.mp3'
     }
   });
   
   const vowelO = await prisma.germanSound.create({
     data: {
       symbol: 'o',
-      exampleWord: 'Sonne (sun)',
+      exampleWord: 'Sonne',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/o.mp3'
+      audioSrc: '../../assets/audio/o-Sonne.mp3'
     }
   });
   
   const vowelU = await prisma.germanSound.create({
     data: {
       symbol: 'u',
-      exampleWord: 'Mutter (mother)',
+      exampleWord: 'Mutter',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/u.mp3'
+      audioSrc: '../../assets/audio/u-Mutter.mp3'
     }
   });
   
@@ -528,27 +528,27 @@ async function createPronunciationData() {
   const umlautA = await prisma.germanSound.create({
     data: {
       symbol: 'ä',
-      exampleWord: 'Mädchen (girl)',
+      exampleWord: 'Mädchen',
       type: 'UMLAUT',
-      audioSrc: '/audio/german/umlauts/a-umlaut.mp3'
+      audioSrc: '../../assets/audio/ä-Mädchen.mp3'
     }
   });
   
   const umlautO = await prisma.germanSound.create({
     data: {
       symbol: 'ö',
-      exampleWord: 'schön (beautiful)',
+      exampleWord: 'schön',
       type: 'UMLAUT',
-      audioSrc: '/audio/german/umlauts/o-umlaut.mp3'
+      audioSrc: '../../assets/audio/ö-schön.mp3'
     }
   });
   
   const umlautU = await prisma.germanSound.create({
     data: {
       symbol: 'ü',
-      exampleWord: 'Tür (door)',
+      exampleWord: 'Tür',
       type: 'UMLAUT',
-      audioSrc: '/audio/german/umlauts/u-umlaut.mp3'
+      audioSrc: '../../assets/audio/ü-Tür.mp3'
     }
   });
   
@@ -558,16 +558,16 @@ async function createPronunciationData() {
       symbol: 'ch',
       exampleWord: 'ich (I)',
       type: 'CONSONANT',
-      audioSrc: '/audio/german/consonants/ch.mp3'
+      audioSrc: '../../assets/audio/ich.mp3'
     }
   });
   
   const consonantSZ = await prisma.germanSound.create({
     data: {
       symbol: 'ß',
-      exampleWord: 'Straße (street)',
+      exampleWord: 'Straße',
       type: 'CONSONANT',
-      audioSrc: '/audio/german/consonants/ss.mp3'
+      audioSrc: '../../assets/audio/ß-Straße.mp3'
     }
   });
   
