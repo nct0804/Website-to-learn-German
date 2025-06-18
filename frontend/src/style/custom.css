@@ -35,14 +35,13 @@
     #9a3412,  /* orange-800 */
     #7c2d12   /* orange-900 */
   );
-  background-size: 300% 300%; /* Tăng kích thước cho chuyển động rộng hơn */
+  background-size: 300% 300%;
   animation: silkFlow 16s cubic-bezier(0.17, 0.67, 0.83, 0.67) infinite;
   transform: translateZ(0);
   position: relative;
   overflow: hidden;
 }
 
-/* Hiệu ứng ánh sáng lấp lánh */
 .blink-gradient::before {
   content: '';
   position: absolute;
