@@ -481,7 +481,7 @@ async function createPronunciationData() {
     const dipthongsGroup = await prisma.soundGroup.create({
     data: {
       name: 'Special Diphthongs',
-      order: 
+      order: 4
     }
   });
   
