@@ -477,6 +477,13 @@ async function createPronunciationData() {
       order: 3
     }
   });
+
+    const dipthongsGroup = await prisma.soundGroup.create({
+    data: {
+      name: 'Special Diphthongs',
+      order: 
+    }
+  });
   
   // Create vowel sounds
   const vowelA = await prisma.germanSound.create({
@@ -570,6 +577,54 @@ async function createPronunciationData() {
       audioSrc: '/assets/sounds/ß-Straße.mp3'
     }
   });
+
+    // Create Dipthong sounds
+  const dipthongAU = await prisma.germanSound.create({
+    data: {
+      symbol: 'au',
+      exampleWord: 'Haus',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/au-Haus.mp3'
+    }
+  });
+
+  const dipthongEI = await prisma.germanSound.create({
+    data: {
+      symbol: 'ei',
+      exampleWord: 'mein',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/ei-mein.mp3'
+    }
+  });
+
+  const dipthongEU = await prisma.germanSound.create({
+    data: {
+      symbol: 'eu',
+      exampleWord: 'neu',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/eu-neu.mp3'
+    }
+  });
+
+  const dipthongAUe = await prisma.germanSound.create({
+    data: {
+      symbol: 'äu',
+      exampleWord: 'Bäume',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/äu-Bäume.mp3'
+    }
+  });
+
+  const dipthongIE = await prisma.germanSound.create({
+    data: {
+      symbol: 'ie',
+      exampleWord: 'Liebe',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/ie-Liebe.mp3'
+    }
+  });
+
+
   
   // Associate sounds with groups
   // Vowels
@@ -593,6 +648,15 @@ async function createPronunciationData() {
     prisma.soundGroupSound.create({ data: { soundId: consonantCH.id, groupId: consonantGroup.id } }),
     prisma.soundGroupSound.create({ data: { soundId: consonantSZ.id, groupId: consonantGroup.id } })
   ]);
+
+  // Special Diphthongs
+  await Promise.all([
+    prisma.soundGroupSound.create({ data: { soundId: dipthongAU.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongEI.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongEU.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongAUe.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongIE.id, groupId: dipthongsGroup.id } })
+  ]); 
   
   console.log('Created pronunciation data with 3 sound groups and 10 German sounds.');
 }
