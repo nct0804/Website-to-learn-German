@@ -64,8 +64,19 @@ Ensure that the relevant ports are free on your system.
 2. Make sure to create a .env file for both backend and frontend:
 -   **Backend**
     ```
-    DATABASE_URL="postgresql://germangains:germangains@db:5432/germangainsdb?schema=public"
+    DATABASE_URL="postgresql://postgres:postgres@localhost:5432/germangains_db"
+
+    # JWT
+    JWT_SECRET="supersecretjwtkey"
+    JWT_REFRESH_SECRET="anotherrefreshsecret"
+    JWT_EXPIRES_IN="1h"
+    JWT_REFRESH_EXPIRES_IN="7d"
+
+    # Server
     PORT=3000
+    NODE_ENV=development
+
+
     ```
 -   **Frontend**
     ```
