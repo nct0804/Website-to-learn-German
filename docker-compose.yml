@@ -31,5 +31,16 @@ services:
       - DATABASE_URL=postgresql://germangains:germangains@db:5432/germangainsdb?schema=public
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: germangains-frontend
+    ports:
+      - '4242:80'
+    depends_on:
+      - backend
+    restart: unless-stopped
+
 volumes:
   pgdata:
