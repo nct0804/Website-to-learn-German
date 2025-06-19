@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 import { faHeadphonesSimple } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLogout } from '@/hooks/useLogOut';
 
 const menuItems = [
   { to: '/', icon: Home, label: 'Home' },
@@ -19,6 +20,7 @@ export default function LeftBar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { logout, loading } = useLogout();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,15 +52,15 @@ export default function LeftBar() {
             >
               <div className="w-8 h-8 flex items-center justify-center">
                 {typeof item.icon === 'string' ? (
-                  <img 
-                    src={item.icon} 
-                    className="w-full h-full object-contain" 
-                    alt={item.label} 
+                  <img
+                    src={item.icon}
+                    className="w-full h-full object-contain"
+                    alt={item.label}
                   />
                 ) : (
-                  <FontAwesomeIcon 
-                    icon={item.icon} 
-                    className="text-[1.75rem] text-gray-800" 
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="text-[1.75rem] text-gray-800"
                   />
                 )}
               </div>
@@ -100,13 +102,15 @@ export default function LeftBar() {
               About us
             </Link>
             <button
-              className="px-4 py-2 text-left text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95"
-              onClick={() => {
-                // logout logic
+              className="px-4 py-2 text-left text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95 flex items-center justify-between"
+              onClick={async () => {
+                await logout();
                 setMenuOpen(false);
               }}
+              disabled={loading}
             >
               Logout
+              {loading && <span className="ml-2 animate-spin">⏳</span>}
             </button>
           </div>
         )}
