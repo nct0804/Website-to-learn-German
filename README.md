@@ -64,7 +64,7 @@ Ensure that the relevant ports are free on your system.
 2. Make sure to create a .env file for both backend and frontend:
 -   **Backend**
     ```
-    DATABASE_URL="postgresql://postgres:postgres@localhost:5432/germangains_db"
+    DATABASE_URL="postgresql://germangains:germangains@db:5432/germangainsdb?schema=public"
 
     # JWT
     JWT_SECRET="supersecretjwtkey"
