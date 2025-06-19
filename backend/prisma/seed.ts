@@ -578,6 +578,78 @@ async function createPronunciationData() {
     }
   });
 
+  const consonantD = await prisma.germanSound.create({
+    data: {
+      symbol: 'd',
+      exampleWord: 'danke',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/danke.mp3'
+    }
+  });
+
+  const consonantG = await prisma.germanSound.create({
+    data: {
+      symbol: 'g',
+      exampleWord: 'gut',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/gut.mp3'
+    }
+  });
+
+  const consonantH = await prisma.germanSound.create({
+    data: {
+      symbol: 'h',
+      exampleWord: 'Haus',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/h-Haus.mp3'
+    }
+  });
+
+  const consonantR = await prisma.germanSound.create({
+    data: {
+      symbol: 'r',
+      exampleWord: 'rot',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/r-rot.mp3'
+    }
+  });
+
+  const consonantS = await prisma.germanSound.create({
+    data: {
+      symbol: 's',
+      exampleWord: 'Sonne',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/s-Sonne.mp3'
+    }
+  });
+
+  const consonantV = await prisma.germanSound.create({
+    data: {
+      symbol: 'v',
+      exampleWord: 'Vater',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/v-Vater.mp3'
+    }
+  });
+
+  const consonantW = await prisma.germanSound.create({
+    data: {
+      symbol: 'w',
+      exampleWord: 'Wasser',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/w-Wasser.mp3'
+    }
+  });
+
+  const consonantZ = await prisma.germanSound.create({
+    data: {
+      symbol: 'z',
+      exampleWord: 'Zeit',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/z-Zeit.mp3'
+    }
+  });
+
     // Create Dipthong sounds
   const dipthongAU = await prisma.germanSound.create({
     data: {
@@ -646,7 +718,15 @@ async function createPronunciationData() {
   // Special consonants
   await Promise.all([
     prisma.soundGroupSound.create({ data: { soundId: consonantCH.id, groupId: consonantGroup.id } }),
-    prisma.soundGroupSound.create({ data: { soundId: consonantSZ.id, groupId: consonantGroup.id } })
+    prisma.soundGroupSound.create({ data: { soundId: consonantSZ.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantD.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantG.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantH.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantR.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantS.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantV.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantW.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantZ.id, groupId: consonantGroup.id } })
   ]);
 
   // Special Diphthongs
