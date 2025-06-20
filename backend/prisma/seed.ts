@@ -46,6 +46,16 @@ async function cleanDatabase() {
   await prisma.userProgress.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.user.deleteMany();
+
+  await prisma.$executeRaw`ALTER SEQUENCE exercises_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE exercise_options_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE lessons_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE modules_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE courses_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE german_sounds_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE sound_groups_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE sound_group_sounds_id_seq RESTART WITH 1;`;
+  
   
   console.log('Database cleaned successfully.');
 }
