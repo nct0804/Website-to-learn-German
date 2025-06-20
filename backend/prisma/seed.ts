@@ -10,6 +10,9 @@ async function main() {
 
   // await cleanDatabase();
 
+  //  !!!!!!! PRESERVING USERS DATA, AND RESET CONTENt SEQUENCES!!!!!!!!!!
+  await cleanContentOnly();
+
   // Create a demo user account
   const demoUser = await createUser();
   // Create course progression (A1.1 - A2.2)
@@ -58,6 +61,41 @@ async function cleanDatabase() {
   
   
   console.log('Database cleaned successfully.');
+}
+
+async function cleanContentOnly() {
+  console.log('Cleaning only content data, preserving users...');
+  
+  try {
+    // First delete relationships and dependent data
+    await prisma.exerciseProgress.deleteMany();
+    await prisma.soundGroupSound.deleteMany();
+    await prisma.userProgress.deleteMany();
+    
+    // Then delete content entities
+    await prisma.germanSound.deleteMany();
+    await prisma.soundGroup.deleteMany();
+    await prisma.exerciseOption.deleteMany();
+    await prisma.exercise.deleteMany();
+    await prisma.lesson.deleteMany();
+    await prisma.modulePrerequisite.deleteMany();
+    await prisma.module.deleteMany();
+    await prisma.course.deleteMany();
+    
+    // Reset content sequences but not user sequences
+    await prisma.$executeRaw`ALTER SEQUENCE exercises_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE exercise_options_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE lessons_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE modules_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE courses_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE german_sounds_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE sound_groups_id_seq RESTART WITH 1;`;
+    
+    console.log('Content data cleaned without affecting user data');
+  } catch (error) {
+    console.error('Error while cleaning content data:', error);
+    throw error; // Re-throw to handle in the calling function
+  }
 }
 
 /**
