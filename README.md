@@ -49,8 +49,8 @@ You can download and install Node.js and npm from the [Node.js official site](ht
     ```
     docker compose up --build -d
     ```
-The backend will be available at [http://localhost:3000](http://localhost:4000).  
-The frontend will be available at (Updating...)
+The backend will be available at [http://localhost:3000](http://localhost:3000).  
+The frontend will be available at [http://localhost:4242](http://localhost:4242).
 
 Ensure that the relevant ports are free on your system.
 
