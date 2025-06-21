@@ -80,7 +80,7 @@ Ensure that the relevant ports are free on your system.
     ```
 -   **Frontend**
     ```
-    Updating...
+    VITE_API_PROXY_TARGET=http://backend:3000
     ```
 3. Run either backend or frontend or the whole project:
     ```
