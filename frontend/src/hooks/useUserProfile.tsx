@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from './useAuth';
 
 interface UserProfile {
   id: string;
@@ -19,6 +20,7 @@ interface UseUserProfileReturn {
 }
 
 const useUserProfile = (): UseUserProfileReturn => {
+  const { accessToken, user } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,8 +30,6 @@ const useUserProfile = (): UseUserProfileReturn => {
       setIsLoading(true);
       setError(null);
 
-      const accessToken = sessionStorage.getItem('accessToken');
-      
       if (!accessToken) {
         throw new Error('No access token found');
       }
@@ -74,10 +74,6 @@ const useUserProfile = (): UseUserProfileReturn => {
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
       setError(errorMessage);
       console.error('Error fetching user profile:', err);
-      
-      if (errorMessage.includes('Unauthorized')) {
-        sessionStorage.removeItem('accessToken');
-      }
     } finally {
       setIsLoading(false);
     }
@@ -88,8 +84,13 @@ const useUserProfile = (): UseUserProfileReturn => {
   };
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (accessToken) {
+      fetchUserProfile();
+    } else {
+      setIsLoading(false);
+      setUserProfile(null);
+    }
+  }, [accessToken]);
 
   return {
     userProfile,
