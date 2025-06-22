@@ -39,6 +39,11 @@ Install Gsap
 npm install gsap
 ```
 
+Install Framer Motion (page transition):
+```
+npm install framer-motion
+
+```
 
 
 ## ** Component Structure **
