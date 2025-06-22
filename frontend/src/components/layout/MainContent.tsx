@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
-import CourseCard from "../learning-path/CourseCard";
-import { useCoursesData } from "@/hooks/useCoursesData";
-import { useModulesWithLessons } from "@/hooks/useModulesWithLessons";
+import CourseCard from "../learning-path/CourseCard"
+import useCoursesWithProgress from "../../hooks/useCoursesWithProgress";
 
 import GreetingIcon from "../../assets/greeting.png";
 import NumberIcon from "../../assets/numbers.png";
@@ -42,69 +41,54 @@ const lessonIcons = [
   
 
 export default function MainContent() {
-  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<number | null>(null)
 
-  const { courses, error: coursesError } = useCoursesData();
-  const { modules, error: modulesError } = useModulesWithLessons(selectedCourse);
+  const { courses, loading, error } = useCoursesWithProgress()
 
-  const currentCourse = selectedCourse
-    ? courses.find((course) => course.id === selectedCourse)
-    : null;
+  if (loading) return <div>Loading courses…</div>
+  if (error)   return <div>Error: {error.message}</div>
 
-  if (coursesError || modulesError) return <div>Error: {coursesError || modulesError}</div>;
+  const current = selectedCourse
+    ? courses.find((c) => c.id === selectedCourse) ?? null
+    : null
 
   return (
-    <div className="flex-1 relative flex justify-center overflow-auto h-full custom-scroll px-4 mx-auto max-w-3xl">
-      <div className="w-full max-w-3xl px-4 mx-auto py-8">
-        {!currentCourse ? (
+    <div className="flex-1 flex justify-center overflow-auto h-full px-4 max-w-3xl mx-auto">
+      <div className="w-full">
+        {!current ? (
           <>
-            <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1>
-            <div>
-              {courses.map((course, index) => (
+            <h1 className="text-2xl font-bold">Choose your lesson:</h1>
+            <div className="space-y-6">
+              {courses.map((course, idx) => (
                 <CourseCard
                   key={course.id}
                   course={course}
-                  icon={moduleIcons[index]}
+                  icon={moduleIcons[idx]}
                   onClick={() => setSelectedCourse(course.id)}
+                  isLocked={course.status !== "learn"}
+                  isCompleted={course.isCompleted}
                 />
               ))}
             </div>
           </>
         ) : (
-          Array.isArray(modules) && modules.length > 0 && modules.map((module, moduleIndex) => (
-            <div key={module.id} className="py-10 m-0">
+          current.modules.map((mod, mi) => (
+            <div key={mod.id} className="py-6">
               <LessonHeader
-                title={`Lesson ${moduleIndex + 1}`}
-                description={module.description}
-                setSelectedLesson={setSelectedCourse}
+                title={`Lesson ${mi + 1}`}
+                description={mod.description}
+                setSelectedLesson={() => setSelectedCourse(null)}
               />
               <VerticalStep
-                steps={
-                  Array.isArray(module.lessons)
-                    ? module.lessons.map((lesson, index) => ({
-                        ...lesson,  
-                        title: lesson.title,
-                        xpReward: lesson.xpReward,
-                        icon: lessonIcons[index],
-                      }))
-                    : []
-                }
+                steps={mod.lessons.map((lesson, li) => ({
+                  ...lesson,
+                  icon: lessonIcons[li],
+                }))}
               />
             </div>
           ))
         )}
       </div>
-      <style>
-        {`
-        .custom-scroll::-webkit-scrollbar {
-            display: none;
-          }
-          .custom-scroll {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-          }
-        `}
-      </style>
     </div>
-  );
+  )
 }
