@@ -2,15 +2,16 @@ import { type Course } from "../../hooks/useCoursesData";
 
 interface CourseCardProps {
     course: Course;
+    icon: string;
     onClick: () => void;
 }
 
-function CourseCard({ course, onClick }: CourseCardProps) {
+function CourseCard({ course, icon, onClick }: CourseCardProps) {
     return (
       <div className="flex items-center gap-4 bg-white rounded-2xl shadow p-10 mb-4"
           id={course.id.toString()}
       >
-        <img src={course.imageSrc} className="w-20 h-20 rounded-xl bg-[#FFFBF3] p-2" />
+        <img src={icon} className="w-20 h-20 rounded-xl bg-[#FFFBF3] p-2" />
         <div className="flex-1">
           <div className="font-semibold text-lg">{course.title}</div>
           <div className="text-sm text-gray-500">{course.description}</div>

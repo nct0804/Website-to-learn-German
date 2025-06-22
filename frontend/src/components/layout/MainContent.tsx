@@ -15,6 +15,17 @@ import FormalVsInformalIcon from "../../assets/speech.png"
 import Number1120Icon from "../../assets/Number12.png"
 import Number100Icon from "../../assets/number100.png"
 import AgeIcon from "../../assets/age.png"
+import A11 from "../../assets/course_19.png"
+import A12 from "../../assets/course_5.png"
+import A21 from "../../assets/course_17.png"
+import A22 from "../../assets/course_21.png"
+
+const moduleIcons = [
+  A11,                        // German A1.1
+  A12,                        // German A1.2
+  A21,                        // German A2.1
+  A22                         // German A2.2
+]
 
 const lessonIcons = [
   IntroductionIcon,            // Introducing Yourself
@@ -49,10 +60,11 @@ export default function MainContent() {
           <>
             <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1>
             <div>
-              {courses.map((course) => (
+              {courses.map((course, index) => (
                 <CourseCard
                   key={course.id}
                   course={course}
+                  icon={moduleIcons[index]}
                   onClick={() => setSelectedCourse(course.id)}
                 />
               ))}
