@@ -5,17 +5,22 @@ import Ranking from '../../assets/ranking-page.png';
 import More from '../../assets/more-page.png';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
+import { faHeadphonesSimple } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLogout } from '@/hooks/useLogOut';
 
 const menuItems = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/lesson', icon: Training, label: 'Lesson' },
   { to: '/ranking', icon: Ranking, label: 'Ranking' },
+  { to: '/pronunciation', icon: faHeadphonesSimple, label: 'Pronunciation' }
 ];
 
 export default function LeftBar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { logout, loading } = useLogout();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -30,65 +35,85 @@ export default function LeftBar() {
   }, []);
 
   return (
-    <aside className="h-full flex flex-col justify-center border-r-[3px] border-[#FFF4E1] w-30 transition-all duration-300">
-      <div className="flex flex-col justify-between items-center h-full py-4">
-        <div className="flex flex-col items-center gap-3 mt-4">
-          {menuItems.map((item) => {
-            const isActive = location.pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={clsx(
-                  'flex items-center rounded p-3 transition-colors duration-100 hover:bg-[#fbb024ae]',
-                  isActive ? 'bg-[#fbb124] font-semibold' : ''
+    <aside className="h-full flex flex-col justify-between border-r-[3px] border-[#FFF4E1] w-30">
+      <div className="flex flex-col items-center gap-3 py-4">
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.to;
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={clsx(
+                'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
+                'hover:bg-[#fbb024ae] hover:scale-105 active:scale-95',
+                isActive ? 'bg-[#fbb124] scale-105 shadow-md' : ''
+              )}
+              title={item.label}
+            >
+              <div className="w-8 h-8 flex items-center justify-center">
+                {typeof item.icon === 'string' ? (
+                  <img
+                    src={item.icon}
+                    className="w-full h-full object-contain"
+                    alt={item.label}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    className="text-[1.75rem] text-gray-800"
+                  />
                 )}
-              >
-                <div className="flex justify-center w-8">
-                  <img src={item.icon} className="w-8 h-8" alt={item.label} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
 
-        <div className="relative mt-auto flex items-center" ref={menuRef}>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="p-1 rounded hover:bg-[#fbb024ae] transition-transform transform hover:scale-110 duration-300"
-            aria-haspopup="true"
-          >
-            <img src={More} alt="More" className="w-8 h-8" />
-          </button>
-
-          {menuOpen && (
-            <div className="absolute left-full top-1/2 -translate-y-[70%] ml-1 flex flex-col gap-1 bg-white shadow-xl rounded-lg py-4 px-4 min-w-[170px] z-50">
-              <Link
-                to="/profile"
-                className="block px-2 py-1 rounded text-gray-800 hover:text-[#fbb124] transition-colors"
-              >
-                Profile
-              </Link>
-              <Link
-                to="/aboutus"
-                className="block px-2 py-1 rounded text-gray-800 hover:text-[#fbb124] transition-colors"
-              >
-                About us
-              </Link>
-              <button
-                className="block px-2 py-1 rounded text-left w-full text-gray-800 hover:text-[#fbb124] transition-colors"
-                onClick={() => {
-                  // logout logic
-                  setMenuOpen(false);
-                }}
-              >
-                Logout
-              </button>
-            </div>
+      <div className="relative mb-4 flex justify-center" ref={menuRef}>
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className={clsx(
+            'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
+            'hover:bg-[#fbb024ae] hover:scale-105 active:scale-95',
+            menuOpen ? 'bg-[#fbb124] scale-105 shadow-md' : ''
           )}
-        </div>
+          aria-haspopup="true"
+          aria-expanded={menuOpen}
+        >
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src={More} alt="More options" className="w-full h-full object-contain" />
+          </div>
+        </button>
 
-
+        {menuOpen && (
+          <div className="absolute left-full bottom-0 ml-2 flex flex-col bg-white shadow-xl rounded-lg py-2 w-[180px] z-50">
+            <Link
+              to="/profile"
+              className="px-4 py-2 text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95"
+              onClick={() => setMenuOpen(false)}
+            >
+              Profile
+            </Link>
+            <Link
+              to="/aboutus"
+              className="px-4 py-2 text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95"
+              onClick={() => setMenuOpen(false)}
+            >
+              About us
+            </Link>
+            <button
+              className="px-4 py-2 text-left text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95 flex items-center justify-between"
+              onClick={async () => {
+                await logout();
+                setMenuOpen(false);
+              }}
+              disabled={loading}
+            >
+              Logout
+              {loading && <span className="ml-2 animate-spin">⏳</span>}
+            </button>
+          </div>
+        )}
       </div>
     </aside>
   );

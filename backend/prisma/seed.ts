@@ -6,38 +6,34 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Starting database seeding...');
 
-  // Clean existing data to prevent duplicates
-  await cleanDatabase();
+  //  !!!!!!! CLEANING DATA, UNCOMMENT THIS LINE BELOW TO RESET DATABASE!!!!!!!!!!
+
+  // await cleanDatabase();
+
+  //  !!!!!!! PRESERVING USERS DATA, AND RESET CONTENt SEQUENCES!!!!!!!!!!
+  await cleanContentOnly();
 
   // Create a demo user account
   const demoUser = await createUser();
-
   // Create course progression (A1.1 - A2.2)
   const courses = await createCourses();
-
   // Create modules for A1.1 (first unlocked, second locked)
   const modules = await createModules(courses[0].id);
-
   // Create lessons for first module (first unlocked, others locked)
   const lessons = await createFirstModuleLessons(modules[0].id);
-
   // Create lessons for second module (all locked - placeholders)
   await createSecondModuleLessons(modules[1].id);
-
   // Create exercises for first lesson
   await createExercisesForFirstLesson(lessons[0].id);
-
   // Create pronunciation data
   await createPronunciationData();
 
   console.log('Database seeding completed successfully!');
 }
 
-/**
- * Cleans existing database entries to prevent conflicts
- */
 async function cleanDatabase() {
   console.log('Cleaning existing database records...');
+  
   
   // Delete in correct order (respecting foreign key constraints)
   await prisma.exerciseProgress.deleteMany();
@@ -53,8 +49,53 @@ async function cleanDatabase() {
   await prisma.userProgress.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.user.deleteMany();
+
+  await prisma.$executeRaw`ALTER SEQUENCE exercises_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE exercise_options_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE lessons_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE modules_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE courses_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE german_sounds_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE sound_groups_id_seq RESTART WITH 1;`;
+  await prisma.$executeRaw`ALTER SEQUENCE sound_group_sounds_id_seq RESTART WITH 1;`;
+  
   
   console.log('Database cleaned successfully.');
+}
+
+async function cleanContentOnly() {
+  console.log('Cleaning only content data, preserving users...');
+  
+  try {
+    // First delete relationships and dependent data
+    await prisma.exerciseProgress.deleteMany();
+    await prisma.soundGroupSound.deleteMany();
+    await prisma.userProgress.deleteMany();
+    
+    // Then delete content entities
+    await prisma.germanSound.deleteMany();
+    await prisma.soundGroup.deleteMany();
+    await prisma.exerciseOption.deleteMany();
+    await prisma.exercise.deleteMany();
+    await prisma.lesson.deleteMany();
+    await prisma.modulePrerequisite.deleteMany();
+    await prisma.module.deleteMany();
+    await prisma.course.deleteMany();
+    
+    // Reset content sequences but not user sequences
+    await prisma.$executeRaw`ALTER SEQUENCE exercises_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE exercise_options_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE lessons_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE modules_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE courses_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE german_sounds_id_seq RESTART WITH 1;`;
+    await prisma.$executeRaw`ALTER SEQUENCE sound_groups_id_seq RESTART WITH 1;`;
+    
+    console.log('Content data cleaned without affecting user data');
+  } catch (error) {
+    console.error('Error while cleaning content data:', error);
+    throw error; // Re-throw to handle in the calling function
+  }
 }
 
 /**
@@ -65,9 +106,11 @@ async function createUser() {
   
   const hashedPassword = await bcrypt.hash('password123', 10);
   
-  const user = await prisma.user.create({
-    data: {
-      email: 'demo@germangains.com',
+  const user = await prisma.user.upsert({
+  where: { email: "demo@germangains.com" },
+  update: {}, // No changes if it exists
+  create: {
+    email: "demo@germangains.com",
       username: 'demouser',
       password: hashedPassword,
       firstName: 'Demo',
@@ -482,50 +525,57 @@ async function createPronunciationData() {
       order: 3
     }
   });
+
+    const dipthongsGroup = await prisma.soundGroup.create({
+    data: {
+      name: 'Special Diphthongs',
+      order: 4
+    }
+  });
   
   // Create vowel sounds
   const vowelA = await prisma.germanSound.create({
     data: {
       symbol: 'a',
-      exampleWord: 'Mann (man)',
+      exampleWord: 'Mann',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/a.mp3'
+      audioSrc: '/assets/sounds/a-Mann.mp3'
     }
   });
   
   const vowelE = await prisma.germanSound.create({
     data: {
       symbol: 'e',
-      exampleWord: 'Bett (bed)',
+      exampleWord: 'Bett',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/e.mp3'
+      audioSrc: '/assets/sounds/e-Bett.mp3'
     }
   });
   
   const vowelI = await prisma.germanSound.create({
     data: {
       symbol: 'i',
-      exampleWord: 'Kind (child)',
+      exampleWord: 'Kind',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/i.mp3'
+      audioSrc: '/assets/sounds/i-Kind.mp3'
     }
   });
   
   const vowelO = await prisma.germanSound.create({
     data: {
       symbol: 'o',
-      exampleWord: 'Sonne (sun)',
+      exampleWord: 'Sonne',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/o.mp3'
+      audioSrc: '/assets/sounds/o-Sonne.mp3'
     }
   });
   
   const vowelU = await prisma.germanSound.create({
     data: {
       symbol: 'u',
-      exampleWord: 'Mutter (mother)',
+      exampleWord: 'Mutter',
       type: 'VOWEL',
-      audioSrc: '/audio/german/vowels/u.mp3'
+      audioSrc: '/assets/sounds/u-Mutter.mp3'
     }
   });
   
@@ -533,27 +583,27 @@ async function createPronunciationData() {
   const umlautA = await prisma.germanSound.create({
     data: {
       symbol: 'ä',
-      exampleWord: 'Mädchen (girl)',
+      exampleWord: 'Mädchen',
       type: 'UMLAUT',
-      audioSrc: '/audio/german/umlauts/a-umlaut.mp3'
+      audioSrc: '/assets/sounds/ä-Mädchen.mp3'
     }
   });
   
   const umlautO = await prisma.germanSound.create({
     data: {
       symbol: 'ö',
-      exampleWord: 'schön (beautiful)',
+      exampleWord: 'schön',
       type: 'UMLAUT',
-      audioSrc: '/audio/german/umlauts/o-umlaut.mp3'
+      audioSrc: '/assets/sounds/ö-schön.mp3'
     }
   });
   
   const umlautU = await prisma.germanSound.create({
     data: {
       symbol: 'ü',
-      exampleWord: 'Tür (door)',
+      exampleWord: 'Tür',
       type: 'UMLAUT',
-      audioSrc: '/audio/german/umlauts/u-umlaut.mp3'
+      audioSrc: '/assets/sounds/ü-Tür.mp3'
     }
   });
   
@@ -563,18 +613,138 @@ async function createPronunciationData() {
       symbol: 'ch',
       exampleWord: 'ich (I)',
       type: 'CONSONANT',
-      audioSrc: '/audio/german/consonants/ch.mp3'
+      audioSrc: '/assets/sounds/ich.mp3'
     }
   });
   
   const consonantSZ = await prisma.germanSound.create({
     data: {
       symbol: 'ß',
-      exampleWord: 'Straße (street)',
+      exampleWord: 'Straße',
       type: 'CONSONANT',
-      audioSrc: '/audio/german/consonants/ss.mp3'
+      audioSrc: '/assets/sounds/ß-Straße.mp3'
     }
   });
+
+  const consonantD = await prisma.germanSound.create({
+    data: {
+      symbol: 'd',
+      exampleWord: 'danke',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/danke.mp3'
+    }
+  });
+
+  const consonantG = await prisma.germanSound.create({
+    data: {
+      symbol: 'g',
+      exampleWord: 'gut',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/gut.mp3'
+    }
+  });
+
+  const consonantH = await prisma.germanSound.create({
+    data: {
+      symbol: 'h',
+      exampleWord: 'Haus',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/h-Haus.mp3'
+    }
+  });
+
+  const consonantR = await prisma.germanSound.create({
+    data: {
+      symbol: 'r',
+      exampleWord: 'rot',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/r-rot.mp3'
+    }
+  });
+
+  const consonantS = await prisma.germanSound.create({
+    data: {
+      symbol: 's',
+      exampleWord: 'Sonne',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/s-Sonne.mp3'
+    }
+  });
+
+  const consonantV = await prisma.germanSound.create({
+    data: {
+      symbol: 'v',
+      exampleWord: 'Vater',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/v-Vater.mp3'
+    }
+  });
+
+  const consonantW = await prisma.germanSound.create({
+    data: {
+      symbol: 'w',
+      exampleWord: 'Wasser',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/w-Wasser.mp3'
+    }
+  });
+
+  const consonantZ = await prisma.germanSound.create({
+    data: {
+      symbol: 'z',
+      exampleWord: 'Zeit',
+      type: 'CONSONANT',
+      audioSrc: '/assets/sounds/z-Zeit.mp3'
+    }
+  });
+
+    // Create Dipthong sounds
+  const dipthongAU = await prisma.germanSound.create({
+    data: {
+      symbol: 'au',
+      exampleWord: 'Haus',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/au-Haus.mp3'
+    }
+  });
+
+  const dipthongEI = await prisma.germanSound.create({
+    data: {
+      symbol: 'ei',
+      exampleWord: 'mein',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/ei-mein.mp3'
+    }
+  });
+
+  const dipthongEU = await prisma.germanSound.create({
+    data: {
+      symbol: 'eu',
+      exampleWord: 'neu',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/eu-neu.mp3'
+    }
+  });
+
+  const dipthongAUe = await prisma.germanSound.create({
+    data: {
+      symbol: 'äu',
+      exampleWord: 'Bäume',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/äu-Bäume.mp3'
+    }
+  });
+
+  const dipthongIE = await prisma.germanSound.create({
+    data: {
+      symbol: 'ie',
+      exampleWord: 'Liebe',
+      type: 'DIPHTHONG',
+      audioSrc: '/assets/sounds/ie-Liebe.mp3'
+    }
+  });
+
+
   
   // Associate sounds with groups
   // Vowels
@@ -596,8 +766,25 @@ async function createPronunciationData() {
   // Special consonants
   await Promise.all([
     prisma.soundGroupSound.create({ data: { soundId: consonantCH.id, groupId: consonantGroup.id } }),
-    prisma.soundGroupSound.create({ data: { soundId: consonantSZ.id, groupId: consonantGroup.id } })
+    prisma.soundGroupSound.create({ data: { soundId: consonantSZ.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantD.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantG.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantH.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantR.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantS.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantV.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantW.id, groupId: consonantGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: consonantZ.id, groupId: consonantGroup.id } })
   ]);
+
+  // Special Diphthongs
+  await Promise.all([
+    prisma.soundGroupSound.create({ data: { soundId: dipthongAU.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongEI.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongEU.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongAUe.id, groupId: dipthongsGroup.id } }),
+    prisma.soundGroupSound.create({ data: { soundId: dipthongIE.id, groupId: dipthongsGroup.id } })
+  ]); 
   
   console.log('Created pronunciation data with 3 sound groups and 10 German sounds.');
 }
