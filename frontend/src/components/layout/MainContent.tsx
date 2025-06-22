@@ -72,7 +72,7 @@ export default function MainContent() {
           </>
         ) : (
           Array.isArray(modules) && modules.length > 0 && modules.map((module, moduleIndex) => (
-            <div key={module.id} className="mb-12">
+            <div key={module.id} className="py-10 m-0">
               <LessonHeader
                 title={`Lesson ${moduleIndex + 1}`}
                 description={module.description}
@@ -82,9 +82,9 @@ export default function MainContent() {
                 steps={
                   Array.isArray(module.lessons)
                     ? module.lessons.map((lesson, index) => ({
+                        ...lesson,  
                         title: lesson.title,
                         xpReward: lesson.xpReward,
-                        ...lesson,
                         icon: lessonIcons[index],
                       }))
                     : []

@@ -49,11 +49,11 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
         <LearningStep
           key={i}
           title={step.title}
-          description={step.description || ""}
-          {...step}
+          subtitle={step.description || ""}
+          xpReward={step.xpReward}
           icon={
             step.icon ? (
-              <img src={step.icon} alt={step.title} className="w-18 h-18" />
+              <img src={step.icon} alt={step.title} className="w-12 h-12" />
             ) : null
           }
           first={i === 0}

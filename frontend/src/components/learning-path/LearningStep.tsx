@@ -1,7 +1,6 @@
 import { useState } from "react";
 import StartBubble from "./StartBubble";
 import DetailBubble from "./DetailBubble";
-import LockedBubble from "./LockedBubble";
 import { useNavigate } from "react-router-dom";
 
 export default function LearningStep({
@@ -13,6 +12,8 @@ export default function LearningStep({
   selected = false,
   title = "",
   subtitle = "",
+  xpReward,
+  description = "",
   onClick,
   bubbleRef,
   blockedBubbleRef,
@@ -26,6 +27,8 @@ export default function LearningStep({
   selected?: boolean;
   title?: string;
   subtitle?: string;
+  xpReward: string,
+  description?: string,
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
   blockedBubbleRef?: (el: HTMLDivElement | null) => void;
@@ -46,11 +49,13 @@ export default function LearningStep({
     <div className="flex flex-col items-center relative">
       {active && !selected && <StartBubble />}
 
+      {/* Connection Path */}
       {!first && (
         <div className="w-1 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
       )}
 
       <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
+        {/* Shadow */}
         <div
           className={`
             absolute w-20 h-19 rounded-full z-0
@@ -61,6 +66,7 @@ export default function LearningStep({
           style={{ top: 0 }}
         />
 
+        {/* Circle lesson node*/}
         <button
           className={`
             relative z-10 w-20 h-19 rounded-full flex items-center justify-center
@@ -81,27 +87,26 @@ export default function LearningStep({
 
       {/* BUBBLES */}
       {selected && (
-        active ? (
+        active ? ( // Wait for backend to isLearned variable
           <DetailBubble
             ref={bubbleRef}
             title={title}
-            subtitle={subtitle || ""}
+            subtitle={description || ""}
             buttonLabel="START"
-            xp="+10XP"
+            xp={`+` + xpReward + `XP`}
             style={{
               backgroundColor: "white",
               color: '#fbb124',
             }}
             onClick={handleStartClick}
-
           />
-        ) : learned ? (
+        ) : learned ? ( // Wait for backend to isLearned variable
           <DetailBubble
             ref={bubbleRef}
             title={title}
-            subtitle={subtitle || ""}
+            subtitle={description || ""}
             buttonLabel="PRACTICE"
-            xp="+5XP"
+            xp={`+` + xpReward + `XP`}
             style={{
               backgroundColor: "#3B6978",
               color: "white",
@@ -109,11 +114,22 @@ export default function LearningStep({
             onClick={handlePracticeClick}
           />
         ) : (
-          <LockedBubble ref={blockedBubbleRef} message="You need to complete previous steps first." />
+          <DetailBubble
+            ref={blockedBubbleRef}
+            title={title}
+            subtitle={description || ""}
+            blockedStyle={{
+              backgroundColor: "#E5E5E5",
+              color: "black",
+            }}
+            onClick={handleStartClick}
+          />
         )
       )}
+      
+      {/* Connection Path */}
       {!last && (
-        <div className="w-1 h-5 bg-[#E5E5E5] absolute -bottom-5 left-1/2 -translate-x-1/2"></div>
+        <div className="w-2 h-5 bg-[#E5E5E5] absolute -bottom-5 left-1/2 -translate-x-1/2"></div>
       )}
     </div>
   );
