@@ -45,8 +45,8 @@ export default function MainContent() {
 
   const { courses, loading, error } = useCoursesWithProgress()
 
-  if (loading) return <div>Loading courses…</div>
-  if (error)   return <div>Error: {error.message}</div>
+  if (loading) console.log("Loading courses…")
+  if (error)   console.log(error.message)
 
   const current = selectedCourse
     ? courses.find((c) => c.id === selectedCourse) ?? null
