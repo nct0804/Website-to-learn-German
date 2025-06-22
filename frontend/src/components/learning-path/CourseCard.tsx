@@ -4,6 +4,8 @@ import type { CourseProgress } from "@/components/types/courseProgress"
 interface CourseCardProps {
   course: CourseProgress
   icon: string
+  isLocked: boolean
+  isCompleted: boolean
   onClick: () => void
 }
 

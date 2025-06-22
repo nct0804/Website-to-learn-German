@@ -57,7 +57,7 @@ export default function MainContent() {
       <div className="w-full">
         {!current ? (
           <>
-            <h1 className="text-2xl font-bold">Choose your lesson:</h1>
+            <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1>
             <div className="space-y-6">
               {courses.map((course, idx) => (
                 <CourseCard
