@@ -1,6 +1,6 @@
 export default function StartBubble() {
     return (
-      <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-20 animate-bounce">
+      <div className="absolute -top-10 left-1/2 flex flex-col items-center z-20 animate-bounce">
         {/* Bubble */}
         <div className="bg-white border-2 border-[#fbb124] rounded-xl px-2 py-2 text-[#fbb124] font-bold shadow text- relative">
           START
