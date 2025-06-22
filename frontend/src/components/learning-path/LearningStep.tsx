@@ -93,6 +93,7 @@ export default function LearningStep({
               color: '#fbb124',
             }}
             onClick={handleStartClick}
+
           />
         ) : learned ? (
           <DetailBubble
