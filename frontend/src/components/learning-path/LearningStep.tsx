@@ -13,7 +13,6 @@ export default function LearningStep({
   title = "",
   subtitle = "",
   xpReward = "",
-  description = "",
   onClick,
   bubbleRef,
   blockedBubbleRef,
@@ -28,7 +27,6 @@ export default function LearningStep({
   title?: string;
   subtitle?: string;
   xpReward: string,
-  description?: string,
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
   blockedBubbleRef?: (el: HTMLDivElement | null) => void;

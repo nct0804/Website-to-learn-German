@@ -1,48 +1,56 @@
-import { type Course } from "../../hooks/useCoursesData";
+// src/components/learning-path/CourseCard.tsx
+import type { CourseProgress } from "@/components/types/courseProgress"
 
 interface CourseCardProps {
-    course: Course;
-    icon: string;
-    onClick: () => void;
+  course: CourseProgress
+  icon: string
+  onClick: () => void
 }
 
-function CourseCard({ course, icon, onClick }: CourseCardProps) {
-    return (
-      <div className="flex items-center gap-4 bg-white rounded-2xl shadow p-10 mb-4"
-          id={course.id.toString()}
-      >
-        <img src={icon} className="w-20 h-20 rounded-xl bg-[#FFFBF3] p-2" />
-        <div className="flex-1">
-          <div className="font-semibold text-lg">{course.title}</div>
-          <div className="text-sm text-gray-500">{course.description}</div>
-          <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className={`h-full transition-all`}
-              style={{
-                // TODO: Wait for backend to add isLearned variable
-                // TODO: to calculate the progress
-                width: `${course.progress * 100}%`,
-                background: "#FDBA17",
-              }}
-            />
-          </div>
+export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
+  const isLocked = course.status === "locked"
+  const isCompleted = course.isCompleted
+
+  return (
+    <div
+      className={`flex items-center gap-6 bg-white rounded-2xl shadow p-8 mb-4
+        ${isLocked ? "opacity-60" : ""}`
+      }
+    >
+      <img src={icon}
+        alt={`${course.title} icon`}
+        className="w-20 h-20 rounded-xl bg-[#FFFBF3] p-2"
+      />
+
+      <div className="flex-1">
+        <h2 className="text-lg font-semibold">{course.title}</h2>
+        <p className="text-sm text-gray-500">{course.description}</p>
+
+        <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[#FDBA17] transition-all"
+            style={{ width: `${course.progress}%` }}
+          />
         </div>
-        <button
-          onClick={course.status !== "locked" ? onClick : undefined}
-          className={`ml-4 px-6 py-2 rounded-full text-white font-semibold transition
-            ${course.status === "practice" ? "bg-[#FDBA17] hover:bg-[#ffd66e]"
-              : course.status === "continue" ? "bg-[#FDBA17] hover:bg-[#ffd66e]"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
-          //TODO: Wait for backend to add isLearned variable
-          //TODO: to know if the lesson is locked or not
-              disabled={course.status === "locked"} 
-        >
-          {/* TODO: Wait for backend to add isLearned variable
-          to determine the action label PRACTICE or LEARN */}
-          {course.actionLabel}
-        </button>
+        <div className="text-xs text-gray-600 mt-1">
+          {course.progress}%
+        </div>
       </div>
-    );
+
+      <button
+        onClick={isLocked ? undefined : onClick}
+        disabled={isLocked}
+        className={`
+          ml-4 px-5 py-2 rounded-full font-semibold transition
+          ${ isLocked
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : isCompleted
+              ? "bg-green-500 hover:bg-green-600 text-white"
+              : "bg-[#FDBA17] hover:bg-[#ffd66e] text-white"}`
+          }
+      >
+        {isLocked ? "LOCKED" : course.actionLabel}
+      </button>
+    </div>
+  )
 }
-  
-export default CourseCard;
