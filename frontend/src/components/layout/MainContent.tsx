@@ -21,10 +21,10 @@ import A21 from "../../assets/course_17.png"
 import A22 from "../../assets/course_21.png"
 
 const moduleIcons = [
-  A11,                        // German A1.1
-  A12,                        // German A1.2
-  A21,                        // German A2.1
-  A22                         // German A2.2
+  A11,  // German A1.1
+  A12,  // German A1.2
+  A21,  // German A2.1
+  A22   // German A2.2
 ]
 
 const lessonIcons = [

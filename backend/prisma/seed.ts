@@ -8,7 +8,7 @@ async function main() {
 
   //  !!!!!!! CLEANING DATA, UNCOMMENT THIS LINE BELOW TO RESET DATABASE!!!!!!!!!!
 
-  // await cleanDatabase();
+  await cleanDatabase();
 
   // Create a demo user account
   const demoUser = await createUser();
