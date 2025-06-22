@@ -12,7 +12,7 @@ export default function LearningStep({
   selected = false,
   title = "",
   subtitle = "",
-  xpReward,
+  xpReward = "",
   description = "",
   onClick,
   bubbleRef,
@@ -91,7 +91,7 @@ export default function LearningStep({
           <DetailBubble
             ref={bubbleRef}
             title={title}
-            subtitle={description || ""}
+            subtitle={subtitle || ""}
             buttonLabel="START"
             xp={`+` + xpReward + `XP`}
             style={{
@@ -104,7 +104,7 @@ export default function LearningStep({
           <DetailBubble
             ref={bubbleRef}
             title={title}
-            subtitle={description || ""}
+            subtitle={subtitle || ""}
             buttonLabel="PRACTICE"
             xp={`+` + xpReward + `XP`}
             style={{
@@ -117,7 +117,7 @@ export default function LearningStep({
           <DetailBubble
             ref={blockedBubbleRef}
             title={title}
-            subtitle={description || ""}
+            subtitle={subtitle || ""}
             blockedStyle={{
               backgroundColor: "#E5E5E5",
               color: "black",
