@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from './useAuth';
 
 interface UserProfile {
   id: string;
@@ -21,6 +22,7 @@ interface UseUserProfileReturn {
 const API = import.meta.env.VITE_API_URL || '';
 
 const useUserProfile = (): UseUserProfileReturn => {
+  const { accessToken, user } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,8 +71,13 @@ const useUserProfile = (): UseUserProfileReturn => {
   };
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (accessToken) {
+      fetchUserProfile();
+    } else {
+      setIsLoading(false);
+      setUserProfile(null);
+    }
+  }, [accessToken]);
 
   return {
     userProfile,
