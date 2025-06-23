@@ -1,12 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import lessonsRoutes from './modules/lessons/lessons.routes';
-import coursesRoutes from './modules/courses/courses.routes';
-import modulesRoutes from './modules/modules/modules.routes';
-import vocabularyRoutes from './modules/vocabulary/vocabulary.routes';
-import path from 'path';
-import exercisesRoutes from './modules/exercises/exercises.routes';
-import exerciseOptionsRoutes from './modules/exercisesOptions/exercisesOptions.routes';
+import express from "express";
+import cors from "cors";
+import lessonsRoutes from "./modules/lessons/lessons.routes";
+import coursesRoutes from "./modules/courses/courses.routes";
+import modulesRoutes from "./modules/modules/modules.routes";
+import vocabularyRoutes from "./modules/vocabulary/vocabulary.routes";
+import path from "path";
+import exercisesRoutes from "./modules/exercises/exercises.routes";
+import exerciseOptionsRoutes from "./modules/exercisesOptions/exercisesOptions.routes";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
@@ -15,27 +15,20 @@ import userRoutes from "./modules/user/user.routes";
 dotenv.config();
 
 const app = express();
-app.use('/assets', express.static(path.join(__dirname, '../assets')));
+app.use("/assets", express.static(path.join(__dirname, "../assets")));
 
 app.use(
   cors({
     origin: [
       process.env.FRONTEND_URL || "http://localhost:5173",
-      "http://localhost:4242"
+      "http://localhost:4242",
     ],
     credentials: true,
   })
 );
-
-// app.use(
-//   cors({
-//     origin: process.env.FRONTEND_URL || "http://localhost:5173","http://localhost:4242"
-//     credentials: true,
-//   })
-// );
 app.use(express.json());
 app.use(cookieParser());
-
+app.use("/assets", express.static(path.join(__dirname, "../assets")));
 app.use("/api/users", userRoutes);
 
 app.get("/", (_, res) => {
@@ -70,12 +63,12 @@ app.get("/test-db", async (_, res) => {
   }
 });
 //Routes
-app.use('/api/lesson', lessonsRoutes);
-app.use('/api/courses', coursesRoutes);
-app.use('/api/modules', modulesRoutes);
-app.use('/api/vocabulary', vocabularyRoutes);
-app.use('/api/exercises', exercisesRoutes);
-app.use('/api/exercise-options', exerciseOptionsRoutes);
+app.use("/api/lesson", lessonsRoutes);
+app.use("/api/courses", coursesRoutes);
+app.use("/api/modules", modulesRoutes);
+app.use("/api/vocabulary", vocabularyRoutes);
+app.use("/api/exercises", exercisesRoutes);
+app.use("/api/exercise-options", exerciseOptionsRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
