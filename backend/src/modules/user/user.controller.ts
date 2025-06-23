@@ -3,23 +3,35 @@ import * as userService from "./user.service";
 import { AuthRequest } from "../../middleware/auth.middleware";
 import { BadRequestError } from "../../utils/errors";
 
-const ACCESS_COOKIE_MS = 15 * 60 * 1000;
-const REFRESH_COOKIE_MS = 30 * 24 * 60 * 60 * 1000;
+const ACCESS_COOKIE_MS = 15 * 60 * 1000; // 15 min
+const REFRESH_COOKIE_MS = 30 * 24 * 60 * 60 * 1000; // 30 Tage
+const prod = process.env.NODE_ENV === "production";
 
-const setCookies = (res: Response, token: string, refresh?: string) => {
-  const common = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none" as const,
-    path: "/",
-  };
-  res.cookie("token", token, { ...common, maxAge: ACCESS_COOKIE_MS });
+const cookieBase = {
+  httpOnly: true,
+  secure: prod, // nur über HTTPS in Prod
+  sameSite: prod ? "none" : "lax",
+  path: "/",
+} as const;
+
+const setCookies = (res: Response, access: string, refresh?: string) => {
+  res.cookie("token", access, { ...cookieBase, maxAge: ACCESS_COOKIE_MS });
   if (refresh)
     res.cookie("refreshToken", refresh, {
-      ...common,
+      ...cookieBase,
       maxAge: REFRESH_COOKIE_MS,
     });
 };
+
+const clearCookies = (res: Response) => {
+  res.clearCookie("token", cookieBase);
+  res.clearCookie("refreshToken", cookieBase);
+};
+
+const stripPw = <T extends { password?: unknown }>(u: T) => ({
+  ...u,
+  password: undefined,
+});
 
 export const register = async (
   req: Request,
@@ -31,13 +43,10 @@ export const register = async (
       req.body
     );
     setCookies(res, token, refreshToken);
+
     res.status(201).json({
       success: true,
-      data: {
-        user: stripPw(user),
-        accessToken: token,
-        refreshToken,
-      },
+      data: { user: stripPw(user) }, // Tokens NICHT mehr mitgeben
     });
   } catch (err) {
     next(err);
@@ -52,16 +61,15 @@ export const login = async (
   try {
     const { email, password } = req.body;
     if (!email || !password)
-      throw new BadRequestError("Email + password required");
+      throw new BadRequestError("E-Mail + Passwort erforderlich");
+
     const { user, token, refreshToken } = await userService.loginUser(
       email,
       password
     );
     setCookies(res, token, refreshToken);
-    res.json({
-      success: true,
-      data: { user: stripPw(user), accessToken: token, refreshToken },
-    });
+
+    res.json({ success: true, data: { user: stripPw(user) } });
   } catch (err) {
     next(err);
   }
@@ -75,7 +83,7 @@ export const logout = async (
   try {
     await userService.logoutUser(req.cookies.refreshToken);
     clearCookies(res);
-    res.json({ success: true, message: "Logged out" });
+    res.json({ success: true, message: "Ausgeloggt" });
   } catch (err) {
     next(err);
   }
@@ -99,20 +107,16 @@ export const refreshToken = async (
   next: NextFunction
 ) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) throw new BadRequestError("No refresh token");
-    const { token } = await userService.refreshAccessToken(refreshToken);
-    setCookies(res, token);
-    res.json({ success: true, message: "Token refreshed", accessToken: token });
+    const oldRefresh = req.cookies.refreshToken;
+    if (!oldRefresh) throw new BadRequestError("Kein Refresh-Token");
+
+    const { accessToken, refreshToken } = await userService.rotateRefreshToken(
+      oldRefresh
+    );
+
+    setCookies(res, accessToken, refreshToken);
+    res.json({ success: true, message: "Token erneuert" });
   } catch (err) {
     next(err);
   }
-};
-
-const stripPw = <T extends { password?: unknown }>(u: T) => ({
-  ...u,
-  password: undefined,
-});
-const clearCookies = (res: Response) => {
-  ["token", "refreshToken"].forEach((c) => res.clearCookie(c, { path: "/" }));
 };

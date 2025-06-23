@@ -83,3 +83,17 @@ const storeRefreshToken = async (userId: string) => {
   });
   return refreshToken;
 };
+
+export const rotateRefreshToken = async (oldToken: string) => {
+  const stored = await prisma.refreshToken.findUnique({
+    where: { token: oldToken },
+  });
+  if (!stored || stored.expiresAt < new Date())
+    throw new UnauthorizedError("Refresh-Token ungültig");
+  await prisma.refreshToken.delete({ where: { token: oldToken } });
+
+  const accessToken = generateToken(stored.userId);
+  const refreshToken = await storeRefreshToken(stored.userId);
+
+  return { accessToken, refreshToken };
+};
