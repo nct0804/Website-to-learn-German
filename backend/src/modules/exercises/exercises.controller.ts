@@ -138,7 +138,6 @@ export const deleteExercise = async (req: Request, res: Response) => {
 
 // POST /api/exercises/:id/check
 export const checkExerciseAnswer = async (req: Request, res: Response) => {
-  try {
     const exerciseId = Number(req.params.id);
     
     if (isNaN(exerciseId)) {
@@ -163,14 +162,10 @@ export const checkExerciseAnswer = async (req: Request, res: Response) => {
       success: true,
       data: result
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  GET /api/lessons/:lessonId/exercises
 export const getExercisesByLessonId = async (req: Request, res: Response) => {
-  try {
     const lessonId = Number(req.params.lessonId);
     
     if (isNaN(lessonId)) {
@@ -183,7 +178,4 @@ export const getExercisesByLessonId = async (req: Request, res: Response) => {
       success: true,
       data: exercises
     });
-  } catch (error) {
-    throw error;
-  }
 };

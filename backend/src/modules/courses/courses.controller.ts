@@ -4,9 +4,7 @@ import { BadRequestError, NotFoundError } from '../../utils/errors';
 
 // GET /api/courses
 export const getAllCourses = async (req: Request, res: Response) => {
-  try {
     const { level, search } = req.query;
-    
     const courses = await CourseService.findCourses({
       level: level ? String(level) : undefined,
       searchTerm: search ? String(search) : undefined
@@ -16,14 +14,11 @@ export const getAllCourses = async (req: Request, res: Response) => {
       success: true,
       data: courses
     });
-  } catch (error) {
-    throw error;
-  }
+
 };
 
 // GET /api/courses/:id
 export const getCourseById = async (req: Request, res: Response) => {
-  try {
     const courseId = Number(req.params.id);
     
     if (isNaN(courseId)) {
@@ -36,14 +31,10 @@ export const getCourseById = async (req: Request, res: Response) => {
       success: true,
       data: course
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // post /api/courses -- admin
 export const createCourse = async (req: Request, res: Response) => {
-  try {
     const { title, description, level, imageSrc, order } = req.body;
     
     const newCourse = await CourseService.createCourse({
@@ -58,14 +49,10 @@ export const createCourse = async (req: Request, res: Response) => {
       success: true,
       data: newCourse
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  PUT /api/courses/:id -- admin
 export const updateCourse = async (req: Request, res: Response) => {
-  try {
     const courseId = Number(req.params.id);
     
     if (isNaN(courseId)) {
@@ -86,14 +73,10 @@ export const updateCourse = async (req: Request, res: Response) => {
       success: true,
       data: updatedCourse
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // DELETE /api/courses/:id -- admin
 export const deleteCourse = async (req: Request, res: Response) => {
-  try {
     const courseId = Number(req.params.id);
     
     if (isNaN(courseId)) {
@@ -107,13 +90,9 @@ export const deleteCourse = async (req: Request, res: Response) => {
       message: `Course with ID ${courseId} successfully deleted`,
       data: deletedCourse
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 export const getCourseWithProgress = async (req: Request, res: Response) => {
-  try {
     const courseId = Number(req.params.id);
     
     if (isNaN(courseId)) {
@@ -133,13 +112,9 @@ export const getCourseWithProgress = async (req: Request, res: Response) => {
       success: true,
       data: course
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 export const getAllCoursesWithProgress = async (req: Request, res: Response) => {
-    try {
       const userId = (req as any).user?.id;
       if (!userId) {
         throw new BadRequestError('User must be authenticated');
@@ -150,7 +125,4 @@ export const getAllCoursesWithProgress = async (req: Request, res: Response) => 
         success: true,
         data: courses
       });
-    } catch (error) {
-      throw error;
-    }
 };
