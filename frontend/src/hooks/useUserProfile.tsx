@@ -18,6 +18,8 @@ interface UseUserProfileReturn {
   refetch: () => void;
 }
 
+const API = import.meta.env.VITE_API_URL || '';
+
 const useUserProfile = (): UseUserProfileReturn => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -28,63 +30,42 @@ const useUserProfile = (): UseUserProfileReturn => {
       setIsLoading(true);
       setError(null);
 
-      const accessToken = sessionStorage.getItem('accessToken');
-      
-      if (!accessToken) {
-        throw new Error('No access token found');
-      }
-
-      const response = await fetch('http://localhost:3000/api/users/me', {
+      const res = await fetch(`${API}/api/users/me`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', 
+        credentials: 'include',
       });
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Unauthorized - Please login again');
-        }
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (res.status === 401) {
+        throw new Error('Unauthorized – bitte erneut einloggen');
+      }
+      if (!res.ok) {
+        throw new Error(`HTTP-Error ${res.status}`);
       }
 
-      const data = await response.json();
-      
-      console.log('API Response:', data);
-      
-      const userData = data.data?.user || data.user || data;
-      
-      const mappedProfile: UserProfile = {
-        id: userData.id,
-        email: userData.email,
-        username: userData.username,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        level: userData.level,
-        xp: userData.xp,
-        streak: userData.streak,
+
+      const { data } = await res.json();
+      const u = data.user;
+
+      const mapped: UserProfile = {
+        id: u.id,
+        email: u.email,
+        username: u.username,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        level: u.level,
+        xp: u.xp,
+        streak: u.streak,
       };
 
-      console.log('User Data:', userData);
-      console.log('Mapped Profile:', mappedProfile);
-      setUserProfile(mappedProfile);
+      setUserProfile(mapped);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
-      console.error('Error fetching user profile:', err);
-      
-      if (errorMessage.includes('Unauthorized')) {
-        sessionStorage.removeItem('accessToken');
-      }
+      const msg =
+        err instanceof Error ? err.message : 'Unbekannter Fehler beim Laden';
+      setError(msg);
+      console.error('fetchUserProfile:', err);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const refetch = () => {
-    fetchUserProfile();
   };
 
   useEffect(() => {
@@ -95,7 +76,7 @@ const useUserProfile = (): UseUserProfileReturn => {
     userProfile,
     isLoading,
     error,
-    refetch,
+    refetch: fetchUserProfile,
   };
 };
 
