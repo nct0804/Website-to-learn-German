@@ -4,7 +4,10 @@
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm install && npm run build && npm start",
-    "start:frontend": "cd frontend && npm install && npm run dev"
+    "start:frontend": "cd frontend && npm install && npm run dev",
+    "lint": "eslint --ext .ts src/",
+    "test:unit": "jest --testPathPattern='tests/unit' --coverage --coverageDirectory=coverage",
+    "test:integration": "jest --testPathPattern='tests/integration' --coverage --coverageDirectory=coverage-integration --reporter=jest-junit --outputFile=junit-integration.xml"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
