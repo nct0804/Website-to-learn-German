@@ -16,7 +16,7 @@ export default function useCoursesWithProgress() {
     }
 
     setLoading(true)
-    fetch(`http://localhost:3000/api/courses/progress/all`, {
+    fetch(`${import.meta.env.VITE_API_PROXY_TARGET}/api/courses/progress/all`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
