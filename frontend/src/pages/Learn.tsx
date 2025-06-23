@@ -2,8 +2,12 @@ import { Card } from "@/components/ui/card"
 import { LearningHeader } from "@/components/learn/LearningHeader"
 import { LearningContent } from "@/components/learn/LearningContent"
 import { motion } from "framer-motion"
+import type { Exercise } from "../components/types/courseProgress"
+import { useLocation } from "react-router-dom"
 
 export default function Learn() {
+  const { state } = useLocation()
+  const exercises: Exercise[] = state?.exercises || []
 
   return (
     <motion.div
@@ -17,7 +21,7 @@ export default function Learn() {
           <Card className="min-h-[90vh] flex flex-col">
             <LearningHeader progress={10} score={5} />
             <div className="flex flex-1 overflow-hidden">
-              <LearningContent />
+              <LearningContent exercises={exercises}/>
             </div>
           </Card>
         </div>

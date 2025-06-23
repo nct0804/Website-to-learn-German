@@ -1,57 +1,59 @@
 import { useState } from "react"
 import { CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { FillInBlankExercise } from "./FillInBlankExercise"
+import { MultipleChoiceExercise } from "./MultipleChoiceExercise"
+import { VocabCheckExercise } from "./VocabCheckExercise"
 import LearningFooter from "./LearningFooter"
+import { useLessonExercises } from "@/hooks/useLessonExercises"
 
-export function LearningContent() {
-  const [selected, setSelected] = useState<string | null>(null)
-  const [score, setScore] = useState(5)
+// You’ll pass the current lessonId from props or context
+export function LearningContent({ lessonId }: { lessonId: number }) {
+  const { exercises, loading, error } = useLessonExercises(lessonId)
+  const [currentIdx, setCurrentIdx] = useState(0)
+  const [selected, setSelected] = useState<number | null>(null)
 
-  const options = [
-    { label: "bin", value: "bin" },
-    { label: "bist", value: "bist" },
-  ]
-  const correct = "bin"
+  if (loading) return <div className="p-8 text-center">Loading…</div>
+  if (error) return <div className="p-8 text-center text-red-500">{error.message}</div>
+  if (!exercises.length) return <div className="p-8 text-center">No exercises found.</div>
 
-  function handleSelect(val: string) {
-    setSelected(val)
-  }
+  const ex = exercises[currentIdx]
 
   function handleCheck() {
-    if (selected !== correct) {
-      console.log("Wrong answer!")
-    }
-    // …next exercise…
+    // check correctness, move to next, etc.
+    setSelected(null)
+    setCurrentIdx(idx => idx + 1)
   }
 
   return (
     <CardContent className="flex-1 flex flex-col items-center px-6 py-8">
-      {/* Centered block */}
-      <div className="flex-1 flex flex-col justify-center items-center space-y-8">
-        <h2 className="text-2xl font-semibold">Fill in the blank</h2>
-        <div className="text-center text-3xl">
-          <span>Ich </span>
-          <span className="inline-block w-32 border-b-2 border-border"></span>
-          <span> Tom.</span>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          {options.map((opt) => (
-            <Button
-              key={opt.value}
-              className="py-3 text-lg"
-              variant={selected === opt.value ? "secondary" : "outline"}
-              onClick={() => handleSelect(opt.value)}
-            >
-              {opt.label}
-            </Button>
-          ))}
-        </div>
+      <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full">
+        {ex.type === "FILL_IN_BLANK" && (
+          <FillInBlankExercise
+            prefix={ex.question.split("_____")[0] || ""}
+            suffix={ex.question.split("_____")[1] || ""}
+            options={ex.exerciseOptions}
+            selected={selected}
+            onSelect={setSelected}
+          />
+        )}
+        {ex.type === "MULTIPLE_CHOICE" && (
+          <MultipleChoiceExercise
+            question={ex.question}
+            options={ex.exerciseOptions}
+            selected={selected}
+            onSelect={setSelected}
+          />
+        )}
+        {ex.type === "VOCABULARY_CHECK" && (
+          <VocabCheckExercise
+            instruction={ex.instruction}
+            items={ex.exerciseOptions}
+            selected={selected}
+            onSelect={setSelected}
+          />
+        )}
       </div>
-
-      <LearningFooter
-        handleCheck={handleCheck}
-        selected={!!selected}
-      ></LearningFooter>
+      <LearningFooter handleCheck={handleCheck} selected={!!selected} />
     </CardContent>
   )
 }
