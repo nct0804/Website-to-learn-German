@@ -72,17 +72,17 @@ export default function MainContent() {
             </div>
           </>
         ) : (
-          current.modules.map((mod, mi) => (
-            <div key={mod.id} className="py-6">
+          current.modules.map((module, idx) => (
+            <div key={module.id} className="py-6">
               <LessonHeader
-                title={`Lesson ${mi + 1}`}
-                description={mod.description}
+                title={`Lesson ${idx + 1}`}
+                description={module.description}
                 setSelectedLesson={() => setSelectedCourse(null)}
               />
               <VerticalStep
-                steps={mod.lessons.map((lesson, li) => ({
+                steps={module.lessons.map((lesson, idx) => ({
                   ...lesson,
-                  icon: lessonIcons[li],
+                  icon: lessonIcons[idx],
                 }))}
               />
             </div>

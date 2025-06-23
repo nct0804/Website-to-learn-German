@@ -48,6 +48,7 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
       {steps.map((step, i) => (
         <LearningStep
           key={i}
+          exercises={step.exercises}
           title={step.title}
           subtitle={step.description || ""}
           xpReward={step.xpReward}

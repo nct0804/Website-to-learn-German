@@ -2,6 +2,7 @@ import { useState } from "react";
 import StartBubble from "./StartBubble";
 import DetailBubble from "./DetailBubble";
 import { useNavigate } from "react-router-dom";
+import type {Exercise} from "../types/courseProgress"
 
 export default function LearningStep({
   icon,
@@ -13,6 +14,7 @@ export default function LearningStep({
   title = "",
   subtitle = "",
   xpReward = "",
+  exercises = [],
   onClick,
   bubbleRef,
   blockedBubbleRef,
@@ -27,6 +29,7 @@ export default function LearningStep({
   title?: string;
   subtitle?: string;
   xpReward: string,
+  exercises?: Exercise[]
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
   blockedBubbleRef?: (el: HTMLDivElement | null) => void;
@@ -36,7 +39,9 @@ export default function LearningStep({
   const navigate = useNavigate();
 
   const handleStartClick = () => {
-    navigate("/learn");
+    navigate("/learn", {
+      state: {exercises}
+    });
   };
 
   const handlePracticeClick = () => {
