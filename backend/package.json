@@ -5,7 +5,13 @@
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
     "start": "npx ts-node src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+     "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint --ext .ts src/",
+    "lint:report": "eslint --ext .ts src/ -f json -o eslint-report.json || true"
   },
   "keywords": [],
   "author": "",
