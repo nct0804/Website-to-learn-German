@@ -13,23 +13,18 @@ export const useLogout = (): UseLogoutResult => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { accessToken, logout: clearAuth } = useAuth();
+  const { logout: clearAuth } = useAuth();
   const navigate = useNavigate();
 
   const logout = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-      };
-      if (accessToken) {
-        headers['Authorization'] = `Bearer ${accessToken}`;
-      }
+
 
       const response = await fetch('/api/users/logout', {
         method: 'POST',
-        headers,
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
 
@@ -47,7 +42,7 @@ export const useLogout = (): UseLogoutResult => {
     } finally {
       setLoading(false);
     }
-  }, [accessToken, clearAuth, navigate]);
+  }, [clearAuth, navigate]);
 
   return { logout, loading, error };
 };
