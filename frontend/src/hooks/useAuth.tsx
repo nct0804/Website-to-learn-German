@@ -33,7 +33,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setL] = useState(true);
 
-  /* 1️⃣  User beim App-Start über Cookie laden */
   useEffect(() => {
     (async () => {
       try {
@@ -50,7 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, []);
 
-  /* 2️⃣  Login setzt nur noch user (Token steckt im Cookie) */
   async function login({ email, password }: { email: string; password: string }) {
     setL(true);
     try {
@@ -68,7 +66,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  /* 3️⃣  Logout ruft API + räumt state auf */
   async function logout() {
     await fetch("http://localhost:3000/api/users/logout", {
       method: "POST",
