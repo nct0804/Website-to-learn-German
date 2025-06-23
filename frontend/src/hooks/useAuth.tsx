@@ -1,5 +1,3 @@
-// src/hooks/useAuth.tsx
-
 import React, {
   createContext,
   useContext,
@@ -25,80 +23,62 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  accessToken: string | null;
-  login: (
-    creds: { email: string; password: string },
-    remember?: boolean
-  ) => Promise<void>;
-  logout: () => void;
+  login: (c: { email: string; password: string }) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [loading, setL] = useState(true);
 
+  /* 1️⃣  User beim App-Start über Cookie laden */
   useEffect(() => {
-    const tok =
-      localStorage.getItem('accessToken') ||
-      sessionStorage.getItem('accessToken');
-    const usr =
-      localStorage.getItem('user') ||
-      sessionStorage.getItem('user');
-    if (tok && usr) {
-      setAccessToken(tok);
-      setUser(JSON.parse(usr));
-    }
-    setLoading(false);
+    (async () => {
+      try {
+        const r = await fetch("http://localhost:3000/api/users/me", {
+          credentials: "include",
+        });
+        if (r.ok) {
+          const { data } = await r.json();
+          setUser(data.user);
+        }
+      } finally {
+        setL(false);
+      }
+    })();
   }, []);
 
-  async function login(
-    { email, password }: { email: string; password: string },
-    remember: boolean = false
-  ) {
-    setLoading(true);
+  /* 2️⃣  Login setzt nur noch user (Token steckt im Cookie) */
+  async function login({ email, password }: { email: string; password: string }) {
+    setL(true);
     try {
-      const res = await fetch('http://localhost:3000/api/users/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+      const r = await fetch("http://localhost:3000/api/users/login", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => null);
-        throw new Error(err?.message ?? 'Invalid credentials');
-      }
-      const { data } = await res.json() as {
-        success: boolean;
-        data: {
-          user: User;
-          accessToken: string;
-          refreshToken: string;
-        };
-      };
-      const storage = remember ? localStorage : sessionStorage;
-      storage.setItem('accessToken', data.accessToken);
-      storage.setItem('refreshToken', data.refreshToken);
-      storage.setItem('user', JSON.stringify(data.user));
-      setAccessToken(data.accessToken);
+      if (!r.ok) throw new Error("Invalid credentials");
+      const { data } = await r.json();
       setUser(data.user);
     } finally {
-      setLoading(false);
+      setL(false);
     }
   }
 
-  function logout() {
-    localStorage.clear();
-    sessionStorage.clear();
-    setAccessToken(null);
+  /* 3️⃣  Logout ruft API + räumt state auf */
+  async function logout() {
+    await fetch("http://localhost:3000/api/users/logout", {
+      method: "POST",
+      credentials: "include",
+    }).catch(() => { });
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, accessToken, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

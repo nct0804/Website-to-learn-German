@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from './useAuth';
 
 interface UserProfile {
   id: string;
@@ -22,7 +21,6 @@ interface UseUserProfileReturn {
 const API = import.meta.env.VITE_API_URL || '';
 
 const useUserProfile = (): UseUserProfileReturn => {
-  const { accessToken, user } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +29,7 @@ const useUserProfile = (): UseUserProfileReturn => {
     try {
       setIsLoading(true);
       setError(null);
+
 
       const res = await fetch(`${API}/api/users/me`, {
         method: 'GET',
@@ -43,7 +42,6 @@ const useUserProfile = (): UseUserProfileReturn => {
       if (!res.ok) {
         throw new Error(`HTTP-Error ${res.status}`);
       }
-
 
       const { data } = await res.json();
       const u = data.user;
@@ -71,13 +69,8 @@ const useUserProfile = (): UseUserProfileReturn => {
   };
 
   useEffect(() => {
-    if (accessToken) {
-      fetchUserProfile();
-    } else {
-      setIsLoading(false);
-      setUserProfile(null);
-    }
-  }, [accessToken]);
+    fetchUserProfile();
+  }, []);
 
   return {
     userProfile,
