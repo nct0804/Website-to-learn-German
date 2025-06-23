@@ -29,7 +29,7 @@ interface ApiResponse {
   data: VocabularyGroup[];
 }
 
-export function useVocabularyGroups(refreshToken: string) {
+export function useVocabularyGroups() {
   const [groups, setGroups] = useState<VocabularyGroup[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +41,7 @@ export function useVocabularyGroups(refreshToken: string) {
         const res = await fetch(
           "http://localhost:3000/api/vocabulary/groups",
           {
-            headers: { Cookie: `refreshToken=${refreshToken}` },
+            credentials: 'include',
           }
         );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -58,13 +58,8 @@ export function useVocabularyGroups(refreshToken: string) {
       }
     };
 
-    if (refreshToken) {
-      fetchGroups();
-    } else {
-      setError("No refresh token");
-      setLoading(false);
-    }
-  }, [refreshToken]);
+    fetchGroups();
+  }, []);
 
   return { groups, loading, error };
 }

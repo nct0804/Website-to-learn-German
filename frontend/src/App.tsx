@@ -13,7 +13,7 @@ import Pronunciation from "./pages/Pronunciation";
 import LandingPage from "./pages/LandingPage";
 
 function App() {
-  const { loading } = useAuth();
+  const { loading, user } = useAuth();
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -22,7 +22,9 @@ function App() {
   return (
     <div className="bg-white">
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={
+          user ? <Navigate to="/home" replace /> : <LandingPage />
+        } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
