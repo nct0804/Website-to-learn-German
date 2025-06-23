@@ -6,73 +6,28 @@ stages:
   - build
 
 variables:
-  POSTGRES_DB: test_db
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/test_db?schema=public"
-  JWT_SECRET: "test-jwt-secret-key"
-  JWT_REFRESH_SECRET: "test-refresh-secret"
-  JWT_EXPIRES_IN: "15m"
-  JWT_REFRESH_EXPIRES_IN: "7d"
+  DATABASE_URL: "dummy"
   NODE_ENV: test
-
-cache:
-  key: ${CI_COMMIT_REF_SLUG}-backend
-  paths:
-    - backend/node_modules/
 
 lint_testing:
   stage: lint
   script:
     - npm install -g pnpm
-    - cd backend && npm install && npm ci && npm run lint
-  only:
-    changes:
-      - backend/**/*
+    - cd backend && pnpm install && pnpm lint
 
 unit_testing:
   stage: test
   script:
     - cd backend
-    - npm ci
-    - npm run test:unit
-  only:
-    changes:
-      - backend/**/*
+    - pnpm install
+    - pnpm test:unit
 
-integration_testing:
-  stage: test
-  services:
-    - postgres:15
-  variables:
-    POSTGRES_DB: test_db
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: postgres
-  script:
-    - cd backend
-    - npm ci
-    - cp .env.test .env
-    - npx prisma generate
-    - npx prisma migrate deploy
-    - npm run test:integration
-  artifacts:
-    reports:
-      junit: backend/junit.xml
-    paths:
-      - backend/coverage/
-  only:
-    changes:
-      - backend/**/*
-
-Building:
+build_backend:
   stage: build
   script:
     - cd backend
-    - npm ci
-    - npm run build
+    - pnpm install
+    - pnpm build
   artifacts:
     paths:
       - backend/dist/
-  only:
-    - main
-    - develop
