@@ -20,5 +20,5 @@ export const verifyToken = (token: string) => {
     throw new UnauthorizedError("Invalid or expired token");
   }
 };
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const generateRefreshToken = (id: string) => uuidv4();
