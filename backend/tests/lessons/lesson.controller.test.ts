@@ -4,7 +4,7 @@ import * as lessonController from '../../src/modules/lessons/lessons.controller'
 import { BadRequestError, NotFoundError } from '../../src/utils/errors';
 
 // Mock the lesson service
-jest.mock('../../../../src/modules/lessons/lessons.service');
+jest.mock('../../src/modules/lessons/lessons.service');
 
 describe('Lesson Controller', () => {
   // Setup mock request and response
