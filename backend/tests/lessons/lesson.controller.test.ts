@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as lessonService from '../../../../src/modules/lessons/lessons.service';
-import * as lessonController from '../../../../src/modules/lessons/lessons.controller';
-import { BadRequestError, NotFoundError } from '../../../../src/utils/errors';
+import * as lessonService from '../../src/modules/lessons/lessons.service';
+import * as lessonController from '../../src/modules/lessons/lessons.controller';
+import { BadRequestError, NotFoundError } from '../../src/utils/errors';
 
 // Mock the lesson service
 jest.mock('../../../../src/modules/lessons/lessons.service');

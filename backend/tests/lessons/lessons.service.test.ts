@@ -1,6 +1,6 @@
-import * as lessonService from '../../../../src/modules/lessons/lessons.service';
+import * as lessonService from '../../src/modules/lessons/lessons.service';
 import { PrismaClient } from '@prisma/client';
-import { NotFoundError } from '../../../../src/utils/errors';
+import { NotFoundError } from '../../src/utils/errors';
 
 // Mock Prisma
 jest.mock('@prisma/client', () => {
