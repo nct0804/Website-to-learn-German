@@ -222,8 +222,8 @@ export const getLessonsWithProgress = async (moduleId: number, userId: string) =
       }
 
       // Determine lesson status and action label
-      let status = isLocked ? "locked" : (isCompleted ? "practice" : "learn");
-      let actionLabel = isLocked ? "LOCKED" : (isCompleted ? "PRACTICE" : "LEARN");
+      const status = isLocked ? "locked" : (isCompleted ? "practice" : "learn");
+      const actionLabel = isLocked ? "LOCKED" : (isCompleted ? "PRACTICE" : "LEARN");
 
       return {
         ...lesson,

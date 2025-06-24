@@ -349,9 +349,9 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
   const baseXpReward = isCorrect ? exercise.xpReward : 0;
   
   // Apply streak multiplier if correct
-  let streakMultiplier = 1;
-  let xpReward = baseXpReward;
-  let newStreak = isCorrect ? user.streak + 1 : 0;
+  const streakMultiplier = 1;
+  const xpReward = baseXpReward;
+  const newStreak = isCorrect ? user.streak + 1 : 0;
   
   if (isCorrect) {
     streakMultiplier = getStreakMultiplier(newStreak);
