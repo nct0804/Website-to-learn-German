@@ -1,33 +1,48 @@
-image: node:20
-
 stages:
+  - install
   - lint
   - test
   - build
 
-variables:
-  DATABASE_URL: "dummy"
-  NODE_ENV: test
+cache:
+  paths:
+    - backend/node_modules/
 
-lint_testing:
+install:
+  stage: install
+  image: node:latest
+  script:
+    - cd backend
+    - npm install
+    - cd ..
+  artifacts:
+    paths:
+      - backend/node_modules/
+
+lint:
   stage: lint
+  image: node:latest
   script:
-    - npm install -g pnpm
-    - cd backend && pnpm install && pnpm lint
+    - cd backend
+    - npm run lint
+    - cd ..
+    - echo "Linting completed successfully"
 
-unit_testing:
+test:
   stage: test
+  image: node:latest
   script:
     - cd backend
-    - pnpm install
-    - pnpm test:unit
+    - npm run test
+    - cd ..
 
-build_backend:
+build:
   stage: build
+  image: node:latest
   script:
     - cd backend
-    - pnpm install
-    - pnpm build
+    - npm run build
+    - cd ..
   artifacts:
     paths:
       - backend/dist/
