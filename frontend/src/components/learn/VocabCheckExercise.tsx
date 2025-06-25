@@ -20,17 +20,17 @@ export function VocabCheckExercise({
       <div className="grid grid-cols-2 gap-4">
         {items.map((item) => (
           <div
-            key={item.value}
+            key={item.id}
             className={
               `flex flex-col items-center p-4 rounded-lg border transition ` +
-              (selected === item.value
+              (selected === item.id
                 ? "border-primary bg-primary/10"
                 : "border-gray-200 bg-white")
             }
-            onClick={() => onSelect(item.value)}
+            onClick={() => onSelect(item.id)}
           >
-            <img src={item.imageSrc} alt={item.label} className="w-16 h-16 mb-2" />
-            <span className="text-lg">{item.label}</span>
+            <img src={item.imageSrc || ""} alt={item.text} className="w-16 h-16 mb-2" />
+            <span className="text-lg">{item.text}</span>
           </div>
         ))}
       </div>

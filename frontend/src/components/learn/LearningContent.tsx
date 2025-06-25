@@ -6,7 +6,6 @@ import { VocabCheckExercise } from "./VocabCheckExercise"
 import LearningFooter from "./LearningFooter"
 import { useLessonExercises } from "@/hooks/useLessonExercises"
 
-// You’ll pass the current lessonId from props or context
 export function LearningContent({ lessonId }: { lessonId: number }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
   const [currentIdx, setCurrentIdx] = useState(0)

@@ -2,7 +2,6 @@ import { useState } from "react";
 import StartBubble from "./StartBubble";
 import DetailBubble from "./DetailBubble";
 import { useNavigate } from "react-router-dom";
-import type {Exercise} from "../types/courseProgress"
 
 export default function LearningStep({
   icon,
@@ -14,7 +13,7 @@ export default function LearningStep({
   title = "",
   subtitle = "",
   xpReward = "",
-  exercises = [],
+  lessonId,
   onClick,
   bubbleRef,
   blockedBubbleRef,
@@ -28,8 +27,8 @@ export default function LearningStep({
   selected?: boolean;
   title?: string;
   subtitle?: string;
-  xpReward: string,
-  exercises?: Exercise[]
+  xpReward: string;
+  lessonId?: number;
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
   blockedBubbleRef?: (el: HTMLDivElement | null) => void;
@@ -38,9 +37,9 @@ export default function LearningStep({
   const [pressed, setPressed] = useState(false);
   const navigate = useNavigate();
 
-  const handleStartClick = () => {
+  const handleStartClick = (lessonId: number) => {
     navigate("/learn", {
-      state: {exercises}
+      state: {lessonId: lessonId}
     });
   };
 
@@ -54,7 +53,7 @@ export default function LearningStep({
 
       {/* Connection Path */}
       {!first && (
-        <div className="w-1 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
+        <div className="w-2 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
       )}
 
       <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
@@ -101,7 +100,7 @@ export default function LearningStep({
               backgroundColor: "white",
               color: '#fbb124',
             }}
-            onClick={handleStartClick}
+            onClick={() => handleStartClick(lessonId || 0)}
           />
         ) : learned ? ( // Wait for backend to isLearned variable
           <DetailBubble
@@ -125,7 +124,7 @@ export default function LearningStep({
               backgroundColor: "#E5E5E5",
               color: "black",
             }}
-            onClick={handleStartClick}
+            onClick={() => handleStartClick(lessonId || 0)}
           />
         )
       )}

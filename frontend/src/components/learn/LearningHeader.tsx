@@ -4,11 +4,12 @@ import HeartIcon from "../../assets/heart.png"
 
 interface LearningHeaderProps {
   progress: number
-  score: number
+  hearts: number
+  current: number
+  total: number
 }
 
-export function LearningHeader({ progress, score }: LearningHeaderProps) {
-    
+export function LearningHeader({ progress, hearts, current, total }: LearningHeaderProps) {
   return (
     <CardHeader>
       <div className="flex justify-between items-center px-6">
@@ -19,8 +20,11 @@ export function LearningHeader({ progress, score }: LearningHeaderProps) {
         >
           X
         </button>
-        <Progress value={progress} className="flex-1 h-2 rounded-full mx-10" />
-        <span className="text-xl font-medium flex">{score}
+        <div className="flex-1 flex flex-col items-center mx-10">
+          <Progress value={progress} className="h-2 rounded-full w-full" />
+          <span className="text-xs mt-1">{current} / {total} exercises</span>
+        </div>
+        <span className="text-xl font-medium flex">{hearts}
           <img src={HeartIcon} className="w-6 h-6 flex"/>
         </span>
       </div>

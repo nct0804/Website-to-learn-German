@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import LearningStep from "./LearningStep";
 
 
+
 export default function VerticalStep({ steps }: { steps: any[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,11 +48,11 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
     >
       {steps.map((step, i) => (
         <LearningStep
-          key={i}
-          exercises={step.exercises}
+          key={step.id}
           title={step.title}
           subtitle={step.description || ""}
           xpReward={step.xpReward}
+          lessonId={step.id}
           icon={
             step.icon ? (
               <img src={step.icon} alt={step.title} className="w-12 h-12" />

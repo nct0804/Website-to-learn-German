@@ -20,12 +20,12 @@ export function MultipleChoiceExercise({
       <div className="flex flex-col space-y-4">
         {options.map((opt) => (
           <Button
-            key={opt.value}
-            variant={selected === opt.value ? "secondary" : "outline"}
+            key={opt.id}
+            variant={selected === opt.id ? "secondary" : "outline"}
             className="text-lg"
-            onClick={() => onSelect(opt.value)}
+            onClick={() => onSelect(opt.id)}
           >
-            {opt.label}
+            {opt.text}
           </Button>
         ))}
       </div>

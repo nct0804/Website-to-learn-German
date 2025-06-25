@@ -27,12 +27,12 @@ export function FillInBlankExercise({
       <div className="grid grid-cols-2 gap-4">
         {options.map((opt) => (
           <Button
-            key={opt.value}
-            variant={selected === opt.value ? "secondary" : "outline"}
+            key={opt.id}
+            variant={selected === opt.id ? "secondary" : "outline"}
             className="py-3 text-lg"
-            onClick={() => onSelect(opt.value)}
+            onClick={() => onSelect(opt.id)}
           >
-            {opt.label}
+            {opt.text}
           </Button>
         ))}
       </div>
