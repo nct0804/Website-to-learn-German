@@ -1,5 +1,5 @@
 // Change from CommonJS module.exports to ES module export default
-export default {
+module.exports= {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/tests'],
@@ -10,14 +10,11 @@ export default {
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
       tsconfig: 'tsconfig.json',
-      useESM: true,
+      useESM: false,
     }]
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   verbose: true,
-  extensionsToTreatAsEsm: ['.ts'],
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js']
   }
-}
