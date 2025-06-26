@@ -516,7 +516,7 @@ export const getExercisesWithStatus = async (lessonId: number, userId: string) =
 };
 
 export const calculateRequiredXPForLevel = (level: number): number => {
-  if (level <= 0) return 0;
+  if (level === 0) return 0;
   if (level === 1) return 50;
   if (level === 2) return 120;
   if (level === 3) return 250;
