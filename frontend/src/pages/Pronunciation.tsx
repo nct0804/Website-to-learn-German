@@ -17,8 +17,7 @@ const vowelColors: Record<string, string> = {
 };
 
 export default function Pronunciation() {
-  const refreshToken = sessionStorage.getItem("refreshToken") ?? "";
-  const { groups, loading, error } = useVocabularyGroups(refreshToken);
+  const { groups, loading, error } = useVocabularyGroups();
 
   const [activeSymbol, setActiveSymbol] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);

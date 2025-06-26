@@ -4,7 +4,6 @@ import { NotFoundError, BadRequestError } from '../../utils/errors';
 
 // Get all lessons, with optional filtering by moduleId
 export const getAllLessons = async (req: Request, res: Response) => {
-  try {
     const { moduleId } = req.query;
     
     const lessons = await LessonService.findLessons({
@@ -15,14 +14,10 @@ export const getAllLessons = async (req: Request, res: Response) => {
       success: true,
       data: lessons
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // Get a specific lesson by ID with its exercises
 export const getLessonById = async (req: Request, res: Response) => {
-  try {
     const lessonId = Number(req.params.id);
     
     if (isNaN(lessonId)) {
@@ -39,14 +34,10 @@ export const getLessonById = async (req: Request, res: Response) => {
       success: true,
       data: lesson
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //Create a new lesson
 export const createLesson = async (req: Request, res: Response) => {
-  try {
     const { moduleId, title, description, order, xpReward, estimatedTime } = req.body;
     
     const newLesson = await LessonService.createLesson({
@@ -62,14 +53,10 @@ export const createLesson = async (req: Request, res: Response) => {
       success: true,
       data: newLesson
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //Update an lesson
 export const updateLesson = async (req: Request, res: Response) => {
-  try {
     const lessonId = Number(req.params.id);
     
     if (isNaN(lessonId)) {
@@ -94,14 +81,10 @@ export const updateLesson = async (req: Request, res: Response) => {
       success: true,
       data: updatedLesson
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //Delete a lesson
 export const deleteLesson = async (req: Request, res: Response) => {
-  try {
     const lessonId = Number(req.params.id);
     
     if (isNaN(lessonId)) {
@@ -119,14 +102,10 @@ export const deleteLesson = async (req: Request, res: Response) => {
       message: `Lesson with ID ${lessonId} successfully deleted`,
       data: deletedLesson
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //all lessons for a specific module
 export const getLessonsByModuleId = async (req: Request, res: Response) => {
-  try {
     const moduleId = Number(req.params.moduleId);
     
     if (isNaN(moduleId)) {
@@ -139,13 +118,9 @@ export const getLessonsByModuleId = async (req: Request, res: Response) => {
       success: true,
       data: lessons
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 export const getLessonsWithProgress = async (req: Request, res: Response) => {
-  try {
     const moduleId = Number(req.params.moduleId);
     
     if (isNaN(moduleId)) {
@@ -165,8 +140,5 @@ export const getLessonsWithProgress = async (req: Request, res: Response) => {
       success: true,
       data: lessons
     });
-  } catch (error) {
-    throw error;
-  }
 };
 

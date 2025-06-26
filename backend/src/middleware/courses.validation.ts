@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { BadRequestError } from '../utils/errors';
-import { LanguageLevel } from '@prisma/client';
+// import { LanguageLevel } from '@prisma/client';
 
 // Should match the LanguageLevel enum values
 const validLevels = ['A1_1', 'A1_2', 'A2_1', 'A2_2'];

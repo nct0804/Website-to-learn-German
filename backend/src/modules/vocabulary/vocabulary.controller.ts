@@ -4,21 +4,16 @@ import { BadRequestError } from '../../utils/errors';
 
 // GET /api/vocabulary/groups
 export const getAllSoundGroups = async (req: Request, res: Response) => {
-  try {
     const soundGroups = await VocabularyService.getAllSoundGroups();
     
     return res.status(200).json({
       success: true,
       data: soundGroups
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // GET /api/vocabulary/groups/:id
 export const getSoundGroupById = async (req: Request, res: Response) => {
-  try {
     const groupId = Number(req.params.id);
     
     if (isNaN(groupId)) {
@@ -31,14 +26,10 @@ export const getSoundGroupById = async (req: Request, res: Response) => {
       success: true,
       data: soundGroup
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // GET /api/vocabulary/sounds
 export const getAllSounds = async (req: Request, res: Response) => {
-  try {
     const { type } = req.query;
     const sounds = await VocabularyService.getAllSounds(type as any);
     
@@ -46,14 +37,10 @@ export const getAllSounds = async (req: Request, res: Response) => {
       success: true,
       data: sounds
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // GET /api/vocabulary/sounds/:id
 export const getSoundById = async (req: Request, res: Response) => {
-  try {
     const soundId = Number(req.params.id);
     
     if (isNaN(soundId)) {
@@ -66,14 +53,10 @@ export const getSoundById = async (req: Request, res: Response) => {
       success: true,
       data: sound
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // POST /api/vocabulary/groups
 export const createSoundGroup = async (req: Request, res: Response) => {
-  try {
     const { name, order } = req.body;
     
     if (!name) {
@@ -89,14 +72,11 @@ export const createSoundGroup = async (req: Request, res: Response) => {
       success: true,
       data: newSoundGroup
     });
-  } catch (error) {
-    throw error;
-  }
+
 };
 
 // POST /api/vocabulary/sounds
 export const createSound = async (req: Request, res: Response) => {
-  try {
     const { symbol, exampleWord, type, audioSrc, groupIds } = req.body;
     
     if (!symbol || !exampleWord || !type) {
@@ -115,14 +95,10 @@ export const createSound = async (req: Request, res: Response) => {
       success: true,
       data: newSound
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // PUT /api/vocabulary/sounds/:id
 export const updateSound = async (req: Request, res: Response) => {
-  try {
     const soundId = Number(req.params.id);
     
     if (isNaN(soundId)) {
@@ -143,14 +119,10 @@ export const updateSound = async (req: Request, res: Response) => {
       success: true,
       data: updatedSound
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // DELETE /api/vocabulary/sounds/:id
 export const deleteSound = async (req: Request, res: Response) => {
-  try {
     const soundId = Number(req.params.id);
     
     if (isNaN(soundId)) {
@@ -163,14 +135,10 @@ export const deleteSound = async (req: Request, res: Response) => {
       success: true,
       message: `Sound with ID ${soundId} successfully deleted`
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // PUT /api/vocabulary/groups/:id
 export const updateSoundGroup = async (req: Request, res: Response) => {
-  try {
     const groupId = Number(req.params.id);
     
     if (isNaN(groupId)) {
@@ -188,14 +156,10 @@ export const updateSoundGroup = async (req: Request, res: Response) => {
       success: true,
       data: updatedGroup
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //DELETE /api/vocabulary/groups/:id
 export const deleteSoundGroup = async (req: Request, res: Response) => {
-  try {
     const groupId = Number(req.params.id);
     
     if (isNaN(groupId)) {
@@ -208,14 +172,10 @@ export const deleteSoundGroup = async (req: Request, res: Response) => {
       success: true,
       message: `Sound group with ID ${groupId} successfully deleted`
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //POST /api/vocabulary/sounds/:soundId/groups/:groupId
 export const addSoundToGroup = async (req: Request, res: Response) => {
-  try {
     const soundId = Number(req.params.soundId);
     const groupId = Number(req.params.groupId);
     
@@ -229,14 +189,10 @@ export const addSoundToGroup = async (req: Request, res: Response) => {
       success: true,
       data: association
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // DELETE /api/vocabulary/sounds/:soundId/groups/:groupId
 export const removeSoundFromGroup = async (req: Request, res: Response) => {
-  try {
     const soundId = Number(req.params.soundId);
     const groupId = Number(req.params.groupId);
     
@@ -250,7 +206,4 @@ export const removeSoundFromGroup = async (req: Request, res: Response) => {
       success: true,
       message: `Sound ${soundId} successfully removed from group ${groupId}`
     });
-  } catch (error) {
-    throw error;
-  }
 };

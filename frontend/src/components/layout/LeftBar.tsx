@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogout } from '@/hooks/useLogOut';
 
 const menuItems = [
-  { to: '/', icon: Home, label: 'Home' },
+  { to: '/home', icon: Home, label: 'Home' },
   { to: '/lesson', icon: Training, label: 'Lesson' },
   { to: '/ranking', icon: Ranking, label: 'Ranking' },
   { to: '/pronunciation', icon: faHeadphonesSimple, label: 'Pronunciation' }
@@ -95,7 +95,7 @@ export default function LeftBar() {
               Profile
             </Link>
             <Link
-              to="/aboutus"
+              to="/"
               className="px-4 py-2 text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95"
               onClick={() => setMenuOpen(false)}
             >

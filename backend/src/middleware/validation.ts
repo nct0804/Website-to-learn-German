@@ -1,15 +1,17 @@
-import { NextFunction, Request, Response } from "express";
-import { BadRequestError } from "../utils/errors";
+import { body, validationResult } from "express-validator";
+import { Request, Response, NextFunction } from 'express';
+import { BadRequestError } from '../utils/errors';
 
-// Verwenden Sie require für express-validator
-const { body, validationResult } = require("express-validator");
 
 export const validate = (req: Request, _res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const formatted = errors
       .array()
-      .map((e: any) => ({ field: e.param, message: e.msg }));
+      .map((e) => ({
+        field: 'param' in e ? e.param : undefined,
+        message: e.msg
+      }));
     throw new BadRequestError(
       "Validation failed: " + JSON.stringify(formatted)
     );

@@ -1,0 +1,48 @@
+stages:
+  - install
+  - lint
+  - test
+  - build
+
+cache:
+  paths:
+    - backend/node_modules/
+
+install:
+  stage: install
+  image: node:latest
+  script:
+    - cd backend
+    - npm install
+    - cd ..
+  artifacts:
+    paths:
+      - backend/node_modules/
+
+lint:
+  stage: lint
+  image: node:latest
+  script:
+    - cd backend
+    - npm run lint
+    - cd ..
+    - echo "Linting completed successfully"
+
+test:
+  stage: test
+  image: node:latest
+  script:
+    - cd backend
+    - npm run test
+    - cd ..
+
+build:
+  stage: build
+  image: node:latest
+  script:
+    - cd backend
+    - npm run build
+    - cd ..
+  artifacts:
+    paths:
+      - backend/dist/

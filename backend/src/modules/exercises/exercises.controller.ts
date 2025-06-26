@@ -4,7 +4,6 @@ import { BadRequestError } from '../../utils/errors';
 
 // GET /api/exercises
 export const getAllExercises = async (req: Request, res: Response) => {
-  try {
     const { lessonId, type } = req.query;
     
     const exercises = await ExerciseService.findExercises({
@@ -16,14 +15,10 @@ export const getAllExercises = async (req: Request, res: Response) => {
       success: true,
       data: exercises
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  GET /api/exercises/:id
 export const getExerciseById = async (req: Request, res: Response) => {
-  try {
     const exerciseId = Number(req.params.id);
     
     if (isNaN(exerciseId)) {
@@ -36,14 +31,11 @@ export const getExerciseById = async (req: Request, res: Response) => {
       success: true,
       data: exercise
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // GET /api/exercises/:id/admin
 export const getExerciseWithAnswers = async (req: Request, res: Response) => {
-  try {
+
     const exerciseId = Number(req.params.id);
     
     if (isNaN(exerciseId)) {
@@ -56,14 +48,10 @@ export const getExerciseWithAnswers = async (req: Request, res: Response) => {
       success: true,
       data: exercise
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // POST /api/exercises
 export const createExercise = async (req: Request, res: Response) => {
-  try {
     const { lessonId, type, question, instruction, order, xpReward, timeLimit, options } = req.body;
     
     const newExercise = await ExerciseService.createExercise({
@@ -81,16 +69,11 @@ export const createExercise = async (req: Request, res: Response) => {
       success: true,
       data: newExercise
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  PUT /api/exercises/:id
 export const updateExercise = async (req: Request, res: Response) => {
-  try {
     const exerciseId = Number(req.params.id);
-    
     if (isNaN(exerciseId)) {
       throw new BadRequestError('Invalid exercise ID');
     }
@@ -111,14 +94,10 @@ export const updateExercise = async (req: Request, res: Response) => {
       success: true,
       data: updatedExercise
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // DELETE /api/exercises/:id
 export const deleteExercise = async (req: Request, res: Response) => {
-  try {
     const exerciseId = Number(req.params.id);
     
     if (isNaN(exerciseId)) {
@@ -131,14 +110,10 @@ export const deleteExercise = async (req: Request, res: Response) => {
       success: true,
       message: `Exercise with ID ${exerciseId} successfully deleted`
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // POST /api/exercises/:id/check
 export const checkExerciseAnswer = async (req: Request, res: Response) => {
-  try {
     const exerciseId = Number(req.params.id);
     
     if (isNaN(exerciseId)) {
@@ -163,14 +138,10 @@ export const checkExerciseAnswer = async (req: Request, res: Response) => {
       success: true,
       data: result
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  GET /api/lessons/:lessonId/exercises
 export const getExercisesByLessonId = async (req: Request, res: Response) => {
-  try {
     const lessonId = Number(req.params.lessonId);
     
     if (isNaN(lessonId)) {
@@ -183,7 +154,4 @@ export const getExercisesByLessonId = async (req: Request, res: Response) => {
       success: true,
       data: exercises
     });
-  } catch (error) {
-    throw error;
-  }
 };

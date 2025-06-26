@@ -4,7 +4,6 @@ import { BadRequestError, NotFoundError } from '../../utils/errors';
 
 // GET /api/modules
 export const getAllModules = async (req: Request, res: Response) => {
-  try {
     const { courseId } = req.query;
     
     const modules = await ModuleService.findModules({
@@ -15,14 +14,10 @@ export const getAllModules = async (req: Request, res: Response) => {
       success: true,
       data: modules
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // GET /api/modules/:id
 export const getModuleById = async (req: Request, res: Response) => {
-  try {
     const moduleId = Number(req.params.id);
     
     if (isNaN(moduleId)) {
@@ -35,14 +30,10 @@ export const getModuleById = async (req: Request, res: Response) => {
       success: true,
       data: module
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  POST /api/modules (admin)
 export const createModule = async (req: Request, res: Response) => {
-  try {
     const { courseId, title, description, order, isLocked } = req.body;
     
     const newModule = await ModuleService.createModule({
@@ -57,14 +48,10 @@ export const createModule = async (req: Request, res: Response) => {
       success: true,
       data: newModule
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 //  PUT /api/modules/:id (admin)
 export const updateModule = async (req: Request, res: Response) => {
-  try {
     const moduleId = Number(req.params.id);
     
     if (isNaN(moduleId)) {
@@ -84,14 +71,10 @@ export const updateModule = async (req: Request, res: Response) => {
       success: true,
       data: updatedModule
     });
-  } catch (error) {
-    throw error;
-  }
 };
 
 // DELETE /api/modules/:id (admin)
 export const deleteModule = async (req: Request, res: Response) => {
-  try {
     const moduleId = Number(req.params.id);
     
     if (isNaN(moduleId)) {
@@ -105,14 +88,11 @@ export const deleteModule = async (req: Request, res: Response) => {
       message: `Module with ID ${moduleId} successfully deleted`,
       data: deletedModule
     });
-  } catch (error) {
-    throw error;
-  }
+ 
 };
 
 // GET /api/courses/:courseId/modules
 export const getModulesByCourseId = async (req: Request, res: Response) => {
-  try {
     const courseId = Number(req.params.courseId);
     
     if (isNaN(courseId)) {
@@ -125,7 +105,4 @@ export const getModulesByCourseId = async (req: Request, res: Response) => {
       success: true,
       data: modules
     });
-  } catch (error) {
-    throw error;
-  }
 };
