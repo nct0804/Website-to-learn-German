@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "./useAuth.tsx"
 import type { CourseProgressResponse, CourseProgress } from "../components/types/courseProgress.ts"
 
 export default function useCoursesWithProgress() {

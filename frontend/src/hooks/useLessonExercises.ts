@@ -1,6 +1,5 @@
 // src/hooks/useLessonExercises.ts
 import { useEffect, useState } from "react"
-import { useAuth } from "./useAuth"
 
 export interface ExerciseOption {
   id: number
@@ -23,7 +22,6 @@ export interface Exercise {
 }
 
 export function useLessonExercises(lessonId: number) {
-  const { accessToken } = useAuth()
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<null | Error>(null)
@@ -40,7 +38,7 @@ export function useLessonExercises(lessonId: number) {
       })
       .catch((err) => setError(err instanceof Error ? err : new Error(String(err))))
       .finally(() => setLoading(false))
-  }, [lessonId, accessToken])
+  }, [lessonId])
 
   return { exercises, loading, error }
 }

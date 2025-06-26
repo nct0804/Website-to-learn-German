@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
 import CourseCard from "../learning-path/CourseCard"
 import useCoursesWithProgress from "../../hooks/useCoursesWithProgress";
+import { useAllModulesLessonProgress } from "../../hooks/useAllModulesLessonProgress";
 
 import GreetingIcon from "../../assets/greeting.png";
 import NumberIcon from "../../assets/numbers.png";
@@ -38,11 +39,9 @@ const lessonIcons = [
   Number100Icon,               // Number 21-100
   AgeIcon                     //Talking about age
 ]
-  
 
 export default function MainContent() {
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null)
-
   const { courses, loading, error } = useCoursesWithProgress()
 
   if (loading) console.log("Loading courses…")
@@ -51,6 +50,12 @@ export default function MainContent() {
   const current = selectedCourse
     ? courses.find((c) => c.id === selectedCourse) ?? null
     : null
+
+  // Memoize module IDs to avoid unnecessary renders
+  const moduleIds = useMemo(() => current ? current.modules.map(m => m.id) : [], [current]);
+
+  // Fetch lessons for all modules in the selected course
+  const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
     <div className="flex-1 flex justify-center overflow-auto h-full px-4 max-w-3xl mx-auto">
@@ -72,21 +77,30 @@ export default function MainContent() {
             </div>
           </>
         ) : (
-          current.modules.map((module, idx) => (
-            <div key={module.id} className="py-6">
-              <LessonHeader
-                title={`Lesson ${idx + 1}`}
-                description={module.description}
-                setSelectedLesson={() => setSelectedCourse(null)}
-              />
-              <VerticalStep
-                steps={module.lessons.map((lesson, idx) => ({
-                  ...lesson,
-                  icon: lessonIcons[idx],
-                }))}
-              />
-            </div>
-          ))
+          current.modules.map((module, idx) => {
+            const lessons = lessonsByModule[module.id] || [];
+            return (
+              <div key={module.id} className="py-6">
+                <LessonHeader
+                  title={`Lesson ${idx + 1}`}
+                  description={module.description}
+                  setSelectedLesson={() => setSelectedCourse(null)}
+                />
+                {lessonsLoading ? (
+                  <div>Loading lessons…</div>
+                ) : lessonsError ? (  
+                  <div>Error loading lessons: {lessonsError.message}</div>
+                ) : (
+                  <VerticalStep
+                    steps={lessons.map((lesson, lidx) => ({
+                      ...lesson,
+                      icon: lessonIcons[lidx],
+                    }))}
+                  />
+                )}
+              </div>
+            );
+          })
         )}
       </div>
     </div>
