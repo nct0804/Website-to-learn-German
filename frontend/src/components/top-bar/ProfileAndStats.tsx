@@ -7,7 +7,7 @@ export default function ProfileAndStats() {
       {/* Stats */}
         <div className="flex items-center gap-4 border-r-[3px] border-[#FFF4E1] pr-6">
             <span className="flex items-center gap-1 text-orange-500 font-bold">🔥 0</span>
-            <span className="flex items-center gap-1 text-yellow-700 font-bold">🥨 13</span>
+            {/* <span className="flex items-center gap-1 text-yellow-700 font-bold">🥨 13</span> */}
             <span className="flex items-center gap-1 text-red-500 font-bold">❤️ 5</span>
         </div>
         {/* Profile */}
