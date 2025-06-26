@@ -31,11 +31,11 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
         <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-[#FDBA17] transition-all"
-            style={{ width: `${course.progress}%` }}
+            style={{ width: `${course.progress * 10}%` }}
           />
         </div>
         <div className="text-xs text-gray-600 mt-1">
-          {course.progress}%
+          {course.progress * 10}%
         </div>
       </div>
 
@@ -47,7 +47,7 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
           ${ isLocked
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
               : isCompleted
-              ? "bg-green-500 hover:bg-green-600 text-white"
+              ? "bg-[#408297] hover:bg-[#408297] text-white"
               : "bg-[#FDBA17] hover:bg-[#ffd66e] text-white"}`
           }
       >
