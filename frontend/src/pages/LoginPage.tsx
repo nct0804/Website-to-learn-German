@@ -6,13 +6,13 @@ import AnimatedBackgroundEffects from '../components/custom/AnimatedBackgroundEf
 
 export default function LoginPage() {
     return (
-        <div className="min-h-screen grid grid-cols-[2fr_3fr]">
-            <div className="flex items-center justify-center bg-white">
+        <div className="h-screen grid grid-cols-[2fr_3fr]">
+            <div className="flex flex-col items-center justify-center bg-white h-screen">
                 <LoginLeftPanel />
             </div>
-            <div className="blink-gradient relative overflow-hidden">
+            <div className="blink-gradient relative overflow-hidden h-screen flex flex-col">
                 <AnimatedBackgroundEffects />
-                <div className="flex items-center justify-center h-full relative z-10">
+                <div className="flex items-center justify-center flex-1 relative z-10">
                     <LoginRightPanel />
                 </div>
             </div>
