@@ -558,10 +558,10 @@ export const checkLevelUp = (currentLevel: number, totalXP: number): {
 };
 
 export const calculateLevelFromXP = (xp: number): number => {
-  if (xp < 50) return 1; // Level 1 minimum
+  if (xp < 50) return 0; 
   
-  // Loop through levels until we find the right one
-  let level = 1;
+
+  let level = 0;
   
   // Keep incrementing level until we find the highest level they qualify for
   while (calculateRequiredXPForLevel(level + 1) <= xp) {
