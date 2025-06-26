@@ -27,31 +27,17 @@ const moduleIcons = [
   A22   // German A2.2
 ]
 
-const lessonIcons = [
-  IntroductionIcon,            // Introducing Yourself
-  FormalVsInformalIcon,        // Formal vs Informal Speech
-  QuestionIcon,                // Asking Simple Questions
-  GreetingIcon,                // Basic Greeting
-  EveryDayPhrasesIcon,         // Common Everyday Phrases
-  Number1120Icon,              // Number 11-20
-  NumberIcon,                  // Numbers 1-10
-  OrdinalNumberIcon,           //Ordinal Number
-  Number100Icon,               // Number 21-100
-  AgeIcon                     //Talking about age
-]
-
 const lessonIconMap: Record<number, string> = {
-  1: IntroductionIcon,
-  2: EveryDayPhrasesIcon,
-  3: GreetingIcon,
-  4: FormalVsInformalIcon,
-  5: QuestionIcon,
-  6: Number1120Icon,
-  7: OrdinalNumberIcon,
-  8: NumberIcon,
-  9: AgeIcon,
-  10: Number100Icon,
-  // ...add more as needed
+  1: IntroductionIcon,          // Introducing Yourself
+  2: EveryDayPhrasesIcon,       // Common Everyday Phrases
+  3: GreetingIcon,              // Basic Greeting
+  4: FormalVsInformalIcon,      // Formal vs Informal Speech
+  5: QuestionIcon,              // Asking Simple Questions
+  6: Number1120Icon,            // Number 11-20
+  7: OrdinalNumberIcon,         // Ordinal Number
+  8: NumberIcon,                // Numbers 1-10
+  9: AgeIcon,                   // Talking about age
+  10: Number100Icon             // Number 21-100
 };
 
 export default function MainContent() {

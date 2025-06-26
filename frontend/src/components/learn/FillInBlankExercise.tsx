@@ -5,12 +5,14 @@ export interface FillInBlankExerciseProps {
   prefix: string
   suffix: string
   onSelect: (text: string) => void
+  instruction?: string
 }
 
 export function FillInBlankExercise({
   prefix,
   suffix,
   onSelect,
+  instruction,
 }: FillInBlankExerciseProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -21,17 +23,16 @@ export function FillInBlankExercise({
 
   return (
     <div className="flex flex-col space-y-8 w-full max-w-lg">
-      <h2 className="text-2xl font-semibold text-center">Fill in the blank</h2>
-      <div className="flex justify-center items-center text-3xl space-x-2">
-        <span>{prefix}</span>
+      <h2 className="text-2xl font-semibold text-center mb-8 block">{instruction}</h2>
+      <div className="flex justify-center items-center text-3xl space-x-2 mb-4">
+        <div className="text-3xl">{prefix}</div>
         <input
           type="text"
           value={inputValue}
           onChange={handleChange}
-          className="inline-block w-32 border-b-2 border-border text-center text-3xl bg-transparent focus:outline-none focus:border-[#fbb124]"
-          placeholder="?"
+          className="inline-block w-32 border-b-2 border-[#fbb124] text-center text-3xl bg-transparent focus:outline-none focus:border-[#408297]"
         />
-        <span>{suffix}</span>
+        <div className="text-3xl">{suffix}</div>
       </div>
     </div>
   );

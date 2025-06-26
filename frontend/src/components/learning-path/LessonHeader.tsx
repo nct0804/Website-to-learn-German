@@ -25,8 +25,8 @@ export default function LessonHeader({
                 </button>
 
                 <div className="flex-1">
-                    <p className="text-sm text-white mb-2 font-normal">{description}</p>
-                    <h1 className="text-2xl font-bold">{title}</h1>
+                    <p className="text-white mb-2 font-normal">{title}</p>
+                    <h1 className="text-2xl font-bold">{description}</h1>
                 </div>
             </div>
         </>
