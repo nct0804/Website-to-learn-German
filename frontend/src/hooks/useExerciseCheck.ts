@@ -20,7 +20,7 @@ export function useExerciseCheck() {
   const [checking, setChecking] = useState(false)
   const [checkResult, setCheckResult] = useState<CheckResult | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const { accessToken } = useAuth()
+  useAuth();
 
   const checkExercise = async (exerciseId: number, answer: string | number) => {
     setChecking(true)
@@ -32,9 +32,9 @@ export function useExerciseCheck() {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
           },
+          credentials: 'include',
           body: JSON.stringify({
             answer
           })

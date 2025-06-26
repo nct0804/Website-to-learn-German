@@ -3,23 +3,14 @@ import { useAuth } from "./useAuth.tsx"
 import type { CourseProgressResponse, CourseProgress } from "../components/types/courseProgress.ts"
 
 export default function useCoursesWithProgress() {
-  const { accessToken } = useAuth()
   const [courses, setCourses] = useState<CourseProgress[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    if (!accessToken) {
-      setError(new Error("Not authenticated"))
-      setLoading(false)
-      return
-    }
-
     setLoading(true)
     fetch(`${import.meta.env.VITE_API_PROXY_TARGET}/api/courses/progress/all`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      credentials: "include",
     })
       .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -44,7 +35,7 @@ export default function useCoursesWithProgress() {
         setError(err instanceof Error ? err : new Error(String(err)))
       })
       .finally(() => setLoading(false))
-  }, [accessToken])
+  }, [])
 
   return { courses, loading, error }
 }
