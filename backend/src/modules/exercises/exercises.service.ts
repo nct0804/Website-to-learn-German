@@ -516,12 +516,12 @@ export const getExercisesWithStatus = async (lessonId: number, userId: string) =
 };
 
 export const calculateRequiredXPForLevel = (level: number): number => {
-  if (level === 0) return 0;
-  if (level === 1) return 50;
-  if (level === 2) return 120;
-  if (level === 3) return 250;
-  if (level === 4) return 370;
-  if (level === 5) return 500;
+  if (level <= 1) return 0;
+  if (level === 2) return 50;
+  if (level === 3) return 120;
+  if (level === 4) return 250;
+  if (level === 5) return 370;
+  if (level === 6) return 500;
   
   // Exponential growth for higher levels
   return Math.round(100 * Math.pow(level, 1.8));
@@ -558,10 +558,10 @@ export const checkLevelUp = (currentLevel: number, totalXP: number): {
 };
 
 export const calculateLevelFromXP = (xp: number): number => {
-  if (xp < 50) return 0; 
+  if (xp < 50) return 1; 
   
 
-  let level = 0;
+  let level = 1;
   
   // Keep incrementing level until we find the highest level they qualify for
   while (calculateRequiredXPForLevel(level + 1) <= xp) {
