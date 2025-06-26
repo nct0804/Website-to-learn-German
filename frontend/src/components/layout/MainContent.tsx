@@ -40,6 +40,20 @@ const lessonIcons = [
   AgeIcon                     //Talking about age
 ]
 
+const lessonIconMap: Record<number, string> = {
+  1: IntroductionIcon,
+  2: EveryDayPhrasesIcon,
+  3: GreetingIcon,
+  4: FormalVsInformalIcon,
+  5: QuestionIcon,
+  6: Number1120Icon,
+  7: OrdinalNumberIcon,
+  8: NumberIcon,
+  9: AgeIcon,
+  10: Number100Icon,
+  // ...add more as needed
+};
+
 export default function MainContent() {
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null)
   const { courses, loading, error } = useCoursesWithProgress()
@@ -92,9 +106,9 @@ export default function MainContent() {
                   <div>Error loading lessons: {lessonsError.message}</div>
                 ) : (
                   <VerticalStep
-                    steps={lessons.map((lesson, lidx) => ({
+                    steps={lessons.map((lesson) => ({
                       ...lesson,
-                      icon: lessonIcons[lidx],
+                      icon: lessonIconMap[lesson.id],
                     }))}
                   />
                 )}
