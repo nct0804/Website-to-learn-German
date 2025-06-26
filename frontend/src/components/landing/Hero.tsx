@@ -29,9 +29,8 @@ function Hero() {
                 <span className="block">with us!</span>
               </h1>
               <p className="text-sm sm:text-base text-orange-100 leading-relaxed">
-                Learn German from zero to fluency with interactive, engaging, and 
-                <span className="font-bold text-white"> completely free</span> courses. 
-                Join thousands who have discovered the joy of speaking German fluently.
+              We're young programmers in Germany who've faced the struggles of learning German firsthand. 
+              That's why we built this free platform to make learning German practical and effective for you
               </p>
             </div>
             
