@@ -44,7 +44,11 @@ export default function LearningStep({
   };
 
   const handlePracticeClick = () => {
-    navigate("/learn");
+    if (lessonId) {
+      navigate("/learn", {
+        state: { lessonId }
+      });
+    }
   };
 
   return (
@@ -76,7 +80,13 @@ export default function LearningStep({
             shadow-md
             cursor-pointer
             ${pressed ? "translate-y-4" : ""}
-            ${active || learned ? "bg-[#3B6978] border-[6px] border-[#E5E5E5]" : "bg-[#FFFBF3] border-none"}
+            ${
+              learned
+                ? "bg-[#3B6978]" // learned style (no border)
+                : active
+                ? "bg-[#3B6978] border-[6px] border-[#E5E5E5]" // next to learn
+                : "bg-[#FFFBF3] border-none" // locked
+            }
           `}
           onClick={onClick}
           onMouseDown={() => setPressed(true)}

@@ -7,6 +7,8 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Find the first not-learned lesson to highlight as
+  const activeIndex = steps.findIndex(step => !step.isLearned);
   // One ref for each node wrapper
   const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
   // One ref for each bubble (may be undefined)
@@ -60,8 +62,8 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
           }
           first={i === 0}
           last={i === steps.length - 1}
-          active={i === 0}             
-          learned={false} 
+          active={i === activeIndex ? true : false}
+          learned={step.isLearned}
           selected={selectedIndex === i}
           onClick={() => handleNodeClick(i)}
           nodeWrapperRef={el => (nodeRefs.current[i] = el)}

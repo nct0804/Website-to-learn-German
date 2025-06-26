@@ -11,16 +11,17 @@ export default function Learn() {
   // Track current exercise index and total
   const [currentIdx, setCurrentIdx] = useState(0);
   const [total, setTotal] = useState(0);
+  const [isSummary, setIsSummary] = useState(false);
 
   // Handler to update progress from LearningContent
-  const handleProgressChange = (current: number, total: number) => {
+  const handleProgressChange = (current: number, total: number, summary: boolean = false) => {
     setCurrentIdx(current);
     setTotal(total);
+    setIsSummary(summary);
   };
 
   // Calculate progress percentage
-  const progress = total > 0 ? (currentIdx / total) * 100 : 0;
-
+  const progress = total > 0 ? (Math.min(currentIdx, total) / total) * 100 : 0;
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
@@ -31,13 +32,14 @@ export default function Learn() {
       <div className="flex items-center justify-center min-h-screen bg-[#FFB939]">
         <div className="w-full max-w-4xl">
           <Card className="min-h-[90vh] flex flex-col rounded-3xl">
-            <LearningHeader progress={progress} hearts={5} current={currentIdx} total={total} />
+            <LearningHeader progress={progress} hearts={5} current={Math.min(currentIdx, total)} total={total} />
             <div className="flex flex-1 overflow-hidden">
               <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
             </div>
           </Card>
         </div>
       </div>
+      
     </motion.div>
   )
 }
