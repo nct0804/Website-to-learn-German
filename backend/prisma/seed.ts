@@ -449,13 +449,13 @@ async function createExercisesForFirstLesson(lessonId: number) {
     ]
   });
   
-  // Exercise 4: Vocabulary Check
+  // Exercise 4: Vocabulary Check - sua lai thanh multi
   const exercise4 = await prisma.exercise.create({
     data: {
       lessonId: lessonId,
-      type: 'VOCABULARY_CHECK',
-      question: 'Match the German greetings with their meanings',
-      instruction: 'Drag each greeting to its correct translation',
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you say "Good Morning" in German?',
+      instruction: '',
       order: 4,
       xpReward: 3,
       timeLimit: 30 // seconds
@@ -465,10 +465,10 @@ async function createExercisesForFirstLesson(lessonId: number) {
   // Options for Exercise 4
   await prisma.exerciseOption.createMany({
     data: [
-      { exerciseId: exercise4.id, text: 'Guten Morgen = Good morning', isCorrect: true, order: 1 },
-      { exerciseId: exercise4.id, text: 'Guten Tag = Good day', isCorrect: true, order: 2 },
-      { exerciseId: exercise4.id, text: 'Guten Abend = Good evening', isCorrect: true, order: 3 },
-      { exerciseId: exercise4.id, text: 'Gute Nacht = Good night', isCorrect: true, order: 4 }
+      { exerciseId: exercise4.id, text: 'Guten Abend', isCorrect: false, order: 1 },
+      { exerciseId: exercise4.id, text: 'Guten Appetit', isCorrect: false, order: 2 },
+      { exerciseId: exercise4.id, text: 'Guten Morgen', isCorrect: true, order: 3 },
+      { exerciseId: exercise4.id, text: 'Gute Nacht', isCorrect: false, order: 4 }
     ]
   });
   
