@@ -7,6 +7,7 @@ import LearningFooter from "./LearningFooter"
 import { useLessonExercises } from "@/hooks/useLessonExercises"
 import { useExerciseCheck } from "@/hooks/useExerciseCheck"
 import { useNavigate } from "react-router-dom"
+import LessonSummary from "./LessonSummary"
 
 export function LearningContent({ lessonId, onProgressChange }: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
@@ -113,49 +114,28 @@ export function LearningContent({ lessonId, onProgressChange }: { lessonId: numb
   // Show congratulatory message and summary if all exercises are finished
   if (currentIdx >= exercises.length) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center z-50">
-        {/* Blurred background */}
-        <div className="absolute inset-0 bg-opacity-30 backdrop-blur-md" />
-        {/* Popup content */}
-        <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-3xl w-full flex flex-col items-center">
-          <h2 className="text-3xl font-bold text-green-600 mb-2">🎉 Congratulations! 🎉</h2>
-          <p className="text-lg text-gray-800 mb-4">You have completed all exercises for this lesson!</p>
-          <div className="w-full space-y-4 mb-6">
-            {exercises.map((ex, idx) => (
-              <div key={ex.id} className="bg-[#fbb12410] rounded-lg shadow-md p-4">
-                <div className="font-semibold text-gray-800 mb-1">{idx + 1}. {ex.question}</div>
-                <div className="text-green-700 font-bold">Answer: {ex.exerciseOptions && ex.exerciseOptions.length === 1 ? ex.exerciseOptions[0].text : "-"}</div>
-              </div>
-            ))}
-          </div>
-          <button
-            onClick={() => navigate(-1)}
-            className="mt-2 bg-[#fbb124] text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-[#e0a800] transition-colors"
-          >
-            Back to Homepage
-          </button>
-        </div>
-      </div>
+      <LessonSummary exercises={exercises} onBack={() => navigate(-1)} />
     );
   }
 
   return (
     <CardContent className="flex-1 flex flex-col items-center px-6 py-8">
       <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full">
-        {ex.type === "FILL_IN_BLANK" && (
-          <FillInBlankExercise
-            prefix={ex.question.split("_____")[0] || ""}
-            suffix={ex.question.split("_____")[1] || ""}
-            options={ex.exerciseOptions}
-            selected={selected}
-            onSelect={(text) => {
-              setSelectedText(text)
-              // Find the option ID for visual selection
-              const option = ex.exerciseOptions.find(opt => opt.text === text)
-              setSelected(option?.id || null)
-            }}
-          />
-        )}
+        {ex.type === "FILL_IN_BLANK" && (() => {
+          // Extract the part after the colon (if present)
+          const fillText = ex.question.includes(":") ? ex.question.split(":").slice(1).join(":").trim() : ex.question;
+          const [prefix, suffix] = fillText.split("_____");
+          return (
+            <FillInBlankExercise
+              prefix={prefix || ""}
+              suffix={suffix || ""}
+              instruction={ex.instruction}
+              onSelect={(text) => {
+                setSelectedText(text)
+              }}
+            />
+          );
+        })()}
         {ex.type === "MULTIPLE_CHOICE" && (
           <MultipleChoiceExercise
             question={ex.question}
