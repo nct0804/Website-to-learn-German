@@ -1,26 +1,111 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CardContent } from "@/components/ui/card"
 import { FillInBlankExercise } from "./FillInBlankExercise"
 import { MultipleChoiceExercise } from "./MultipleChoiceExercise"
 import { VocabCheckExercise } from "./VocabCheckExercise"
 import LearningFooter from "./LearningFooter"
 import { useLessonExercises } from "@/hooks/useLessonExercises"
+import { useExerciseCheck } from "@/hooks/useExerciseCheck"
 
-export function LearningContent({ lessonId }: { lessonId: number }) {
+export function LearningContent({ lessonId, onProgressChange }: { lessonId: number, onProgressChange?: (current: number, total: number) => void }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
+  const [selectedText, setSelectedText] = useState<string | null>(null)
+  const { checkExercise, checkResult, checking, resetCheck } = useExerciseCheck()
 
-  if (loading) return <div className="p-8 text-center">Loading…</div>
-  if (error) return <div className="p-8 text-center text-red-500">{error.message}</div>
-  if (!exercises.length) return <div className="p-8 text-center">No exercises found.</div>
+  useEffect(() => {
+    if (onProgressChange) {
+      onProgressChange(currentIdx + 1, exercises.length)
+    }
+  }, [currentIdx, exercises.length, onProgressChange])
+
+  if (loading) return console.log("Loading exercises for lessonId: ", lessonId)
+  if (error) return console.log("Error: ", error)
+  if (!exercises.length) return console.log("No exercises found for lessonId: ", lessonId)
 
   const ex = exercises[currentIdx]
 
-  function handleCheck() {
-    // check correctness, move to next, etc.
-    setSelected(null)
-    setCurrentIdx(idx => idx + 1)
+  async function handleCheck() {
+    if (selected === null && selectedText === null) return
+
+    if (ex.type === "VOCABULARY_CHECK") {
+      setSelected(null)
+      setSelectedText(null)
+      resetCheck()
+      setCurrentIdx(idx => idx + 1)
+      return
+    }
+    
+    let answer: number | string
+    if (ex.type === "FILL_IN_BLANK") {
+      answer = selectedText || ""
+    } else {
+      answer = selected || 0
+    }
+    
+    const result = await checkExercise(ex.id, answer)
+    
+    // If correct, move to next exercise after a short delay
+    if (result.isCorrect) {
+      setTimeout(() => {
+        setSelected(null)
+        setSelectedText(null)
+        resetCheck()
+        setCurrentIdx(idx => idx + 1)
+      }, 2000) // Show result for 2 seconds
+    }
+  }
+
+  // If we have a check result, show feedback
+  if (checkResult) {
+    return (
+      <CardContent className="flex-1 flex flex-col items-center justify-center px-6 py-8">
+        <div className={`text-center space-y-4 ${checkResult.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+          <h2 className="text-2xl font-bold">
+            {checkResult.isCorrect ? 'Correct!' : 'Incorrect'}
+          </h2>
+          <p className="text-lg">{checkResult.feedback}</p>
+          {!checkResult.isCorrect && (
+            <p className="text-sm text-gray-600">
+              Correct answer: {checkResult.correctAnswer}
+            </p>
+          )}
+          {checkResult.isCorrect && (
+            <div className="text-sm text-gray-600">
+              <p>XP earned: {checkResult.xpReward}</p>
+              <p>Streak: {checkResult.currentStreak}</p>
+            </div>
+          )}
+          <div className="mt-6">
+            {checkResult.isCorrect ? (
+              <button
+                onClick={() => {
+                  setSelected(null)
+                  setSelectedText(null)
+                  resetCheck()
+                  setCurrentIdx(idx => idx + 1)
+                }}
+                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setSelected(null)
+                  setSelectedText(null)
+                  resetCheck()
+                }}
+                className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Try Again
+              </button>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    )
   }
 
   return (
@@ -32,12 +117,18 @@ export function LearningContent({ lessonId }: { lessonId: number }) {
             suffix={ex.question.split("_____")[1] || ""}
             options={ex.exerciseOptions}
             selected={selected}
-            onSelect={setSelected}
+            onSelect={(text) => {
+              setSelectedText(text)
+              // Find the option ID for visual selection
+              const option = ex.exerciseOptions.find(opt => opt.text === text)
+              setSelected(option?.id || null)
+            }}
           />
         )}
         {ex.type === "MULTIPLE_CHOICE" && (
           <MultipleChoiceExercise
             question={ex.question}
+            instruction={ex.instruction}
             options={ex.exerciseOptions}
             selected={selected}
             onSelect={setSelected}
@@ -52,7 +143,12 @@ export function LearningContent({ lessonId }: { lessonId: number }) {
           />
         )}
       </div>
-      <LearningFooter handleCheck={handleCheck} selected={!!selected} />
+      <LearningFooter 
+        handleCheck={handleCheck} 
+        selected={!!selected || !!selectedText} 
+        checking={checking}
+        exerciseType={ex.type}
+      />
     </CardContent>
   )
 }

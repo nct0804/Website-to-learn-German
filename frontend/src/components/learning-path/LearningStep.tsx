@@ -120,11 +120,17 @@ export default function LearningStep({
             ref={blockedBubbleRef}
             title={title}
             subtitle={subtitle || ""}
+            buttonLabel="LOCKED"
+            style={{
+              backgroundColor: "white",
+              color: "#E5E5E5",
+              cursor: "not-allowed"
+            }}
             blockedStyle={{
               backgroundColor: "#E5E5E5",
               color: "black",
             }}
-            onClick={() => handleStartClick(lessonId || 0)}
+            onClick={() => {}}
           />
         )
       )}

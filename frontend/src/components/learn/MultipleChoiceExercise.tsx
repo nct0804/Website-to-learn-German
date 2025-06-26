@@ -3,6 +3,7 @@ import type { ExerciseOption } from "@/hooks/useLessonExercises"
 
 export interface MultipleChoiceExerciseProps {
   question: string
+  instruction?: string
   options: ExerciseOption[]
   selected: number | null
   onSelect: (id: number) => void
@@ -10,6 +11,7 @@ export interface MultipleChoiceExerciseProps {
 
 export function MultipleChoiceExercise({
   question,
+  instruction,
   options,
   selected,
   onSelect,
@@ -17,6 +19,7 @@ export function MultipleChoiceExercise({
   return (
     <div className="flex flex-col space-y-6 w-full max-w-lg">
       <h2 className="text-2xl font-semibold text-center">{question}</h2>
+      {instruction && <p className="text-center text-sm text-gray-600">{instruction}</p>}
       <div className="flex flex-col space-y-4">
         {options.map((opt) => (
           <Button

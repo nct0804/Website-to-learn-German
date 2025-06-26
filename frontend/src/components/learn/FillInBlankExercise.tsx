@@ -6,7 +6,7 @@ export interface FillInBlankExerciseProps {
   suffix: string
   options: ExerciseOption[]
   selected: number | null
-  onSelect: (id: number) => void
+  onSelect: (text: string) => void
 }
 
 export function FillInBlankExercise({
@@ -30,7 +30,7 @@ export function FillInBlankExercise({
             key={opt.id}
             variant={selected === opt.id ? "secondary" : "outline"}
             className="py-3 text-lg"
-            onClick={() => onSelect(opt.id)}
+            onClick={() => onSelect(opt.text)}
           >
             {opt.text}
           </Button>
