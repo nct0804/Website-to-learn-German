@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { CardContent } from "@/components/ui/card"
 import { FillInBlankExercise } from "./FillInBlankExercise"
 import { MultipleChoiceExercise } from "./MultipleChoiceExercise"
@@ -9,19 +9,37 @@ import { useExerciseCheck } from "@/hooks/useExerciseCheck"
 import { useNavigate } from "react-router-dom"
 import LessonSummary from "./LessonSummary"
 
-export function LearningContent({ lessonId, onProgressChange }: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void }) {
+export function LearningContent({ 
+  lessonId, 
+  onProgressChange 
+}: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [selectedText, setSelectedText] = useState<string | null>(null)
   const { checkExercise, checkResult, checking, resetCheck } = useExerciseCheck()
   const navigate = useNavigate()
+  const feedbackRef = useRef<HTMLDivElement>(null)
+  const [showTick, setShowTick] = useState(false)
 
   useEffect(() => {
     if (onProgressChange) {
       onProgressChange(currentIdx + 1, exercises.length, currentIdx >= exercises.length)
     }
   }, [currentIdx, exercises.length, onProgressChange])
+
+  // Animated feedback for correct/incorrect answers
+  useEffect(() => {
+    if (!checkResult) return;
+    if (checkResult.isCorrect) {
+      setShowTick(true);
+      setTimeout(() => setShowTick(false), 2000); // 2 seconds
+    } else if (feedbackRef.current) {
+      feedbackRef.current.classList.remove("animate-shake");
+      void feedbackRef.current.offsetWidth;
+      feedbackRef.current.classList.add("animate-shake");
+    }
+  }, [checkResult]);
 
   if (loading) return console.log("Loading exercises for lessonId: ", lessonId)
   if (error) return console.log("Error: ", error)
@@ -56,7 +74,7 @@ export function LearningContent({ lessonId, onProgressChange }: { lessonId: numb
         setSelectedText(null)
         resetCheck()
         setCurrentIdx(idx => idx + 1)
-      }, 2000) // Show result for 2 seconds
+      }, 2500) // Show result for 2.5 seconds
     }
   }
 
@@ -64,46 +82,40 @@ export function LearningContent({ lessonId, onProgressChange }: { lessonId: numb
   if (checkResult) {
     return (
       <CardContent className="flex-1 flex flex-col items-center justify-center px-6 py-8">
-        <div className={`text-center space-y-4 ${checkResult.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-          <h2 className="text-2xl font-bold">
-            {checkResult.isCorrect ? 'Correct!' : 'Incorrect'}
-          </h2>
-          <p className="text-lg">{checkResult.feedback}</p>
-          {!checkResult.isCorrect && (
-            <p className="text-sm text-gray-600">
-              Correct answer: {checkResult.correctAnswer}
-            </p>
+        <div
+          ref={feedbackRef}
+          className={`relative text-center space-y-4 ${checkResult.isCorrect ? 'text-green-600' : 'text-red-600'}`}
+        >
+          {showTick && (
+            <svg
+              className="absolute left-1/2 -translate-x-1/2 -top-20 w-28 h-28 text-green-500 animate-tick"
+              viewBox="0 0 52 52"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="26" cy="26" r="25" stroke="currentColor" strokeWidth="4" fill="white" />
+              <path d="M16 27L24 35L38 19" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           )}
+          <p className="text-lg">{checkResult.feedback}</p>
           {checkResult.isCorrect && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 mt-10">
               <p>XP earned: {checkResult.xpReward}</p>
               <p>Streak: {checkResult.currentStreak}</p>
             </div>
           )}
           <div className="mt-6">
-            {checkResult.isCorrect ? (
+            {!checkResult.isCorrect && (
               <button
-                onClick={() => {
-                  setSelected(null)
-                  setSelectedText(null)
-                  resetCheck()
-                  setCurrentIdx(idx => idx + 1)
-                }}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Continue
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  setSelected(null)
-                  setSelectedText(null)
-                  resetCheck()
-                }}
-                className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Try Again
-              </button>
+              onClick={() => {
+                setSelected(null)
+                setSelectedText(null)
+                resetCheck()
+              }}
+              className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] px-8 py-3 text-lg"
+            >
+              Try Again
+            </button>
             )}
           </div>
         </div>

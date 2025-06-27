@@ -10,12 +10,9 @@ interface LearningFooterProps {
 export default function LearningFooter( { handleCheck, selected, checking = false, exerciseType }: LearningFooterProps) {
     const isVocabCheck = exerciseType === "VOCABULARY_CHECK";
     return (
-        <div className="w-full max-w-sm flex justify-between mt-auto">
-            <Button variant="ghost" className="text-lg" disabled={checking}>
-                Skip
-            </Button>
+        <div className="w-full flex justify-end items-center px-50 py-10 mt-auto">
             <Button
-                className="py-3 px-8 text-lg bg-[#FFB939]"
+                className="h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98]"
                 onClick={handleCheck}
                 disabled={!selected || checking}
             >
