@@ -28,8 +28,8 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg font-semibold truncate">{course.title}</CardTitle>
-            <CardDescription className="text-sm text-gray-500 truncate">{course.description}</CardDescription>
+            <CardTitle className="text-lg font-semibold">{course.title}</CardTitle>
+            <CardDescription className="text-sm text-gray-500">{course.description}</CardDescription>
             <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#FDBA17] transition-all"
