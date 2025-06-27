@@ -8,6 +8,7 @@ import { useLessonExercises } from "@/hooks/useLessonExercises"
 import { useExerciseCheck } from "@/hooks/useExerciseCheck"
 import { useNavigate } from "react-router-dom"
 import LessonSummary from "./LessonSummary"
+import { Button } from "@/components/ui/button"
 
 export function LearningContent({ 
   lessonId, 
@@ -106,16 +107,16 @@ export function LearningContent({
           )}
           <div className="mt-6">
             {!checkResult.isCorrect && (
-              <button
+              <Button
               onClick={() => {
                 setSelected(null)
                 setSelectedText(null)
                 resetCheck()
               }}
-              className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] px-8 py-3 text-lg"
+              className="h-10 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98]"
             >
               Try Again
-            </button>
+            </Button>
             )}
           </div>
         </div>

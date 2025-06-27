@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { LearningHeader } from "@/components/learn/LearningHeader"
+import LearningHeader from "@/components/learn/LearningHeader"
 import { LearningContent } from "@/components/learn/LearningContent"
 import { motion } from "framer-motion"
 import { useLocation } from "react-router-dom"
@@ -29,17 +29,16 @@ export default function Learn() {
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="flex items-center justify-center min-h-screen bg-[#FFB939]">
-        <div className="w-full max-w-4xl">
-          <Card className="min-h-[90vh] flex flex-col rounded-3xl">
+      <div className="flex items-center justify-center min-h-screen h-screen w-screen px-50 py-10">
+        <div className="w-full h-full">
+          <Card className="h-full min-h-screen flex flex-col rounded-none border-none">
             <LearningHeader progress={progress} hearts={5} current={Math.min(currentIdx, total)} total={total} />
-            <div className="flex flex-1 overflow-hidden">
+            <div className="flex flex-1 overflow-hidden h-full">
               <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
             </div>
           </Card>
         </div>
       </div>
-      
     </motion.div>
   )
 }
