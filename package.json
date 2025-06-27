@@ -13,8 +13,12 @@
     "lint:report": "eslint --ext .ts src/ -f json -o eslint-report.json || true"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3"
   }
 }
