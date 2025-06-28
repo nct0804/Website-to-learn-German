@@ -13,7 +13,7 @@ export default function LessonHeader({
         <> 
             <div className="bg-[#fbb124] 
             text-white font-bold rounded-2xl px-8 py-8 
-            mb-12 w-full flex items-center 
+             w-full flex items-center 
             sticky top-0 z-30 bg-[#fbb124] rounded-2xl shadow-lg">
                 {/* Left arrow icon */}
                 <button

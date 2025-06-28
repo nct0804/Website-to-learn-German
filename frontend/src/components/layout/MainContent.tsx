@@ -58,7 +58,7 @@ export default function MainContent() {
   const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto h-full px-4 max-w-3xl mx-auto">
+    <div className="flex-1 flex justify-center overflow-auto px-4 max-w-3xl mx-auto">
       <div className="w-full">
         {!current ? (
           <>
@@ -80,13 +80,23 @@ export default function MainContent() {
           current.modules.map((module) => {
             const lessons = lessonsByModule[module.id] || [];
             return (
-              <div key={module.id} className="py-6">
-                <LessonHeader
-                  id={module.id}
-                  title={module.title}
-                  description={module.description}
-                  setSelectedLesson={() => setSelectedCourse(null)}
-                />
+              <div key={module.id} className="">
+                {/* {module.isLocked ? (
+                  // Show a hint for the next lesson (first lesson in the module)
+                  lessons.length > 0 && lessons[0].title ? (
+                    <div className="flex items-center w-full my-8">
+                      <div className="flex-1 h-px bg-gray-200" />
+                      <span className="mx-4 text-gray-500 italic whitespace-nowrap">Next up: {lessons[0].title}</span>
+                      <div className="flex-1 h-px bg-gray-200" />
+                    </div>
+                  ) : null
+                ) : ( */}
+                  <LessonHeader
+                    id={module.id}
+                    title={module.title}
+                    description={module.description}
+                    setSelectedLesson={() => setSelectedCourse(null)}
+                  />
                 {lessonsLoading ? (
                   (console.log('Loading lessons...'), null)
                 ) : lessonsError ? (  
