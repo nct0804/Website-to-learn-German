@@ -1,32 +1,3 @@
-# What's New
-
-### Major UI/UX Improvements (June 2024)
-
-- **Profile, Stats, and Progress Bar Redesign:**
-  - Modern pill-shaped profile and stats blocks with icons and avatar.
-  - Progress bar now matches the new design: pill-shaped, with level and XP labels inside the bar, and a subtle progress fill.
-  - All elements are right-aligned for a clean, dashboard-like look.
-
-- **Consistent Card & Button Usage:**
-  - All major content blocks (e.g., CourseCard) now use the custom Card and Button components for a unified appearance.
-
-- **Lesson Exit Confirmation:**
-  - When attempting to leave a lesson, users see a modal warning that progress will not be counted, with options to continue or return home.
-
-- **Improved Learning Path UI:**
-  - Course and lesson cards, learning steps, and progress indicators have been visually enhanced for clarity and engagement.
-
-- **Responsive & Accessible:**
-  - Layouts and components are more mobile-friendly and accessible.
-
-- **Animated Feedback:**
-  - Confetti and tick animations for correct answers and lesson completion.
-
-- **General Polish:**
-  - Better spacing, color consistency, and visual hierarchy throughout the app.
-
----
-
 install Reactrouter
 ```bash
 npm install react-router-dom lucide-react clsx
