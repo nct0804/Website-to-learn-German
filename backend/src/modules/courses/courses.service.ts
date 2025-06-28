@@ -136,6 +136,7 @@ export const deleteCourse = async (id: number): Promise<Course> => {
   });
 };
 
+// Update the existing getCourseWithProgress function to enhance the course progress calculations
 export const getCourseWithProgress = async (id: number, userId: string) => {
   const course = await prisma.course.findUnique({
     where: { id },
@@ -160,6 +161,10 @@ export const getCourseWithProgress = async (id: number, userId: string) => {
   // Calculate progress metrics
   let totalExercises = 0;
   let completedExercises = 0;
+  let totalModules = course.modules.length;
+  let completedModules = 0;
+  let totalLessons = 0;
+  let completedLessons = 0;
 
   // Get all completed exercises for this user
   const userProgress = await prisma.exerciseProgress.findMany({
@@ -183,13 +188,45 @@ export const getCourseWithProgress = async (id: number, userId: string) => {
 
   // Process each module, lesson, and exercise
   for (const module of course.modules) {
+    let moduleCompleted = true;
+    let moduleExercises = 0;
+    let moduleCompletedExercises = 0;
+    
     for (const lesson of module.lessons) {
+      let lessonCompleted = true;
+      let lessonExercises = 0;
+      let lessonCompletedExercises = 0;
+      
+      totalLessons++;
+      
       for (const exercise of lesson.exercises) {
         totalExercises++;
+        moduleExercises++;
+        lessonExercises++;
+        
         if (completedExerciseIds.has(exercise.id)) {
           completedExercises++;
+          moduleCompletedExercises++;
+          lessonCompletedExercises++;
         }
       }
+      
+      // Check if lesson is complete (all exercises completed)
+      if (lessonExercises > 0 && lessonCompletedExercises === lessonExercises) {
+        completedLessons++;
+      } else {
+        lessonCompleted = false;
+      }
+      
+      // If any lesson is incomplete, the module is incomplete
+      if (!lessonCompleted) {
+        moduleCompleted = false;
+      }
+    }
+    
+    // Check if module is complete (all lessons completed)
+    if (moduleCompleted && module.lessons.length > 0) {
+      completedModules++;
     }
   }
 
@@ -231,6 +268,10 @@ export const getCourseWithProgress = async (id: number, userId: string) => {
     progress,
     completedExercises,
     totalExercises,
+    completedModules,
+    totalModules,
+    completedLessons,
+    totalLessons,
     isCompleted: progress === 1,
     status,
     actionLabel
@@ -244,9 +285,35 @@ export const getAllCoursesWithProgress = async (userId: string) => {
 
   // Add progress info to each course
   const coursesWithProgress = await Promise.all(
-    courses.map(async (course) => {
+    courses.map(async (course, index) => {
       try {
-        return await getCourseWithProgress(course.id, userId);
+        const courseProgress = await getCourseWithProgress(course.id, userId);
+        
+        // Determine unlock status:
+        // - First course is always unlocked
+        // - Other courses require previous course to be completed
+        let status = courseProgress.status;
+        let actionLabel = courseProgress.actionLabel;
+        
+        if (course.order > 1) {
+          // Check if previous course is completed
+          const previousCourse = courses.find(c => c.order === course.order - 1);
+          if (previousCourse) {
+            const previousCourseProgress = await getCourseWithProgress(previousCourse.id, userId);
+            
+            // Only if previous course is fully completed (100%)
+            if (previousCourseProgress.progress < 1) {
+              status = "locked";
+              actionLabel = "LOCKED";
+            }
+          }
+        }
+        
+        return {
+          ...courseProgress,
+          status,
+          actionLabel
+        };
       } catch (error) {
         console.error(`Error getting progress for course ${course.id}:`, error);
         return {
@@ -264,3 +331,4 @@ export const getAllCoursesWithProgress = async (userId: string) => {
 
   return coursesWithProgress;
 };
+

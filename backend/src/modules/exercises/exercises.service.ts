@@ -345,91 +345,89 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
     throw new NotFoundError('User not found');
   }
   
-  // Get XP reward only if correct
-  const baseXpReward = isCorrect ? exercise.xpReward : 0;
-  
-  // Apply streak multiplier if correct
-  let streakMultiplier = 1;
-  let xpReward = baseXpReward;
-  let newStreak = isCorrect ? user.streak + 1 : 0;
-  
-  if (isCorrect) {
-    streakMultiplier = getStreakMultiplier(newStreak);
-    xpReward = Math.round(baseXpReward * streakMultiplier);
-  }
-  
+  // Check if this exercise was already completed
   const existingProgress = await prisma.exerciseProgress.findFirst({
     where: {
       userId,
       exerciseId: id
     }
   });
-
+  
+  const isNewCompletion = isCorrect && (!existingProgress || !existingProgress.completed);
+  
+  // Only increase streak for correct answers on NEW completions
+  // This prevents users from farming streak by repeating completed exercises
+  let newStreak = user.streak;
+  if (isNewCompletion) {
+    // Only increment streak for new completions
+    newStreak += 1;
+  } else if (!isCorrect) {
+    // Reset streak for incorrect answers
+    newStreak = 0;
+  }
+  
+  // Calculate XP reward
+  const baseXpReward = isCorrect ? exercise.xpReward : 0;
+  let streakMultiplier = getStreakMultiplier(newStreak);
+  let xpReward = Math.round(baseXpReward * streakMultiplier);
+  
+  // No XP for already completed exercises
+  let finalXpReward = (existingProgress && existingProgress.completed) ? 0 : xpReward;
+  
   // Calculate level up info based on new XP total
-  const newTotalXP = user.xp + xpReward;
+  const newTotalXP = user.xp + finalXpReward;
   const levelUpInfo = isCorrect ? checkLevelUp(user.level, newTotalXP) : {
     leveledUp: false,
     xpForNextLevel: calculateRequiredXPForLevel(user.level + 1)
   };
 
-  let finalXpReward = xpReward;
-  
-  if (existingProgress && existingProgress.completed) {
-    finalXpReward = 0; // No XP for already completed exercises
-  } else {
-    // Store progress in database
-    if (existingProgress) {
+  // Store progress in database
+  if (existingProgress) {
+    if (!existingProgress.completed && isCorrect) {
       await prisma.exerciseProgress.update({
         where: { id: existingProgress.id },
         data: {
-          completed: isCorrect,
-          completedAt: isCorrect ? new Date() : null
-        }
-      });
-    } else {
-      await prisma.exerciseProgress.create({
-        data: {
-          exerciseId: id,
-          userId,
-          completed: isCorrect,
-          completedAt: isCorrect ? new Date() : null
+          completed: true,
+          completedAt: new Date()
         }
       });
     }
+  } else {
+    await prisma.exerciseProgress.create({
+      data: {
+        exerciseId: id,
+        userId,
+        completed: isCorrect,
+        completedAt: isCorrect ? new Date() : null
+      }
+    });
+  }
 
-    if (isCorrect) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          xp: { increment: finalXpReward },
-          streak: newStreak,
-          level: levelUpInfo.leveledUp ? levelUpInfo.newLevel : user.level,
-          updatedAt: new Date()
-        }
-      });
-    } else {
-      // Reset streak to 0 for incorrect answers
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          streak: 0,
-          updatedAt: new Date()
-        }
-      });
-    }
+  // Only update user data if there's a change to make
+  if (isNewCompletion || !isCorrect || finalXpReward > 0 || levelUpInfo.leveledUp) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        xp: { increment: finalXpReward },
+        streak: newStreak,
+        level: levelUpInfo.leveledUp ? levelUpInfo.newLevel : user.level,
+        updatedAt: new Date()
+      }
+    });
   }
 
   let completionMessage = null;
   if (isCorrect) {
-    const exercise = await prisma.exercise.findUnique({
+    // Only fetch additional data if answer is correct to avoid unnecessary database queries
+    const exerciseWithLesson = await prisma.exercise.findUnique({
       where: { id },
       include: { lesson: true }
     });
     
-    if (exercise) {
+    if (exerciseWithLesson) {
       // Count total exercises in this lesson
       const totalExercises = await prisma.exercise.count({
-        where: { lessonId: exercise.lessonId }
+        where: { lessonId: exerciseWithLesson.lessonId }
       });
       
       // Count completed exercises in this lesson
@@ -438,14 +436,14 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
           userId,
           completed: true,
           Exercise: {
-            lessonId: exercise.lessonId
+            lessonId: exerciseWithLesson.lessonId
           }
         }
       });
       
       // If all exercises are completed, add completion message
       if (completedExercises >= totalExercises) {
-        completionMessage = `Congratulations! You've completed all exercises in "${exercise.lesson.title}" lesson. You can now move to the next lesson or practice this one again.`;
+        completionMessage = `Congratulations! You've completed all exercises in "${exerciseWithLesson.lesson.title}" lesson. You can now move to the next lesson or practice this one again.`;
       }
     }
   }
@@ -456,6 +454,7 @@ export const checkAnswer = async (id: number, answer: string | number | string[]
     baseXpReward,
     streakMultiplier: isCorrect ? streakMultiplier : 1,
     currentStreak: newStreak,
+    isNewCompletion, // Add flag to indicate if this was a new completion
     levelUp: levelUpInfo,
     correctAnswer,
     feedback: isCorrect ? 'Correct!' : 'Uh Oh. Try again.',
@@ -516,12 +515,12 @@ export const getExercisesWithStatus = async (lessonId: number, userId: string) =
 };
 
 export const calculateRequiredXPForLevel = (level: number): number => {
-  if (level <= 0) return 0;
-  if (level === 1) return 50;
-  if (level === 2) return 120;
-  if (level === 3) return 250;
-  if (level === 4) return 370;
-  if (level === 5) return 500;
+  if (level <= 1) return 0;
+  if (level === 2) return 50;
+  if (level === 3) return 120;
+  if (level === 4) return 250;
+  if (level === 5) return 370;
+  if (level === 6) return 500;
   
   // Exponential growth for higher levels
   return Math.round(100 * Math.pow(level, 1.8));
@@ -558,10 +557,10 @@ export const checkLevelUp = (currentLevel: number, totalXP: number): {
 };
 
 export const calculateLevelFromXP = (xp: number): number => {
-  if (xp < 50) return 0; 
+  if (xp < 50) return 1; 
   
 
-  let level = 0;
+  let level = 1;
   
   // Keep incrementing level until we find the highest level they qualify for
   while (calculateRequiredXPForLevel(level + 1) <= xp) {

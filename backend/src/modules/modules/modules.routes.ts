@@ -14,6 +14,14 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/course/:courseId/progress', authenticate, async (req, res) => {
+  try {
+    await ModuleController.getModulesWithProgress(req, res);
+  } catch (error) {
+    handleError(error, res);
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     await ModuleController.getModuleById(req, res);

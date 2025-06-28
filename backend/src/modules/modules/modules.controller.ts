@@ -32,6 +32,26 @@ export const getModuleById = async (req: Request, res: Response) => {
     });
 };
 
+export const getModulesWithProgress = async (req: Request, res: Response) => {
+    const courseId = Number(req.params.courseId);
+    const userId = (req as any).user?.id;
+    
+    if (isNaN(courseId)) {
+      throw new BadRequestError('Invalid course ID');
+    }
+    
+    if (!userId) {
+      throw new BadRequestError('User must be authenticated');
+    }
+    
+    const modules = await ModuleService.getModulesWithProgress(courseId, userId);
+    
+    return res.status(200).json({
+      success: true,
+      data: modules
+    });
+};
+
 //  POST /api/modules (admin)
 export const createModule = async (req: Request, res: Response) => {
     const { courseId, title, description, order, isLocked } = req.body;
