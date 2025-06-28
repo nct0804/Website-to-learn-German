@@ -1,5 +1,4 @@
 import { useState } from "react";
-import StartBubble from "./StartBubble";
 import DetailBubble from "./DetailBubble";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +12,7 @@ export default function LearningStep({
   title = "",
   subtitle = "",
   xpReward = "",
+  order,
   lessonId,
   onClick,
   bubbleRef,
@@ -28,6 +28,7 @@ export default function LearningStep({
   title?: string;
   subtitle?: string;
   xpReward: string;
+  order: number;
   lessonId?: number;
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
@@ -53,53 +54,74 @@ export default function LearningStep({
 
   return (
     <div className="flex flex-col items-center relative">
-      {active && !selected && <StartBubble />}
+      {/* {active && !selected && <StartBubble />} */}
 
       {/* Connection Path */}
       {!first && (
-        <div className="w-2 h-5 bg-[#E5E5E5] absolute -top-5 left-1/2 -translate-x-1/2"></div>
+        <div className={`w-2 h-16 absolute -top-11 left-1/2 -translate-x-1/2 rounded-full
+          ${learned ? 'bg-[#3B6978]' : active ? 'bg-yellow-300 animate-pulse' : 'bg-gray-200'}
+        `}></div>
       )}
 
       <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
-        {/* Shadow */}
-        <div
+        {/* Animated shadow */}
+        {/* <div
           className={`
-            absolute w-20 h-19 rounded-full z-0
-            bg-[#3b6978a7] left-1/2 -translate-x-1/2
-            transition-all duration-100 pointer-events-none
-            ${pressed ? "translate-y-4 opacity-0" : "translate-y-3 opacity-80"}
+            absolute w-20 h-20 rounded-full z-0
+            ${active ? 'bg-yellow-200 animate-pulse' : learned ? 'bg-green-100' : 'bg-gray-100'}
+            left-1/2 -translate-x-1/2
+            transition-all duration-200 pointer-events-none
+            ${pressed ? 'translate-y-4 opacity-0' : 'translate-y-3 opacity-80'}
           `}
           style={{ top: 0 }}
-        />
+        /> */}
+
+        {/* Step number badge */}
+        <span className={`absolute -top-5 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-bold shadow
+          ${active ? 'bg-yellow-400 text-white' : learned ? 'bg-[#3B6978] text-white' : 'bg-gray-300 text-gray-700'}
+        `}>
+          {order}
+        </span>
 
         {/* Circle lesson node*/}
         <button
           className={`
-            relative z-10 w-20 h-19 rounded-full flex items-center justify-center
-            transition-all duration-100
-            shadow-md
-            cursor-pointer
-            ${pressed ? "translate-y-4" : ""}
-            ${
-              learned
-                ? "bg-[#3B6978]" // learned style (no border)
-                : active
-                ? "bg-[#3B6978] border-[6px] border-[#E5E5E5]" // next to learn
-                : "bg-[#FFFBF3] border-none" // locked
-            }
+            z-10 w-20 h-20 rounded-full flex items-center justify-center
+            transition-all duration-200 shadow-lg
+            ${active ? 'ring-4 ring-yellow-400 animate-bounce' : ''}
+            ${learned ? 'bg-[#3B6978]' : active ? 'bg-yellow-100' : 'bg-gray-100'}
+            ${!active && !learned ? 'opacity-60' : ''}
+            ${pressed ? 'scale-95' : ''}
+            ${selected && learned ? 'ring-4 ring-green-400' : ''}
+            hover:scale-105 hover:shadow-xl
           `}
           onClick={onClick}
           onMouseDown={() => setPressed(true)}
           onMouseUp={() => setPressed(false)}
           onMouseLeave={() => setPressed(false)}
+          aria-label={title}
         >
-          <span className="relative z-20">{icon}</span>
+          {learned ? (
+            <svg
+              className="w-8 h-8"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 10 18 4 12" />
+            </svg>
+          ) : (
+            <span className="relative z-20">{icon}</span>
+          )}
         </button>
       </div>
 
       {/* BUBBLES */}
       {selected && (
-        active ? ( // Wait for backend to isLearned variable
+        active ? (
           <DetailBubble
             ref={bubbleRef}
             title={title}
@@ -112,7 +134,7 @@ export default function LearningStep({
             }}
             onClick={() => handleStartClick(lessonId || 0)}
           />
-        ) : learned ? ( // Wait for backend to isLearned variable
+        ) : learned ? (
           <DetailBubble
             ref={bubbleRef}
             title={title}
@@ -147,7 +169,9 @@ export default function LearningStep({
       
       {/* Connection Path */}
       {!last && (
-        <div className="w-2 h-5 bg-[#E5E5E5] absolute -bottom-5 left-1/2 -translate-x-1/2"></div>
+        <div className={`w-2 h-10 absolute -bottom-10 left-1/2 -translate-x-1/2 rounded-full
+          ${learned ? 'bg-green-300' : active ? 'bg-yellow-300 animate-pulse' : 'bg-gray-200'}
+        `}></div>
       )}
     </div>
   );

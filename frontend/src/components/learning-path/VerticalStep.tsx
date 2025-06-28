@@ -48,6 +48,9 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
       className="flex flex-col items-center relative gap-10 min-h-[400px] w-0 mx-auto my-45"
       ref={containerRef}
     >
+      {/* Vertical progress bar background */}
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 w-3 h-full bg-gradient-to-b from-yellow-100 to-gray-100 z-0 rounded-full opacity-60" style={{ minHeight: 60 * steps.length + 'px' }} />
+      {/* Steps */}
       {steps.map((step, i) => (
         <LearningStep
           key={step.id}
@@ -55,6 +58,7 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
           subtitle={step.description || ""}
           xpReward={step.xpReward}
           lessonId={step.id}
+          order={step.order}
           icon={
             step.icon ? (
               <img src={step.icon} alt={step.title} className="w-12 h-12" />

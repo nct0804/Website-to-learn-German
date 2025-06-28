@@ -96,6 +96,7 @@ export default function MainContent() {
                     steps={lessons.map((lesson) => ({
                       ...lesson,
                       icon: lessonIconMap[lesson.id],
+                      order: lesson.order,
                     }))}
                   />
                 )}
