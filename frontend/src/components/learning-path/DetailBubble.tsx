@@ -11,7 +11,7 @@ const DetailBubble = forwardRef<HTMLDivElement, {
   ref?: React.RefObject<HTMLDivElement>;
 }>(({ title, subtitle, buttonLabel, xp, style, blockedStyle, onClick }, ref) => (
   <div ref={ref} 
-    className={"absolute top-[120%] left-1/2 -translate-x-1/2 flex flex-col items-center z-30"}
+    className={"absolute top-[120%] left-1/2 -translate-x-1/2 flex flex-col items-center z-40"}
   >
     <div className="bg-[#fbb124] text-white rounded-xl px-6 py-3 shadow-lg relative w-60" style={blockedStyle}>
       <div className="absolute left-1/2 -top-2 -translate-x-1/2">

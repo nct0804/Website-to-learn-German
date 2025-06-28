@@ -24,8 +24,6 @@ export default function VerticalStep({ steps }: { steps: Step[] }) {
         ref => ref && ref.contains(event.target as Node)
       );
       if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node) &&
         !clickedInsideNode &&
         !clickedInsideBubble
       ) {
@@ -40,6 +38,7 @@ export default function VerticalStep({ steps }: { steps: Step[] }) {
   }, [selectedIndex]);
 
   function handleNodeClick(i: number) {
+    console.log("handleNodeClick", i);
     setSelectedIndex((prev) => (prev === i ? null : i));
   }
 

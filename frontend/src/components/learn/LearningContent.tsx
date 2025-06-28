@@ -134,7 +134,7 @@ export function LearningContent({
   }
 
   return (
-    <CardContent className="flex-1 flex flex-col items-center px-6 py-8">
+    <CardContent className="flex-1 flex flex-col items-center px-6 py-8 text-[#3B6978]">
       <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full">
         {ex.type === "FILL_IN_BLANK" && (() => {
           // Extract the part after the colon (if present)
@@ -148,6 +148,7 @@ export function LearningContent({
               onSelect={(text) => {
                 setSelectedText(text)
               }}
+              onEnter={handleCheck}
             />
           );
         })()}
