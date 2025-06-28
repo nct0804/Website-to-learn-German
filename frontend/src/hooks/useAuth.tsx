@@ -27,26 +27,29 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>(null!);
+const AuthContext = createContext<AuthContextType & { refreshUser: () => Promise<void> }>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setL] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch("http://localhost:3000/api/users/me", {
-          credentials: "include",
-        });
-        if (r.ok) {
-          const { data } = await r.json();
-          setUser(data.user);
-        }
-      } finally {
-        setL(false);
+  async function refreshUser() {
+    setL(true);
+    try {
+      const r = await fetch("http://localhost:3000/api/users/me", {
+        credentials: "include",
+      });
+      if (r.ok) {
+        const { data } = await r.json();
+        setUser(data.user);
       }
-    })();
+    } finally {
+      setL(false);
+    }
+  }
+
+  useEffect(() => {
+    refreshUser();
   }, []);
 
   async function login({ email, password }: { email: string; password: string }) {
@@ -75,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

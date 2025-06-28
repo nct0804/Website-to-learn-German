@@ -9,6 +9,7 @@ import { useExerciseCheck } from "@/hooks/useExerciseCheck"
 import { useNavigate } from "react-router-dom"
 import LessonSummary from "./LessonSummary"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/hooks/useAuth"
 
 export function LearningContent({ 
   lessonId, 
@@ -22,6 +23,7 @@ export function LearningContent({
   const navigate = useNavigate()
   const feedbackRef = useRef<HTMLDivElement>(null)
   const [showTick, setShowTick] = useState(false)
+  const { refreshUser } = useAuth()
 
   useEffect(() => {
     if (onProgressChange) {
@@ -127,7 +129,7 @@ export function LearningContent({
   // Show congratulatory message and summary if all exercises are finished
   if (currentIdx >= exercises.length) {
     return (
-      <LessonSummary exercises={exercises} onBack={() => navigate(-1)} />
+      <LessonSummary exercises={exercises} onBack={async () => { await refreshUser(); navigate(-1); }} />
     );
   }
 
