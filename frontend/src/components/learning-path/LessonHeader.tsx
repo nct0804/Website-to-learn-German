@@ -26,9 +26,11 @@ export default function LessonHeader({
                     </svg>
                 </button>
 
-                <div className="flex-1">
-                    <h1 className="text-white mb-2 font-bold text-2xl">{`Lesson ${id}: ${title}`}</h1>
-                    <p className="text-white mb-2 font-normal italic    ">{description}</p>
+                <div className="flex-1 flex flex-col w-full">
+                    <div className="flex w-full justify-between items-center">
+                        <h1 className="text-white mb-2 font-bold text-2xl text-left">{`${id}. ${title}`}</h1>
+                    </div>
+                    <p className="text-white mb-2 font-normal italic text-left">{description}</p>
                 </div>
             </div>
         </>
