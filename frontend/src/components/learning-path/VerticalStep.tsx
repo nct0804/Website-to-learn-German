@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import LearningStep from "./LearningStep";
+import type { Step } from "../types/step";
 
 
-
-export default function VerticalStep({ steps }: { steps: any[] }) {
+export default function VerticalStep({ steps }: { steps: Step[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -45,11 +45,10 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
 
   return (
     <div
-      className="flex flex-col items-center relative gap-10 min-h-[400px] w-0 mx-auto my-45"
+      className="flex flex-col items-center relative gap-10 min-h-[400px] w-full max-w-xs mx-auto my-45"
       ref={containerRef}
     >
-      {/* Vertical progress bar background */}
-      <div className="absolute left-1/2 top-0 -translate-x-1/2 w-3 h-full bg-gradient-to-b from-yellow-100 to-gray-100 z-0 rounded-full opacity-60" style={{ minHeight: 60 * steps.length + 'px' }} />
+      
       {/* Steps */}
       {steps.map((step, i) => (
         <LearningStep
@@ -66,7 +65,7 @@ export default function VerticalStep({ steps }: { steps: any[] }) {
           }
           first={i === 0}
           last={i === steps.length - 1}
-          active={i === activeIndex ? true : false}
+          active={i === activeIndex && !step.isLocked ? true : false}
           learned={step.isLearned}
           selected={selectedIndex === i}
           onClick={() => handleNodeClick(i)}

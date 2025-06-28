@@ -97,6 +97,7 @@ export default function MainContent() {
                       ...lesson,
                       icon: lessonIconMap[lesson.id],
                       order: lesson.order,
+                      isLocked: module.isLocked,
                     }))}
                   />
                 )}

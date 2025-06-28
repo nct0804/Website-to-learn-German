@@ -65,7 +65,7 @@ export default function LearningStep({
 
       <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
         {/* Animated shadow */}
-        {/* <div
+        <div
           className={`
             absolute w-20 h-20 rounded-full z-0
             ${active ? 'bg-yellow-200 animate-pulse' : learned ? 'bg-green-100' : 'bg-gray-100'}
@@ -74,7 +74,7 @@ export default function LearningStep({
             ${pressed ? 'translate-y-4 opacity-0' : 'translate-y-3 opacity-80'}
           `}
           style={{ top: 0 }}
-        /> */}
+        />
 
         {/* Step number badge */}
         <span className={`absolute -top-5 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-bold shadow
@@ -86,14 +86,12 @@ export default function LearningStep({
         {/* Circle lesson node*/}
         <button
           className={`
-            z-10 w-20 h-20 rounded-full flex items-center justify-center
-            transition-all duration-200 shadow-lg
-            ${active ? 'ring-4 ring-yellow-400 animate-bounce' : ''}
+            relative z-10 w-20 h-20 rounded-full flex items-center justify-center
+            transition-all duration-200 shadow-lg cur
+            ${active ? 'ring-4 ring-yellow-400 animate-bounce translate-y-3 translate-x-9.75' : ''}
             ${learned ? 'bg-[#3B6978]' : active ? 'bg-yellow-100' : 'bg-gray-100'}
-            ${!active && !learned ? 'opacity-60' : ''}
             ${pressed ? 'scale-95' : ''}
             ${selected && learned ? 'ring-4 ring-green-400' : ''}
-            hover:scale-105 hover:shadow-xl
           `}
           onClick={onClick}
           onMouseDown={() => setPressed(true)}
