@@ -62,7 +62,7 @@ export default function MainContent() {
       <div className="w-full">
         {!current ? (
           <>
-            <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1>
+            {/* <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1> */}
             <div className="space-y-6">
               {courses.map((course, idx) => (
                 <CourseCard
@@ -77,7 +77,7 @@ export default function MainContent() {
             </div>
           </>
         ) : (
-          current.modules.map((module, idx) => {
+          current.modules.map((module) => {
             const lessons = lessonsByModule[module.id] || [];
             return (
               <div key={module.id} className="py-6">
@@ -88,9 +88,9 @@ export default function MainContent() {
                   setSelectedLesson={() => setSelectedCourse(null)}
                 />
                 {lessonsLoading ? (
-                  <div>Loading lessons…</div>
+                  (console.log('Loading lessons...'), null)
                 ) : lessonsError ? (  
-                  <div>Error loading lessons: {lessonsError.message}</div>
+                  (console.log('Error loading lessons: ', lessonsError.message), null)
                 ) : (
                   <VerticalStep
                     steps={lessons.map((lesson) => ({
