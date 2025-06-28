@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import { CardContent } from "@/components/ui/card"
 import { FillInBlankExercise } from "./FillInBlankExercise"
 import { MultipleChoiceExercise } from "./MultipleChoiceExercise"
-import { VocabCheckExercise } from "./VocabCheckExercise"
 import LearningFooter from "./LearningFooter"
 import { useLessonExercises } from "@/hooks/useLessonExercises"
 import { useExerciseCheck } from "@/hooks/useExerciseCheck"
@@ -10,9 +9,10 @@ import { useNavigate } from "react-router-dom"
 import LessonSummary from "./LessonSummary"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
+import confetti from 'canvas-confetti';
 
 export function LearningContent({ 
-  lessonId, 
+  lessonId,
   onProgressChange 
 }: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
@@ -24,6 +24,9 @@ export function LearningContent({
   const feedbackRef = useRef<HTMLDivElement>(null)
   const [showTick, setShowTick] = useState(false)
   const { refreshUser } = useAuth()
+  const [exerciseResults, setExerciseResults] = useState<
+    { id: number; question: string; userAnswer: string; correctAnswer: string; isCorrect: boolean; currentStreak: number; xpReward: number }[]
+  >([]);
 
   useEffect(() => {
     if (onProgressChange) {
@@ -44,6 +47,16 @@ export function LearningContent({
     }
   }, [checkResult]);
 
+  useEffect(() => {
+    if (currentIdx >= exercises.length && exercises.length > 0) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+  }, [currentIdx, exercises.length]);
+
   if (loading) return console.log("Loading exercises for lessonId: ", lessonId)
   if (error) return console.log("Error: ", error)
   if (!exercises.length) return console.log("No exercises found for lessonId: ", lessonId)
@@ -53,13 +66,13 @@ export function LearningContent({
   async function handleCheck() {
     if (selected === null && selectedText === null) return
 
-    if (ex.type === "VOCABULARY_CHECK") {
-      setSelected(null)
-      setSelectedText(null)
-      resetCheck()
-      setCurrentIdx(idx => idx + 1)
-      return
-    }
+    // if (ex.type === "VOCABULARY_CHECK") {
+    //   setSelected(null)
+    //   setSelectedText(null)
+    //   resetCheck()
+    //   setCurrentIdx(idx => idx + 1)
+    //   return
+    // }
     
     let answer: number | string
     if (ex.type === "FILL_IN_BLANK") {
@@ -69,6 +82,23 @@ export function LearningContent({
     }
     
     const result = await checkExercise(ex.id, answer)
+    
+    // Track user answer and correctness
+    setExerciseResults(prev => {
+      const filtered = prev.filter(r => r.id !== ex.id);
+      return [
+        ...filtered,
+        {
+          id: ex.id,
+          question: ex.question,
+          userAnswer: answer.toString(),
+          correctAnswer: result.correctAnswer,
+          isCorrect: result.isCorrect,
+          currentStreak: result.currentStreak,
+          xpReward: result.xpReward,
+        }
+      ];
+    });
     
     // If correct, move to next exercise after a short delay
     if (result.isCorrect) {
@@ -91,7 +121,7 @@ export function LearningContent({
         >
           {showTick && (
             <svg
-              className="absolute left-1/2 -translate-x-1/2 -top-20 w-28 h-28 text-green-500 animate-tick"
+              className="absolute left-1/2 -translate-x-1/2 -top-20 w-32 h-32 text-green-500 animate-tick"
               viewBox="0 0 52 52"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -102,9 +132,9 @@ export function LearningContent({
           )}
           <p className="text-lg">{checkResult.feedback}</p>
           {checkResult.isCorrect && (
-            <div className="text-sm text-gray-600 mt-10">
-              <p>XP earned: {checkResult.xpReward}</p>
-              <p>Streak: {checkResult.currentStreak}</p>
+            <div className="text-2xl text-gray-600 mt-10">
+              <p>XP earned: <span className="font-bold text-orange-500">{checkResult.xpReward}</span></p>
+              <p>Streak: <span className="font-bold text-red-500">{checkResult.currentStreak}</span></p>
             </div>
           )}
           <div className="mt-6">
@@ -128,13 +158,29 @@ export function LearningContent({
 
   // Show congratulatory message and summary if all exercises are finished
   if (currentIdx >= exercises.length) {
+    // Use the last exercise result's currentStreak for summary
+    let streak = 0;
+    if (exerciseResults.length > 0) {
+      streak = exerciseResults[exerciseResults.length - 1].currentStreak || 0;
+    }
+    // Calculate total XP earned from correct answers
+    const totalXp = exerciseResults.reduce((sum, r) => r.isCorrect ? sum + (r.xpReward || 0) : sum, 0);
     return (
-      <LessonSummary exercises={exercises} onBack={async () => { await refreshUser(); navigate(-1); }} />
+      <LessonSummary
+        exercises={exerciseResults}
+        onBack={async () => { await refreshUser(); navigate(-1); }}
+        totalXp={totalXp}
+        streak={streak}
+      />
     );
   }
 
   return (
-    <CardContent className="flex-1 flex flex-col items-center px-6 py-8 text-[#3B6978]">
+    <CardContent className="flex-1 flex flex-col items-center px-6 py-8 text-[#3B6978] w-full">
+      {/* Progress Indicator */}
+      <div className="w-full flex justify-center items-center mb-6">
+        <span className="text-sm font-bold text-[#3B6978]">Exercise {currentIdx + 1} of {exercises.length}</span>
+    </div>
       <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full">
         {ex.type === "FILL_IN_BLANK" && (() => {
           // Extract the part after the colon (if present)
@@ -161,15 +207,18 @@ export function LearningContent({
             onSelect={setSelected}
           />
         )}
-        {ex.type === "VOCABULARY_CHECK" && (
+        {/* {ex.type === "VOCABULARY_CHECK" && (
           <VocabCheckExercise
+            question={ex.question}
             instruction={ex.instruction}
             items={ex.exerciseOptions}
             selected={selected}
             onSelect={setSelected}
           />
         )}
+        */}
       </div>
+      
       <LearningFooter 
         handleCheck={handleCheck} 
         selected={!!selected || !!selectedText} 
@@ -179,3 +228,5 @@ export function LearningContent({
     </CardContent>
   )
 }
+
+export default LearningContent;

@@ -32,7 +32,10 @@ export default function Learn() {
       <div className="flex items-center justify-center min-h-screen h-screen w-screen px-50 py-10">
         <div className="w-full h-full">
           <Card className="h-full min-h-screen flex flex-col rounded-none border-none">
-            <LearningHeader progress={progress} hearts={5} current={Math.min(currentIdx, total)} total={total} />
+            {/* Only show header if not summary */}
+            {!isSummary && (
+              <LearningHeader progress={progress} hearts={5} current={Math.min(currentIdx, total)} total={total} />
+            )}
             <div className="flex flex-1 overflow-hidden h-full">
               <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
             </div>

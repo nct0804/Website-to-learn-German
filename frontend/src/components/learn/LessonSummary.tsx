@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
 import confetti from "canvas-confetti";
-// import { useNavigate } from "react-router-dom";
+import { CheckCircle, XCircle, Star, Flame } from "lucide-react";
 
 interface Exercise {
   id: number;
   question: string;
+  userAnswer?: string;
+  correctAnswer?: string;
+  isCorrect?: boolean;
   exerciseOptions?: { id: number; text: string }[];
 }
 
 interface LessonSummaryProps {
   exercises: Exercise[];
   onBack: () => void;
+  totalXp?: number;
+  streak?: number;
 }
 
-const LessonSummary: React.FC<LessonSummaryProps> = ({ exercises, onBack }) => {
+const LessonSummary: React.FC<LessonSummaryProps> = ({ exercises, onBack, totalXp = 0, streak = 0 }) => {
   useEffect(() => {
     confetti({
       particleCount: 120,
@@ -23,30 +28,63 @@ const LessonSummary: React.FC<LessonSummaryProps> = ({ exercises, onBack }) => {
     });
   }, []);
 
+  // Calculate correct answers
+  const correctCount = exercises.filter(ex => ex.isCorrect).length;
+  const total = exercises.length;
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      {/* Blurred background */}
-      <div className="absolute inset-0 bg-opacity-30 backdrop-blur-md" />
-      {/* Popup content */}
-      <div className="relative bg-white rounded-2xl shadow-2xl p-4 sm:p-8 max-w-3xl w-full flex flex-col items-center mx-2">
-        <h2 className="text-2xl sm:text-3xl font-bold text-green-600 mb-2 text-center">🎉 Congratulations! 🎉</h2>
-        <p className="text-base sm:text-lg text-gray-800 mb-4 text-center">You have completed all exercises for this lesson!</p>
-        <div className="w-full space-y-4 mb-6">
-          {exercises.map((ex, idx) => (
-            <div key={ex.id} className="bg-[#fbb12410] rounded-lg shadow-md p-3 sm:p-4">
-              <div className="font-semibold text-gray-800 mb-1">{idx + 1}. {ex.question}</div>
-              <div className="text-green-700 font-bold">Answer: {ex.exerciseOptions && ex.exerciseOptions.length === 1 ? ex.exerciseOptions[0].text : "-"}</div>
-            </div>
-          ))}
-        </div>
-        <button
-          onClick={onBack}
-          className="w-full sm:w-auto mt-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] px-8 py-3 text-lg"
-        >
-          Back to Homepage
-        </button>
+    <section className="w-full max-w-3xl min-h-screen mx-auto bg-white flex flex-col items-center justify-center ">
+      {/* Celebratory Header */}
+      <div className="flex flex-col items-center justify-center mb-1">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-green-600 mb-1 text-center drop-shadow-lg">🎉 Congratulations! 🎉</h2>
+        <p className="text-lg sm:text-xl text-gray-800 text-center font-light">You completed this lesson!</p>
       </div>
-    </div>
+      {/* Progress & XP */}
+      <div className="flex flex-row items-center justify-center gap-8 mb-8 w-full">
+        <div className="flex flex-col items-center">
+          <span className="text-xs text-gray-500">XP Earned</span>
+          <span className="flex items-center gap-1 text-2xl font-bold text-orange-500"><Star className="w-6 h-6" />{totalXp}</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-xs text-gray-500">Streak</span>
+          <span className="flex items-center gap-1 text-2xl font-bold text-red-500"><Flame className="w-6 h-6" />{streak}</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-xs text-gray-500">Correct</span>
+          <span className="flex items-center gap-1 text-2xl font-bold text-green-600">{correctCount}/{total}</span>
+        </div>
+      </div>
+      {/* Exercise Recap as Grid */}
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 mb-10">
+        {exercises.map((ex, idx) => (
+          <div key={ex.id} className="flex flex-col bg-white/90 rounded-2xl shadow-lg p-5 h-full min-h-[120px] justify-between border-2 border-yellow-100">
+            <div className="flex items-center gap-2 mb-2">
+              {ex.isCorrect ? (
+                <CheckCircle className="w-6 h-6 text-green-500" />
+              ) : (
+                <XCircle className="w-6 h-6 text-red-400" />
+              )}
+              <span className="font-semibold text-gray-800">{idx + 1}. {ex.question}</span>
+            </div>
+            <div className="mt-2 text-sm">
+              <span className="font-bold text-gray-700">Correct answer: </span>
+              <span className="text-green-600 font-bold">{ex.correctAnswer}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* CTA Button */}
+      <button
+        onClick={onBack}
+        className="w-full sm:w-auto mt-2 bg-gradient-to-r 
+        from-[#fbb124] to-[#ffa600] 
+        hover:from-[#ffa600] hover:to-[#ffa600] text-white
+        text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition 
+        transform hover:scale-[1.02] focus:scale-[0.98] px-10 py-4 text-xl"
+      >
+        Continue
+      </button>
+    </section>
   );
 };
 

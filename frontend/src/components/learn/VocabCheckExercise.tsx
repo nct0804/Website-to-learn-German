@@ -1,6 +1,7 @@
 import type { ExerciseOption } from "@/hooks/useLessonExercises"
 
 export interface VocabCheckExerciseProps {
+  question: string
   instruction: string
   items: ExerciseOption[]
   selected: number | null
@@ -8,6 +9,7 @@ export interface VocabCheckExerciseProps {
 }
 
 export function VocabCheckExercise({
+  question,
   instruction,
   items,
   selected,
@@ -15,7 +17,7 @@ export function VocabCheckExercise({
 }: VocabCheckExerciseProps) {
   return (
     <div className="flex flex-col space-y-6 w-full max-w-lg">
-      <h2 className="text-2xl font-semibold text-center">Vocabulary Check</h2>
+      <h2 className="text-3xl font-semibold text-center">{question}</h2>
       <p className="text-center text-sm text-gray-600">{instruction}</p>
       <div className="grid grid-cols-2 gap-4">
         {items.map((item) => (

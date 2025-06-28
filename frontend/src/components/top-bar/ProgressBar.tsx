@@ -22,12 +22,6 @@ export default function ProgressBar() {
 
     return (
         <div className="flex flex-col flex-1 w-full max-w-3xl px-4 mx-auto">
-            {/* Top: Level */}
-            <div className="flex justify-between mb-1">
-                <span className="font-bold text-sm text-[#3B6978]">Level {level}</span>
-                {/* This empty span ensures "Level 2" hugs the left. Remove if not needed */}
-                <span></span>
-            </div>
             {/* Bar */}
             <div className="h-4 w-full bg-gray-200 rounded-full mb-1">
                 <div className="h-4 bg-yellow-400 rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />

@@ -12,7 +12,11 @@ export default function LearningFooter( { handleCheck, selected, checking = fals
     return (
         <div className="w-full flex justify-end items-center px-50 py-10 mt-auto">
             <Button
-                className="h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98]"
+                className="h-12 bg-gradient-to-r 
+                from-[#fbb124] to-[#ffa600] 
+                hover:from-[#ffa600] hover:to-[#ffa600] text-white 
+                font-semibold rounded-xl shadow-lg hover:shadow-xl transition 
+                transform hover:scale-[1.02] focus:scale-[0.98] text-xl"
                 onClick={handleCheck}
                 disabled={!selected || checking}
             >
