@@ -82,7 +82,8 @@ export default function MainContent() {
             return (
               <div key={module.id} className="py-6">
                 <LessonHeader
-                  title={`Lesson ${idx + 1}`}
+                  id={module.id}
+                  title={module.title}
                   description={module.description}
                   setSelectedLesson={() => setSelectedCourse(null)}
                 />

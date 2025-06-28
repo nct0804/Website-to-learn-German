@@ -49,9 +49,12 @@ export interface CourseProgress {
     progress: number
     completedExercises: number
     totalExercises: number
+    completedLessons: number
+    totalModules: number
     isCompleted: boolean
     status: string
-    actionLabel: string
+    actionLabel: string,
+    totalLessons: number
 }
 
 export interface CourseProgressResponse {

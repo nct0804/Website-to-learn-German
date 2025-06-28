@@ -1,8 +1,10 @@
 export default function LessonHeader({
+    id,
     title,
     description,
     setSelectedLesson
 }: {
+    id: number,
     title: string, 
     description: string | undefined,
     setSelectedLesson: (lesson: number | null) => void
@@ -10,9 +12,9 @@ export default function LessonHeader({
     return (
         <> 
             <div className="bg-[#fbb124] 
-            text-white font-bold rounded-2xl shadow px-8 py-8 
+            text-white font-bold rounded-2xl px-8 py-8 
             mb-12 w-full flex items-center 
-            sticky top-0 z-30 bg-[#fbb124] rounded-2xl shadow">
+            sticky top-0 z-30 bg-[#fbb124] rounded-2xl shadow-lg">
                 {/* Left arrow icon */}
                 <button
                     className="mr-4 transition flex items-center"
@@ -25,8 +27,8 @@ export default function LessonHeader({
                 </button>
 
                 <div className="flex-1">
-                    <p className="text-white mb-2 font-normal">{title}</p>
-                    <h1 className="text-2xl font-bold">{description}</h1>
+                    <h1 className="text-white mb-2 font-bold text-2xl">{`Lesson ${id}: ${title}`}</h1>
+                    <p className="text-white mb-2 font-normal italic    ">{description}</p>
                 </div>
             </div>
         </>
