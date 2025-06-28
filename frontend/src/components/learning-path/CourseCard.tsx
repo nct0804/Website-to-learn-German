@@ -49,7 +49,7 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
           <Button
             onClick={isLocked ? undefined : onClick}
             disabled={isLocked}
-            className={`px-5 py-2 rounded-full font-semibold transition ${
+            className={`px-5 py-2 rounded-full font-semibold transition cursor-pointer ${
               isLocked
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : isCompleted

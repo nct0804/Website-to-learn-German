@@ -16,7 +16,6 @@ export default function LearningStep({
   lessonId,
   onClick,
   bubbleRef,
-  blockedBubbleRef,
   nodeWrapperRef,
 }: {
   icon: React.ReactNode;
@@ -32,7 +31,6 @@ export default function LearningStep({
   lessonId?: number;
   onClick?: () => void;
   bubbleRef?: (el: HTMLDivElement | null) => void;
-  blockedBubbleRef?: (el: HTMLDivElement | null) => void;
   nodeWrapperRef?: (el: HTMLDivElement | null) => void;
 }) {
   const [pressed, setPressed] = useState(false);
@@ -87,7 +85,7 @@ export default function LearningStep({
         <button
           className={`
             relative z-10 w-20 h-20 rounded-full flex items-center justify-center
-            transition-all duration-200 shadow-lg cur
+            transition-all duration-200 shadow-lg cursor-pointer
             ${active ? 'ring-4 ring-yellow-400 animate-bounce translate-y-3 translate-x-9.75' : ''}
             ${learned ? 'bg-[#3B6978]' : active ? 'bg-yellow-100' : 'bg-gray-100'}
             ${pressed ? 'scale-95' : ''}
@@ -126,10 +124,6 @@ export default function LearningStep({
             subtitle={subtitle || ""}
             buttonLabel="START"
             xp={`+` + xpReward + `XP`}
-            style={{
-              backgroundColor: "white",
-              color: '#fbb124',
-            }}
             onClick={() => handleStartClick(lessonId || 0)}
           />
         ) : learned ? (
@@ -139,27 +133,14 @@ export default function LearningStep({
             subtitle={subtitle || ""}
             buttonLabel="PRACTICE"
             xp={`+` + xpReward + `XP`}
-            style={{
-              backgroundColor: "#3B6978",
-              color: "white",
-            }}
             onClick={handlePracticeClick}
           />
         ) : (
           <DetailBubble
-            ref={blockedBubbleRef}
+            ref={bubbleRef}
             title={title}
             subtitle={subtitle || ""}
             buttonLabel="LOCKED"
-            style={{
-              backgroundColor: "white",
-              color: "#E5E5E5",
-              cursor: "not-allowed"
-            }}
-            blockedStyle={{
-              backgroundColor: "#E5E5E5",
-              color: "black",
-            }}
             onClick={() => {}}
           />
         )
