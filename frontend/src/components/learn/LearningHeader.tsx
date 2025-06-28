@@ -28,21 +28,34 @@ export default function LearningHeader({ progress, hearts, current, total }: Lea
   return (
     <>
       <CardHeader>
-        <div className="flex justify-between items-center px-6">
-          <button
-            onClick={handleBack}
-            aria-label="Go back"
-            className="text-xl text-muted-foreground hover:text-foreground transition cursor-pointer"
-          >
-            X
-          </button>
-          <div className="flex-1 flex flex-col items-center mx-10">
-            <Progress value={progress} className="h-2 rounded-full w-full" />
-            <span className="text-xs mt-1">{current} / {total} exercises</span>
+        <div className="flex items-center w-full px-6 min-h-[48px]">
+          {/* Left: X button */}
+          <div className="w-10 flex-shrink-0 flex items-center justify-start">
+            <button
+              onClick={handleBack}
+              aria-label="Go back"
+              className="text-xl text-muted-foreground hover:text-foreground transition cursor-pointer"
+            >
+              X
+            </button>
           </div>
-          <span className="text-xl font-medium flex">{hearts}
-            <img src={HeartIcon} className="w-6 h-6 flex"/>
-          </span>
+          {/* Center: Progress bar */}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <Progress 
+              value={progress} 
+              className="h-3 rounded-full w-full 
+              bg-[#FFF7E0] [&_[data-slot=progress-indicator]]:bg-gradient-to-r 
+              [&_[data-slot=progress-indicator]]:from-orange-400 
+              [&_[data-slot=progress-indicator]]:to-yellow-400" 
+            />
+          </div>
+          {/* Right: HeartIcon */}
+          <div className="w-14 flex-shrink-0 flex items-center justify-end">
+            <span className="text-xl font-medium flex items-center">
+              <img src={HeartIcon} className="w-6 h-6 ml-1" alt="hearts" />
+              {hearts}
+            </span>
+          </div>
         </div>
       </CardHeader>
       {showConfirm && (
