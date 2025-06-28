@@ -12,8 +12,11 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
-  const isLocked = course.status === "locked"
+  const isLocked = course.completedLessons == course.totalLessons
   const isCompleted = course.isCompleted
+
+  // Calculate progress percentage based on lessons
+  const progressPercent = course.totalModules > 0 ? Math.round((course.completedLessons / course.totalLessons) * 100) : 0;
 
   return (
     <Card className={`mb-4 p-0`}>
@@ -33,11 +36,11 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
             <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-[#FDBA17] transition-all"
-                style={{ width: `${course.progress * 10}%` }}
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
             <div className="text-xs text-gray-600 mt-1">
-              {course.progress * 10}%
+              {progressPercent}%
             </div>
           </div>
         </div>
