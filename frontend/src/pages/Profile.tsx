@@ -82,146 +82,148 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-50 p-3 rounded-3xl max-w-xl mx-auto">
-      <div className="bg-white rounded-xl shadow-md overflow-hidden mb-4 border border-gray-100">
-        <div className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 h-20 relative">
-          <div className="absolute -bottom-8 left-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full border-3 border-white shadow-lg flex items-center justify-center">
-              <span className="text-white text-lg font-bold">
-                {getAvatarInitials(userProfile.firstName, userProfile.lastName)}
-              </span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="pt-10 pb-4 px-4">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
-            <div>
-              <h1 className="text-xl font-bold text-gray-800 mb-1">
-                {userProfile.firstName || 'User'} {userProfile.lastName || ''}
-              </h1>
-              <p className="text-base text-gray-600 mb-2">@{userProfile.username || 'user'}</p>
-              <div className="flex items-center text-gray-500 mb-3">
-                <Mail className="w-3 h-3 mr-2" />
-                <span className="text-xs">{userProfile.email || 'No email'}</span>
+    <div className="flex-1 flex justify-center overflow-auto px-4">
+      <div className="w-full max-w-4xl">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-4 border border-gray-100">
+          <div className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 h-20 relative">
+            <div className="absolute -bottom-8 left-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full border-3 border-white shadow-lg flex items-center justify-center">
+                <span className="text-white text-lg font-bold">
+                  {getAvatarInitials(userProfile.firstName, userProfile.lastName)}
+                </span>
               </div>
             </div>
-            
-            <div className="flex items-center bg-gradient-to-r from-orange-400 to-red-500 text-white px-3 py-1.5 rounded-full shadow-md">
-              <Crown className="w-4 h-4 mr-1" />
-              <span className="text-xs font-bold">Level {userProfile.level || 1}</span>
+          </div>
+          
+          <div className="pt-10 pb-4 px-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+              <div>
+                <h1 className="text-xl font-bold text-gray-800 mb-1">
+                  {userProfile.firstName || 'User'} {userProfile.lastName || ''}
+                </h1>
+                <p className="text-base text-gray-600 mb-2">@{userProfile.username || 'user'}</p>
+                <div className="flex items-center text-gray-500 mb-3">
+                  <Mail className="w-3 h-3 mr-2" />
+                  <span className="text-xs">{userProfile.email || 'No email'}</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center bg-gradient-to-r from-orange-400 to-red-500 text-white px-3 py-1.5 rounded-full shadow-md">
+                <Crown className="w-4 h-4 mr-1" />
+                <span className="text-xs font-bold">Level {userProfile.level || 1}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-        <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
-          <div className="flex items-center mb-2">
-            <div className="bg-orange-100 p-1.5 rounded-full mr-2">
-              <Zap className="w-4 h-4 text-orange-600" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+            <div className="flex items-center mb-2">
+              <div className="bg-orange-100 p-1.5 rounded-full mr-2">
+                <Zap className="w-4 h-4 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="text-xs font-semibold text-gray-800">Experience</h3>
+                <p className="text-lg font-bold text-orange-600">{(userProfile.xp || 0).toLocaleString()}</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xs font-semibold text-gray-800">Experience</h3>
-              <p className="text-lg font-bold text-orange-600">{(userProfile.xp || 0).toLocaleString()}</p>
-            </div>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
-            <div 
-              className="bg-gradient-to-r from-orange-400 to-red-500 h-1.5 rounded-full transition-all duration-500"
-              style={{ width: `${getLevelProgress(userProfile.xp || 0, userProfile.level || 1)}%` }}
-            ></div>
-          </div>
-          <p className="text-xs text-gray-500">
-            {getXpForNextLevel(userProfile.level || 1) - (userProfile.xp || 0)} XP to next level
-          </p>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
-          <div className="flex items-center mb-2">
-            <div className="bg-red-100 p-1.5 rounded-full mr-2">
-              <Flame className="w-4 h-4 text-red-600" />
-            </div>
-            <div>
-              <h3 className="text-xs font-semibold text-gray-800">Streak</h3>
-              <p className="text-lg font-bold text-red-600">{userProfile.streak || 0} days</p>
-            </div>
-          </div>
-          <div className="flex items-center">
-            {[...Array(7)].map((_, i) => (
+            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
               <div 
-                key={i}
-                className={`w-3 h-3 rounded-full mr-1 ${
-                  i < (userProfile.streak || 0) % 7 ? 'bg-red-400' : 'bg-gray-200'
-                }`}
-              />
-            ))}
+                className="bg-gradient-to-r from-orange-400 to-red-500 h-1.5 rounded-full transition-all duration-500"
+                style={{ width: `${getLevelProgress(userProfile.xp || 0, userProfile.level || 1)}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-gray-500">
+              {getXpForNextLevel(userProfile.level || 1) - (userProfile.xp || 0)} XP to next level
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+            <div className="flex items-center mb-2">
+              <div className="bg-red-100 p-1.5 rounded-full mr-2">
+                <Flame className="w-4 h-4 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xs font-semibold text-gray-800">Streak</h3>
+                <p className="text-lg font-bold text-red-600">{userProfile.streak || 0} days</p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              {[...Array(7)].map((_, i) => (
+                <div 
+                  key={i}
+                  className={`w-3 h-3 rounded-full mr-1 ${
+                    i < (userProfile.streak || 0) % 7 ? 'bg-red-400' : 'bg-gray-200'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+            <div className="flex items-center mb-2">
+              <div className="bg-yellow-100 p-1.5 rounded-full mr-2">
+                <Trophy className="w-4 h-4 text-yellow-600" />
+              </div>
+              <div>
+                <h3 className="text-xs font-semibold text-gray-800">Current Level</h3>
+                <p className="text-lg font-bold text-yellow-600">{userProfile.level || 1}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-1">
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i}
+                  className={`w-3 h-3 ${
+                    i < (userProfile.level || 1) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
-          <div className="flex items-center mb-2">
-            <div className="bg-yellow-100 p-1.5 rounded-full mr-2">
-              <Trophy className="w-4 h-4 text-yellow-600" />
-            </div>
-            <div>
-              <h3 className="text-xs font-semibold text-gray-800">Current Level</h3>
-              <p className="text-lg font-bold text-yellow-600">{userProfile.level || 1}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-1">
-            {[...Array(5)].map((_, i) => (
-              <Star 
-                key={i}
-                className={`w-3 h-3 ${
-                  i < (userProfile.level || 1) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Achievement Section */}
-      <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
-        <div className="flex items-center mb-3">
-          <Award className="w-5 h-5 text-orange-500 mr-2" />
-          <h2 className="text-lg font-bold text-gray-800">Achievements</h2>
-        </div>
-        
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {/* Sample achievements */}
-          <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-              <Trophy className="w-4 h-4 text-gray-500" />
-            </div>
-            <p className="text-xs font-medium text-gray-500">First Steps</p>
+        {/* Achievement Section */}
+        <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+          <div className="flex items-center mb-3">
+            <Award className="w-5 h-5 text-orange-500 mr-2" />
+            <h2 className="text-lg font-bold text-gray-800">Achievements</h2>
           </div>
           
-          <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-              <Flame className="w-4 h-4 text-gray-500" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {/* Sample achievements */}
+            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
+              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
+                <Trophy className="w-4 h-4 text-gray-500" />
+              </div>
+              <p className="text-xs font-medium text-gray-500">First Steps</p>
             </div>
-            <p className="text-xs font-medium text-gray-500">Hot Streak</p>
+            
+            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
+              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
+                <Flame className="w-4 h-4 text-gray-500" />
+              </div>
+              <p className="text-xs font-medium text-gray-500">Hot Streak</p>
+            </div>
+            
+            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
+              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
+                <Zap className="w-4 h-4 text-gray-500" />
+              </div>
+              <p className="text-xs font-medium text-gray-500">Power User</p>
+            </div>
+            
+            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
+              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
+                <Star className="w-4 h-4 text-gray-500" />
+              </div>
+              <p className="text-xs font-medium text-gray-500">Rising Star</p>
+            </div>
           </div>
           
-          <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-gray-500" />
-            </div>
-            <p className="text-xs font-medium text-gray-500">Power User</p>
+          <div className="mt-3 text-center">
+            <p className="text-xs text-gray-500">Keep learning to unlock more achievements!</p>
           </div>
-          
-          <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-            <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-              <Star className="w-4 h-4 text-gray-500" />
-            </div>
-            <p className="text-xs font-medium text-gray-500">Rising Star</p>
-          </div>
-        </div>
-        
-        <div className="mt-3 text-center">
-          <p className="text-xs text-gray-500">Keep learning to unlock more achievements!</p>
         </div>
       </div>
     </div>
