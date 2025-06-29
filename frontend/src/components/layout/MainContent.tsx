@@ -58,11 +58,16 @@ export default function MainContent() {
   const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto px-4 max-w-3xl mx-auto">
+    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto mb-5">
       <div className="w-full">
         {!current ? (
           <>
-            {/* <h1 className="text-2xl font-bold mb-6">Choose your lesson:</h1> */}
+            <div className="mb-8 text-center">
+              <h1 className="text-3xl font-bold text-[#2f6879] mb-2">Explore Your German Learning Path</h1>
+              <p className="text-lg text-black max-w-3xl mx-auto italic">
+                Choose from our expertly designed courses to master German step by step. Each course is crafted just to help you as a beginner to learn German with confidence and fun!
+              </p>
+            </div>
             <div className="space-y-6">
               {courses.map((course, idx) => (
                 <CourseCard
@@ -108,6 +113,12 @@ export default function MainContent() {
                       icon: lessonIconMap[lesson.id],
                       order: lesson.order,
                       isLocked: module.isLocked,
+                      lessonId: lesson.id,
+                      onClick: () => {},
+                      bubbleRef: null,
+                      nodeWrapperRef: null,
+                      blockedBubbleRef: null,
+                      xpReward: lesson.xpReward.toString(),
                     }))}
                   />
                 )}
