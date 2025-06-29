@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom"
 import LessonSummary from "./LessonSummary"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
-import confetti from 'canvas-confetti';
+import StreakIcon from "../../assets/streak.png"
+import XPIcon from "../../assets/xp-2.png"
 
 export function LearningContent({ 
   lessonId,
@@ -22,11 +23,11 @@ export function LearningContent({
   const { checkExercise, checkResult, checking, resetCheck } = useExerciseCheck()
   const navigate = useNavigate()
   const feedbackRef = useRef<HTMLDivElement>(null)
-  const [showTick, setShowTick] = useState(false)
   const { refreshUser } = useAuth()
   const [exerciseResults, setExerciseResults] = useState<
     { id: number; question: string; userAnswer: string; correctAnswer: string; isCorrect: boolean; currentStreak: number; xpReward: number }[]
   >([]);
+  const [shouldShowSummary, setShouldShowSummary] = useState(false);
 
   useEffect(() => {
     if (onProgressChange) {
@@ -34,13 +35,9 @@ export function LearningContent({
     }
   }, [currentIdx, exercises.length, onProgressChange])
 
-  // Animated feedback for correct/incorrect answers
   useEffect(() => {
     if (!checkResult) return;
-    if (checkResult.isCorrect) {
-      setShowTick(true);
-      setTimeout(() => setShowTick(false), 2000); // 2 seconds
-    } else if (feedbackRef.current) {
+    if (!checkResult.isCorrect && feedbackRef.current) {
       feedbackRef.current.classList.remove("animate-shake");
       void feedbackRef.current.offsetWidth;
       feedbackRef.current.classList.add("animate-shake");
@@ -48,12 +45,10 @@ export function LearningContent({
   }, [checkResult]);
 
   useEffect(() => {
-    if (currentIdx >= exercises.length && exercises.length > 0) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+    if (currentIdx >= exercises.length) {
+      setShouldShowSummary(true);
+    } else {
+      setShouldShowSummary(false);
     }
   }, [currentIdx, exercises.length]);
 
@@ -119,22 +114,48 @@ export function LearningContent({
           ref={feedbackRef}
           className={`relative text-center space-y-4 ${checkResult.isCorrect ? 'text-green-600' : 'text-red-600'}`}
         >
-          {showTick && (
-            <svg
-              className="absolute left-1/2 -translate-x-1/2 -top-20 w-32 h-32 text-green-500 animate-tick"
-              viewBox="0 0 52 52"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="26" cy="26" r="25" stroke="currentColor" strokeWidth="4" fill="white" />
-              <path d="M16 27L24 35L38 19" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-          <p className="text-lg">{checkResult.feedback}</p>
-          {checkResult.isCorrect && (
-            <div className="text-2xl text-gray-600 mt-10">
-              <p>XP earned: <span className="font-bold text-orange-500">{checkResult.xpReward}</span></p>
-              <p>Streak: <span className="font-bold text-red-500">{checkResult.currentStreak}</span></p>
+          {checkResult.isCorrect ? (
+            <div className="flex flex-col items-center animate-fade-in">
+              <div className="mb-2">
+                <svg className="w-20 h-20 text-green-500" fill="none" viewBox="0 0 52 52">
+                  <circle cx="26" cy="26" r="25" stroke="currentColor" strokeWidth="4" fill="white" />
+                  <path d="M16 27L24 35L38 19" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <p className="text-2xl font-bold text-green-600 mb-2">Great job!</p>
+              <div className="flex gap-6 text-xl font-bold">
+                <span className="flex items-center gap-1 text-orange-500">
+                  <img src={XPIcon} alt="XP" className="w-7 h-7" />
+                  {checkResult?.xpReward ?? 0}
+                </span>
+                <span className="flex items-center gap-1 text-red-500">
+                  <img src={StreakIcon} alt="Streak" className="w-7 h-7" />
+                  {checkResult?.currentStreak ?? 0}
+                </span>
+              </div>
+              <p className="text-lg text-gray-500 mt-2">Keep up the streak!</p>
+            </div>
+          ) : ( // Incorrect answer
+            <div className="flex flex-col items-center animate-fade-in">
+              <div className="mb-2">
+                <svg className="w-20 h-20 text-red-500 animate-shake" fill="none" viewBox="0 0 52 52">
+                  <circle cx="26" cy="26" r="25" stroke="currentColor" strokeWidth="4" fill="white" />
+                  <line x1="16" y1="16" x2="36" y2="36" stroke="currentColor" strokeWidth="4" />
+                  <line x1="36" y1="16" x2="16" y2="36" stroke="currentColor" strokeWidth="4" />
+                </svg>
+              </div>
+              <p className="text-2xl font-bold text-red-600 mb-2">Oops! Try again!</p>
+              <div className="flex gap-6 text-xl font-bold">
+                <span className="flex items-center gap-1 text-orange-500">
+                  <img src={XPIcon} alt="XP" className="w-7 h-7" />
+                  {checkResult?.xpReward ?? 0}
+                </span>
+                <span className="flex items-center gap-1 text-red-500">
+                  <img src={StreakIcon} alt="Streak" className="w-7 h-7" />
+                  {checkResult?.currentStreak ?? 0}
+                </span>
+              </div>
+              <p className="text-lg text-gray-500 mt-2">Don't give up, you can do it!</p>
             </div>
           )}
           <div className="mt-6">
@@ -158,21 +179,25 @@ export function LearningContent({
 
   // Show congratulatory message and summary if all exercises are finished
   if (currentIdx >= exercises.length) {
-    // Use the last exercise result's currentStreak for summary
-    let streak = 0;
-    if (exerciseResults.length > 0) {
-      streak = exerciseResults[exerciseResults.length - 1].currentStreak || 0;
+    if (shouldShowSummary) {
+      // Use the last exercise result's currentStreak for summary
+      let streak = 0;
+      if (exerciseResults.length > 0) {
+        streak = exerciseResults[exerciseResults.length - 1].currentStreak || 0;
+      }
+      // Calculate total XP earned from correct answers
+      const totalXp = exerciseResults.reduce((sum, r) => r.isCorrect ? sum + (r.xpReward || 0) : sum, 0);
+      return (
+        <LessonSummary
+          exercises={exerciseResults}
+          onBack={async () => { await refreshUser(); navigate(-1); }}
+          totalXp={totalXp}
+          streak={streak}
+        />
+      );
     }
-    // Calculate total XP earned from correct answers
-    const totalXp = exerciseResults.reduce((sum, r) => r.isCorrect ? sum + (r.xpReward || 0) : sum, 0);
-    return (
-      <LessonSummary
-        exercises={exerciseResults}
-        onBack={async () => { await refreshUser(); navigate(-1); }}
-        totalXp={totalXp}
-        streak={streak}
-      />
-    );
+    // fallback: render nothing
+    return null;
   }
 
   return (

@@ -6,11 +6,9 @@ import React, { useState } from "react";
 interface LearningHeaderProps {
   progress: number
   hearts: number
-  current: number
-  total: number
 }
 
-export default function LearningHeader({ progress, hearts, current, total }: LearningHeaderProps) {
+export default function LearningHeader({ progress, hearts }: LearningHeaderProps) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleBack = () => {

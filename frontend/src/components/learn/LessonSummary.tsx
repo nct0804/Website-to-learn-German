@@ -82,7 +82,7 @@ const LessonSummary: React.FC<LessonSummaryProps> = ({ exercises, onBack, totalX
         text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition 
         transform hover:scale-[1.02] focus:scale-[0.98] px-10 py-4 text-xl"
       >
-        Continue
+        Back to Home
       </button>
     </section>
   );
