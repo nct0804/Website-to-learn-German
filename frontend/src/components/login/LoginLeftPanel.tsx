@@ -1,16 +1,15 @@
 import React, { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { useSocialAuth } from '../../hooks/useSocialAuth';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import SocialLoginButtons from './SocialLoginButtons';
 
 export default function LoginLeftPanel() {
   const { login } = useAuth();
-  const { loginWithProvider } = useSocialAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as any)?.from?.pathname || '/home';
@@ -165,23 +164,8 @@ export default function LoginLeftPanel() {
           )}
         </Button>
 
-        <div className="mt-4">
-          <div className="text-center text-gray-500 text-sm mb-2">Sign in with</div>
-          <div className="flex flex-row items-center justify-center gap-4">
-            <button type="button" onClick={() => loginWithProvider('google')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign in with Google">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" className="w-6 h-6" />
-            </button>
-            <button type="button" onClick={() => loginWithProvider('facebook')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign in with Facebook">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" className="w-6 h-6" />
-            </button>
-            <button type="button" onClick={() => loginWithProvider('apple')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign in with Apple">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" alt="Apple" className="w-6 h-6" />
-            </button>
-            <button type="button" onClick={() => loginWithProvider('github')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign in with Github">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="Github" className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
+        {/* Social Login Buttons */}
+        <SocialLoginButtons />
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{' '}

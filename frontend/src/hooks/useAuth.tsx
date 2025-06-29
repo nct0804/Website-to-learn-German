@@ -24,6 +24,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (c: { email: string; password: string }) => Promise<void>;
+  loginSocial: (user: User) => void;
   logout: () => Promise<void>;
 }
 
@@ -31,7 +32,7 @@ const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setL] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -44,13 +45,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(data.user);
         }
       } finally {
-        setL(false);
+        setLoading(false);
       }
     })();
   }, []);
 
   async function login({ email, password }: { email: string; password: string }) {
-    setL(true);
+    setLoading(true);
     try {
       const r = await fetch("http://localhost:3000/api/users/login", {
         method: "POST",
@@ -62,8 +63,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data } = await r.json();
       setUser(data.user);
     } finally {
-      setL(false);
+      setLoading(false);
     }
+  }
+
+  function loginSocial(user: User) {
+    setUser(user);
   }
 
   async function logout() {
@@ -75,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, loginSocial, logout }}>
       {children}
     </AuthContext.Provider>
   );
