@@ -11,7 +11,7 @@ import { useLogout } from '@/hooks/useLogOut';
 
 const menuItems = [
   { to: '/home', icon: Home, label: 'Home' },
-  { to: '/lesson', icon: Training, label: 'Lesson' },
+  { to: '/challenge', icon: Training, label: 'Challenge' },
   { to: '/ranking', icon: Ranking, label: 'Ranking' },
   { to: '/pronunciation', icon: faHeadphonesSimple, label: 'Pronunciation' }
 ];

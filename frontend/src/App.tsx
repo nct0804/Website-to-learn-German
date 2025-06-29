@@ -1,8 +1,7 @@
 import './App.css'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
-import Home from './pages/Home';
-import Lesson from './pages/Lesson';
+import Challenge from './pages/Challenge';
 import Ranking from './pages/Ranking';
 import Profile from './pages/Profile';
 import Learn from './pages/Learn';
@@ -13,6 +12,7 @@ import PrivateRoute from './components/PrivateRoute';
 import { AnimatePresence } from "framer-motion"
 import { useAuth } from "./hooks/useAuth";
 import LandingPage from "./pages/LandingPage";
+import MainContent from './components/layout/MainContent';
 
 export default function App() {
   const location = useLocation()
@@ -35,11 +35,11 @@ export default function App() {
         {/* protected */}
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="lesson" element={<Lesson />} />
-            <Route path="ranking" element={<Ranking />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path='pronunciation' element={<Pronunciation/>} />
+            <Route path="/home" element={<MainContent />} />
+            <Route path="/challenge" element={<Challenge />} />
+            <Route path="/ranking" element={<Ranking />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/pronunciation" element={<Pronunciation/>} />
           </Route>
         </Route>
         <Route path="/learn" element={<Learn />} />
