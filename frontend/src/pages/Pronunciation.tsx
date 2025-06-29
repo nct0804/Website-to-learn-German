@@ -53,48 +53,31 @@ export default function Pronunciation() {
   };
 
   if (loading) {
-    return (
-      <div className="bg-white py-6 px-4">
-        <div className="max-w-3xl mx-auto flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mr-3" />
-          <span className="text-gray-600">Loading groups...</span>
-        </div>
-      </div>
-    );
+    return console.log("Loading groups...")
   }
 
   if (error) {
-    return (
-      <div className="bg-white py-6 px-4">
-        <div className="max-w-3xl mx-auto flex items-center justify-center py-12">
-          <AlertCircle className="w-8 h-8 text-red-500 mr-3" />
-          <div className="text-center">
-            <p className="text-red-600 font-semibold">Failed to load</p>
-            <p className="text-gray-500 text-sm mt-1">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
+    return console.log("Failed to load", error)
   }
 
   return (
-    <div className="bg-white py-6 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto my-5">
+      <div className="w-full">
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-3">
             <Volume2 className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r text-[#017395] bg-clip-text ">
             German Pronunciation Practice
           </h1>
-          <p className="text-sm text-gray-600 max-w-lg mx-auto">
+          <p className="text-sm text-gray-500 max-w-lg mx-auto">
             Click any symbol below to hear its pronunciation.
           </p>
         </div>
 
         {groups.map((group: VocabularyGroup) => (
           <div key={group.id} className="mb-8">
-            <h2 className="text-xl font-semibold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
               {group.name}
             </h2>
             <div className="grid grid-cols-5 gap-3">
@@ -162,18 +145,6 @@ export default function Pronunciation() {
             </div>
           </div>
         ))}
-
-        <div className="bg-gray-50 rounded-lg border border-gray-100 p-3 text-center">
-          <p className="text-xs text-gray-600">
-            💡 <strong>Tip:</strong> Repeat each sound after listening. Practice makes perfect!
-          </p>
-        </div>
-
-        <div className="text-center mt-3">
-          <p className="text-xs text-gray-500">
-            Loaded {groups.reduce((sum, g) => sum + g.sounds.length, 0)} items across {groups.length} groups
-          </p>
-        </div>
       </div>
     </div>
   );
