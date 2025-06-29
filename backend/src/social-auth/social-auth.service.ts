@@ -1,5 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import AppleAuth from "apple-signin-auth";
+import fetch from "node-fetch";
 import {
   SocialProfile,
   GoogleProfile,
@@ -56,7 +57,7 @@ export class SocialAuthService {
         throw new UnauthorizedError("Invalid Facebook token");
       }
 
-      const profile: FacebookProfile = await response.json();
+      const profile = (await response.json()) as FacebookProfile;
 
       if (!profile.email) {
         throw new BadRequestError(
@@ -71,22 +72,22 @@ export class SocialAuthService {
     }
   }
 
-  async verifyAppleToken(
-    identityToken: string,
-    authorizationCode?: string
-  ): Promise<SocialProfile> {
+  async verifyAppleToken(identityToken: string): Promise<SocialProfile> {
     try {
       const appleData = await AppleAuth.verifyIdToken(identityToken, {
         audience: process.env.APPLE_CLIENT_ID!,
         ignoreExpiration: false,
       });
 
-      const profile: AppleProfile = {
-        sub: appleData.sub,
-        email: appleData.email,
-        given_name: (appleData as any).given_name || undefined,
-        family_name: (appleData as any).family_name || undefined,
-      };
+      interface AppleTokenPayload {
+        sub: string;
+        email: string;
+        given_name?: string;
+        family_name?: string;
+        [key: string]: unknown;
+      }
+
+      const profile = appleData as unknown as AppleTokenPayload;
 
       return this.mapAppleProfile(profile);
     } catch (error) {

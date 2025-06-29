@@ -105,8 +105,7 @@ export const appleLogin = async (
     }
 
     const socialProfile = await socialAuthService.verifyAppleToken(
-      identityToken,
-      authorizationCode
+      identityToken
     );
 
     const { user, token, refreshToken } =
