@@ -39,7 +39,9 @@ export const handleError = (err: unknown, res: import("express").Response) => {
   const error = err instanceof ApiError ? err : new ApiError();
 
   console.error(`[Error] ${error.statusCode} – ${error.message}`);
-  if (error.statusCode === 500) {console.error(error.stack);}
+  if (error.statusCode === 500) {
+    console.error(error.stack);
+  }
 
   res.status(error.statusCode).json({
     success: false,

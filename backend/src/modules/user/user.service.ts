@@ -71,7 +71,6 @@ export const refreshAccessToken = async (refreshToken: string) => {
 export const logoutUser = (refreshToken: string) =>
   prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
 
-/* helpers */
 const storeRefreshToken = async (userId: string) => {
   const refreshToken = generateRefreshToken(userId);
   await prisma.refreshToken.create({
@@ -96,4 +95,48 @@ export const rotateRefreshToken = async (oldToken: string) => {
   const refreshToken = await storeRefreshToken(stored.userId);
 
   return { accessToken, refreshToken };
+};
+
+export const getUserByEmail = async (email: string) => {
+  return await prisma.user.findUnique({
+    where: { email },
+  });
+};
+
+export const createSocialUser = async (data: {
+  email: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+}) => {
+  return await prisma.user.create({
+    data: {
+      ...data,
+      password: "",
+    },
+  });
+};
+
+export const updateUserLastLogin = async (userId: string) => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { lastLogin: new Date() },
+  });
+};
+
+export const createSocialUserAlt = async (data: {
+  email: string;
+  username: string;
+  first_name?: string;
+  last_name?: string;
+}) => {
+  return await prisma.user.create({
+    data: {
+      email: data.email,
+      username: data.username,
+      firstName: data.first_name,
+      lastName: data.last_name,
+      password: "",
+    },
+  });
 };
