@@ -35,17 +35,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function refreshUser() {
     setL(true);
-    try {
-      const r = await fetch("http://localhost:3000/api/users/me", {
-        credentials: "include",
-      });
-      if (r.ok) {
-        const { data } = await r.json();
-        setUser(data.user);
+      try {
+        const r = await fetch("http://localhost:3000/api/users/me", {
+          credentials: "include",
+        });
+        if (r.ok) {
+          const { data } = await r.json();
+          setUser(data.user);
+        }
+      } finally {
+        setL(false);
       }
-    } finally {
-      setL(false);
-    }
   }
 
   useEffect(() => {
