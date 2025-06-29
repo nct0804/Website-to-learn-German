@@ -31,8 +31,8 @@ export function FillInBlankExercise({
 
   return (
     <div className="flex flex-col space-y-8 w-full max-w-lg">
-      <h2 className="text-3xl font-bold text-center mb-8 block">{instruction}</h2>
-      <div className="flex justify-center items-center text-3xl space-x-2 mb-4">
+      <h2 className="text-3xl font-bold text-center block mb-20">{instruction}</h2>
+      <div className="flex justify-center items-center space-x-3">
         <div className="text-2xl">{prefix}</div>
         <input
           type="text"
