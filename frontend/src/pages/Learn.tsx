@@ -3,7 +3,8 @@ import LearningHeader from "@/components/learn/LearningHeader"
 import { LearningContent } from "@/components/learn/LearningContent"
 import { motion } from "framer-motion"
 import { useLocation } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import LoadingScreen from "@/components/learn/LoadingScreen"
 
 export default function Learn() {
   const { state } = useLocation()
@@ -12,6 +13,13 @@ export default function Learn() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [total, setTotal] = useState(0);
   const [isSummary, setIsSummary] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
+
+  useEffect(() => {
+    setShowLoading(true);
+    const timer = setTimeout(() => setShowLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, [lessonId]);
 
   // Handler to update progress from LearningContent
   const handleProgressChange = (current: number, total: number, summary: boolean = false) => {
@@ -33,11 +41,15 @@ export default function Learn() {
         <div className="w-full h-full">
           <Card className="h-full min-h-screen flex flex-col rounded-none border-none">
             {/* Only show header if not summary */}
-            {!isSummary && (
-              <LearningHeader progress={progress} hearts={5} current={Math.min(currentIdx, total)} total={total} />
+            {!isSummary && !showLoading && (
+            <LearningHeader progress={progress} hearts={5} current={Math.min(currentIdx, total)} total={total} />
             )}
             <div className="flex flex-1 overflow-hidden h-full">
+              {showLoading ? (
+                <LoadingScreen message="Get ready to learn!" />
+              ) : (
               <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
+              )}
             </div>
           </Card>
         </div>
