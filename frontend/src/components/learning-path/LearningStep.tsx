@@ -45,7 +45,10 @@ export default function LearningStep({
   const handlePracticeClick = () => {
     if (lessonId) {
       navigate("/learn", {
-        state: { lessonId }
+        state: { 
+          lessonId: lessonId,
+          isLearned: true
+         }
       });
     }
   };

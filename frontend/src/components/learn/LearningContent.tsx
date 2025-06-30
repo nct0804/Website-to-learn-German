@@ -14,8 +14,9 @@ import XPIcon from "../../assets/xp-2.png"
 
 export function LearningContent({ 
   lessonId,
-  onProgressChange 
-}: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void }) {
+  onProgressChange,
+  isLearned
+}: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void, isLearned?: boolean }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)

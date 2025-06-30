@@ -56,7 +56,7 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
                     </span>
                   ))}
                   {course.totalLessons > number && (
-                    <span className="inline-block px-2 py-1 text-xs bg-blue-50 text-[#408297] rounded-md border border-gray-200">
+                    <span className="inline-block px-2 py-1 text-xs bg-white text-[#408297] rounded-md">
                       +{course.totalLessons - number} more
                     </span>
                   )}
