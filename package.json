@@ -16,9 +16,20 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "@types/passport": "^1.0.17",
+    "@types/passport-facebook": "^3.0.3",
+    "@types/passport-google-oauth20": "^2.0.16",
     "concurrently": "^9.1.2"
   },
   "dependencies": {
-    "canvas-confetti": "^1.9.3"
+    "canvas-confetti": "^1.9.3",
+    "@google-cloud/local-auth": "^3.0.1",
+    "apple-signin-auth": "^2.0.0",
+    "google-auth-library": "^10.1.0",
+    "googleapis": "^150.0.1",
+    "passport": "^0.7.0",
+    "passport-apple": "^2.0.2",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0"
   }
 }

@@ -7,7 +7,7 @@ function Hero() {
   const { user } = useAuth();
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600">
+    <section className="relative overflow-hidden bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 min-h-screen flex items-center">
       <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600"></div>
       
       {/* Decorative elements */}
@@ -16,8 +16,8 @@ function Hero() {
       <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
       <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
       
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[60vh]">
           <div className="space-y-4">
             <div className="space-y-3">
               <div className="inline-flex items-center space-x-2 bg-white/20 text-white px-3 py-1 rounded-full text-xs font-medium">

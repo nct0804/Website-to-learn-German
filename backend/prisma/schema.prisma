@@ -4,7 +4,7 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -184,6 +184,12 @@ model SoundGroupSound {
   @@map("sound_group_sounds")
 }
 
+enum SocialProvider {
+  GOOGLE
+  FACEBOOK
+  APPLE
+}
+
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
@@ -198,9 +204,12 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+  socialAccounts UserSocialAccount[]
+
   // Lernfortschritt
   progress         UserProgress[]
   ExerciseProgress ExerciseProgress[]
+  refreshTokens    RefreshToken[]
 
   @@map("users")
 }
@@ -230,5 +239,29 @@ model RefreshToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("refresh_tokens")
+}
+
+model UserSocialAccount {
+  id            String         @id @default(cuid())
+  userId        String
+  provider      SocialProvider
+  providerId    String // ID vom Social Provider
+  providerEmail String? // E-Mail vom Provider
+  providerData  Json? // Zusätzliche Daten vom Provider (Name, Foto, etc.)
+  accessToken   String? // Optional: Access Token speichern
+  refreshToken  String? // Optional: Refresh Token speichern
+  expiresAt     DateTime? // Token Ablaufzeit
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Constraints
+  @@unique([provider, providerId])
+  @@unique([userId, provider])
+  @@map("user_social_accounts")
 }

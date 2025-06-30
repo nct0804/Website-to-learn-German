@@ -55,10 +55,7 @@
   white-space: nowrap;
   width: 0;
   margin: 0 auto;
-  border-right: 2px solid white;
-  animation: 
-    typewriter 2s steps(30) 1.8s forwards,
-    blink 0.7s infinite 3.8s;
+  animation: typewriter-full 2s steps(40) 1.8s forwards;
 }
 
 .features-container {
@@ -88,8 +85,6 @@
   border-radius: 50%;
   animation: pulse-sync 2s ease-in-out infinite;
 }
-
-
 
 @keyframes fade-in-sync {
   from {
@@ -149,18 +144,12 @@
   }
 }
 
-@keyframes typewriter {
+@keyframes typewriter-full {
   from {
     width: 0;
   }
   to {
-    width: 250px;
-  }
-}
-
-@keyframes blink {
-  50% {
-    border-color: transparent;
+    width: 100%;
   }
 }
 

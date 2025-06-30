@@ -50,12 +50,14 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/dotenv": "^6.1.1",
     "@types/uuid": "^10.0.0",
+    "apple-signin-auth": "^2.0.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express-validator": "^7.2.1",
+    "google-auth-library": "^10.1.0",
     "uuid": "^11.1.0"
   },
   "prisma": {

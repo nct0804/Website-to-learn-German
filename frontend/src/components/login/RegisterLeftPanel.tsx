@@ -1,17 +1,16 @@
 import React, { useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useRegister } from '../../hooks/useRegister';
-import { useSocialAuth } from '../../hooks/useSocialAuth';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
-import Notification from '../notification/notificationRegister'; 
+import Notification from '../notification/notificationRegister';
+import SocialLoginButtons from './SocialLoginButtons';
 
 export default function RegisterLeftPanel() {
   const { register, loading, error } = useRegister();
   const navigate = useNavigate();
-  const { loginWithProvider } = useSocialAuth();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -210,7 +209,6 @@ export default function RegisterLeftPanel() {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   minLength={8}
-                  title="Password must be at least 8 characters long"
                   className="pl-10 pr-10 h-9 md:h-10 border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 rounded-lg hover:border-gray-300 bg-white text-gray-800 placeholder-gray-400 transition text-sm"
                   required
                 />
@@ -226,43 +224,28 @@ export default function RegisterLeftPanel() {
                   )}
                 </button>
               </div>
-              <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters long</p>
+              <p className="text-xs text-gray-500 mt-1">Password must be at least 8 characters long</p>
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-9 md:h-10 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               disabled={loading}
             >
               {loading ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Signing Up...</span>
+                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Creating Account...</span>
                 </div>
               ) : (
-                'Sign Up'
+                'Create Account'
               )}
             </Button>
 
-            <div className="mt-4">
-              <div className="text-center text-gray-500 text-sm mb-2">Sign up with</div>
-              <div className="flex flex-row items-center justify-center gap-4">
-                <button type="button" onClick={() => loginWithProvider('google')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign up with Google">
-                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" className="w-6 h-6" />
-                </button>
-                <button type="button" onClick={() => loginWithProvider('facebook')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign up with Facebook">
-                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook" className="w-6 h-6" />
-                </button>
-                <button type="button" onClick={() => loginWithProvider('apple')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign up with Apple">
-                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" alt="Apple" className="w-6 h-6" />
-                </button>
-                <button type="button" onClick={() => loginWithProvider('github')} className="p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition" aria-label="Sign up with Github">
-                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="Github" className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
+            {/* Social Login Buttons */}
+            <SocialLoginButtons />
 
-            <p className="mt-3 md:mt-4 text-center text-sm text-gray-600">
+            <p className="mt-4 text-center text-sm text-gray-600">
               Already have an account?{' '}
               <Link to="/login" className="text-orange-600 hover:underline">
                 Sign In
