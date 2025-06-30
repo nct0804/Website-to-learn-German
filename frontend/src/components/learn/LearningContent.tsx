@@ -10,13 +10,12 @@ import LessonSummary from "./LessonSummary"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
 import StreakIcon from "../../assets/streak.png"
-import XPIcon from "../../assets/xp-2.png"
+import XPIcon from "../../assets/XP-2.png"
 
 export function LearningContent({ 
   lessonId,
   onProgressChange,
-  isLearned
-}: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void, isLearned?: boolean }) {
+}: { lessonId: number, onProgressChange?: (current: number, total: number, summary?: boolean) => void }) {
   const { exercises, loading, error } = useLessonExercises(lessonId)
   const [currentIdx, setCurrentIdx] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
