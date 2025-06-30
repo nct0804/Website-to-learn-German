@@ -1,7 +1,7 @@
 import LeftBar from './LeftBar';
 import TopBar from './TopBar';
 import RightBar from '@/components/layout/RightBar';
-import MainContent from '@/components/layout/MainContent';
+import { Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
   return (
@@ -9,7 +9,7 @@ export default function MainLayout() {
       <TopBar />
       <div className="flex flex-1 overflow-hidden h-full">
         <LeftBar/>
-        <MainContent/>
+        <Outlet />
         <RightBar />
       </div>
     </div>

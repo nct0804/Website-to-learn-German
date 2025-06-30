@@ -1,4 +1,3 @@
-
 install Reactrouter
 ```bash
 npm install react-router-dom lucide-react clsx
@@ -39,6 +38,11 @@ Install Gsap
 npm install gsap
 ```
 
+Install Framer Motion (page transition):
+```
+npm install framer-motion
+
+```
 
 
 ## ** Component Structure **
@@ -55,49 +59,83 @@ npm install gsap
 
 **`components/pages/`** :Route-level components (pages)
 
-    Home.tsx
-    Lesson.tsx
-    Profile.tsx
-    Ranking.tsx
-    More.tsx (Profile/AboutUs/Logout)
+    - Home.tsx: Main landing page after login, shows dashboard or learning overview.
+    - Lesson.tsx: (placeholder)
+    - Profile.tsx: (placeholder)
+    - Ranking.tsx: (placeholder)
+    - Learn.tsx: Main learning interface, renders exercises and progress for a lesson.
+    - LandingPage.tsx: 
+    - LoginPage.tsx: 
+    - RegisterPage.tsx: 
+    - Pronunciation.tsx: 
 
 **`components/layout/`** :Layout components: wrappers, bars, main structure
 
-    LeftBar.tsx: Main vertical sidebar with navigation links to HOME, TRAINING, RANKING and MORE menu.
-    MainContent.tsx: Wrapper for the center area where LEARNING PATHS are rendered.
-    MainLayout.tsx
-    RightBar.tsx: Panels shown on the right side of the screen for extra information (not final version): FUN FACTS, TIPS, REWEDENDUNGEN.
-    TopBar.tsx: LOGO, STATS, XP PROGRESS, and PROFILE infos (LOGO is not final, just for placeholder, still changeable)
-
-**`components/login/`** :Login modals and authentication UIs
-
-    LoginModal.tsx
-    LoginModalJWT.tsx
-
-**`components/panels/`** :Information and dashboard panels
-
-    HeaderPanel.tsx
-    QuotePanel.tsx
-    UserPanel.tsx
-
-**`components/top-bar/`** :TopBar subcomponents (logo, profile, progress, etc.)
-
-    Logo.tsx
-    ProfileAndStats.tsx
-    ProgressBar.tsx
-
-**`components/ui/`** :All basic, styled, and reusable UI widgets. (buttons, inputs, etc.)
-
-    button.tsx
-    card.tsx
-    input.tsx
-    label.tsx
+    - LeftBar.tsx: Main vertical sidebar with navigation links to HOME, TRAINING, RANKING and MORE menu.
+    - MainContent.tsx: Wrapper for the center area where LEARNING PATHS are rendered.
+    - MainLayout.tsx
+    - RightBar.tsx: Panels shown on the right side of the screen for extra information (not final version): FUN FACTS, TIPS, REWEDENDUNGEN.
+    - TopBar.tsx: LOGO, STATS, XP PROGRESS, and PROFILE infos (LOGO is not final, just for placeholder, still changeable)
 
 **`components/hooks/`** :Custom React hooks for logic reuse
 
-    useAuth.tsx
-    useAuthJWT.tsx
+    - useAuth.tsx:
+    - useAuthJWT.tsx:
+    - useCoursesWithProgress.ts: Fetches all courses with progress, sorts courses/modules/lessons.
+    - useAllModulesLessonProgress.ts: Fetches lesson progress for multiple modules at once.
+    - useLessonModuleProgress.ts: Fetches lesson progress for a single module.
+    - useLessonExercises.ts: Fetches all exercises for a specfic choosen lesson.
+    - useExerciseCheck.ts: Checks user answers for exercises, returns correctness, XP, and feedback.
+
+**`components/learning-path/`** :Learning path (course cards, lessons and etc...)
+
+    - LearningStep.tsx: Logics for StartBubble, DetailBubble and LockedBubble
+    - CourseCard.tsx: CourseCard to choose from in HOME to learn (A1.1, A1.2, B1.1, B1.2)
+    - LessonHeader.tsx: Infos for the module (Lesson1, Title...) sticking fixed on top
+    - VerticalStep.tsx: Vertical learning path with nodes 
+    - StartBubble.tsx: Indicating the active node
+    - DetailBubble.tsx: Infos of the clicked node
+    - LockedBubble.tsx: Showing infos for locked node
+
+**`components/learn/`** :Learning page (exercise and lesson flow)
+
+    - LearningHeader.tsx: Displays lesson progress, hearts, and a back button with exit confirmation modal.
+    - LearningContent.tsx: Main logic for rendering exercises, handling answer checking, feedback, and lesson summary.
+    - LearningFooter.tsx: Footer with the main action button (Check) for exercises.
+    - LessonSummary.tsx: Shows a congratulatory summary and answers after lesson completion.
+    - FillInBlankExercise.tsx: Renders fill-in-the-blank exercise UI and handles user input.
+    - MultipleChoiceExercise.tsx: Renders multiple choice questions and handles selection.
+    - VocabCheckExercise.tsx: Renders vocabulary check exercises with images and options.
+    - PronunciationExercise.tsx: (placeholder, not yet implemented)
+
+**`components/login/`** :Login modals and authentication UIs
+
+    - LoginModal.tsx
+    - LoginModalJWT.tsx
+
+**`components/panels/`** :Information and dashboard panels
+
+    - HeaderPanel.tsx
+    - QuotePanel.tsx
+    - UserPanel.tsx
+
+**`components/top-bar/`** :TopBar subcomponents (logo, profile, progress, etc.)
+
+    - Logo.tsx
+    - ProfileAndStats.tsx
+    - ProgressBar.tsx
+
+**`components/ui/`** :All basic, styled, and reusable UI widgets. (buttons, inputs, etc.)
+
+    - button.tsx
+    - card.tsx
+    - input.tsx
+    - label.tsx
 
 **`components/libs/`** :General utility/helper functions
 
     utils.tsx
+
+**`components/types/`**: 
+    - courseProgress.ts: 
+

@@ -28,14 +28,14 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>(null!);
+const AuthContext = createContext<AuthContextType & { refreshUser: () => Promise<void> }>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
+  async function refreshUser() {
+    setLoading(true);
       try {
         const r = await fetch("http://localhost:3000/api/users/me", {
           credentials: "include",
@@ -47,7 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } finally {
         setLoading(false);
       }
-    })();
+  }
+
+  useEffect(() => {
+    refreshUser();
   }, []);
 
   async function login({ email, password }: { email: string; password: string }) {
@@ -80,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, loginSocial, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, loginSocial, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,7 +8,7 @@ async function main() {
 
   //  !!!!!!! CLEANING DATA, UNCOMMENT THIS LINE BELOW TO RESET DATABASE!!!!!!!!!!
 
-  // await cleanDatabase();
+  await cleanDatabase();
 
   //  !!!!!!! PRESERVING USERS DATA, AND RESET CONTENt SEQUENCES!!!!!!!!!!
   await cleanContentOnly();

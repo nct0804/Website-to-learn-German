@@ -11,7 +11,7 @@ import { useLogout } from '@/hooks/useLogOut';
 
 const menuItems = [
   { to: '/home', icon: Home, label: 'Home' },
-  { to: '/lesson', icon: Training, label: 'Lesson' },
+  { to: '/challenge', icon: Training, label: 'Challenge' },
   { to: '/ranking', icon: Ranking, label: 'Ranking' },
   { to: '/pronunciation', icon: faHeadphonesSimple, label: 'Pronunciation' }
 ];
@@ -35,7 +35,7 @@ export default function LeftBar() {
   }, []);
 
   return (
-    <aside className="h-full flex flex-col justify-between border-r-[3px] border-[#FFF4E1] w-30">
+    <aside className="h-full flex flex-col justify-between w-30">
       <div className="flex flex-col items-center gap-3 py-4">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.to;
