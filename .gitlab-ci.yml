@@ -45,8 +45,7 @@ test:
     - npm run test
     - cd ..
     - cd frontend
-    - echo "Dang chay test completed successfully"
-    ## - npm run test -- --watchAll=false || true
+    - npm run test
     - cd ..
 
 build:
