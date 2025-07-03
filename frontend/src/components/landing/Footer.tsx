@@ -46,10 +46,10 @@ function Footer() {
         <div className="mt-8 pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-3 sm:mb-0">
             <Globe className="h-4 w-4 text-gray-500" />
-            <span className="text-xs text-gray-600">DeutschMeister</span>
+            <span className="text-xs text-gray-600">GermanGains</span>
           </div>
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} DeutschMeister. All rights reserved. Completely free education for all.
+            &copy; {new Date().getFullYear()} GermanGains. All rights reserved. Completely free education for all.
           </p>
         </div>
       </div>

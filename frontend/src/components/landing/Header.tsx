@@ -24,7 +24,7 @@ function Header() {
         <div className="flex justify-between items-center py-2.5">
           <Link to="/" className="flex items-center space-x-2">
             <Globe className="h-6 w-6 text-orange-500" />
-            <h1 className="text-lg font-bold text-gray-900">DeutschMeister</h1>
+            <h1 className="text-lg font-bold text-gray-900">GermanGains</h1>
           </Link>
           <nav className="hidden md:flex items-center space-x-5">
             <button 
