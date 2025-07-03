@@ -8,9 +8,11 @@ import { useEffect, useRef, useState } from 'react';
 import { faHeadphonesSimple } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogout } from '@/hooks/useLogOut';
+import VoiceIcon from '../../assets/voice.png';
 
 const menuItems = [
   { to: '/home', icon: Home, label: 'Home' },
+  { to: '/speak', icon: VoiceIcon, label: 'Speak' },
   { to: '/challenge', icon: Training, label: 'Challenge' },
   { to: '/ranking', icon: Ranking, label: 'Ranking' },
   { to: '/pronunciation', icon: faHeadphonesSimple, label: 'Pronunciation' }
@@ -86,7 +88,7 @@ export default function LeftBar() {
         </button>
 
         {menuOpen && (
-          <div className="absolute left-full bottom-0 ml-2 flex flex-col bg-white shadow-xl rounded-lg py-2 w-[180px] z-50">
+          <div className="absolute left-full bottom-0 ml-2 flex flex-col bg-white shadow-xl rounded-lg py-2 w-[140px] z-50">
             <Link
               to="/profile"
               className="px-4 py-2 text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95"
@@ -95,7 +97,7 @@ export default function LeftBar() {
               Profile
             </Link>
             <Link
-              to="/"
+              to="/aboutus"
               className="px-4 py-2 text-gray-800 hover:bg-[#fbb12420] transition-colors active:scale-95"
               onClick={() => setMenuOpen(false)}
             >

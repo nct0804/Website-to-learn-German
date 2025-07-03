@@ -53,11 +53,26 @@ export default function Pronunciation() {
   };
 
   if (loading) {
-    return console.log("Loading groups...")
+    return (
+      <div className="flex-1 flex justify-center items-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-500" />
+          <p className="text-gray-600">Loading pronunciation data...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return console.log("Failed to load", error)
+    return (
+      <div className="flex-1 flex justify-center items-center">
+        <div className="text-center">
+          <AlertCircle className="w-8 h-8 mx-auto mb-4 text-red-500" />
+          <p className="text-gray-600">Failed to load pronunciation data</p>
+          <p className="text-sm text-gray-500 mt-2">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
