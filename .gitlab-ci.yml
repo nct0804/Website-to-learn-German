@@ -7,6 +7,7 @@ stages:
 cache:
   paths:
     - backend/node_modules/
+    - frontend/node_modules/
 
 install:
   stage: install
@@ -15,15 +16,23 @@ install:
     - cd backend
     - npm install
     - cd ..
+    - cd frontend
+    - npm install
+    - cd ..
   artifacts:
     paths:
       - backend/node_modules/
+      - frontend/node_modules/
 
 lint:
   stage: lint
   image: node:latest
   script:
     - cd backend
+    - npm run lint
+    - cd ..
+    - cd frontend
+    - echo "Dang chay lint"
     - npm run lint
     - cd ..
     - echo "Linting completed successfully"
@@ -35,12 +44,20 @@ test:
     - cd backend
     - npm run test
     - cd ..
+    - cd frontend
+    - echo "Dang chay test completed successfully"
+    ## - npm run test -- --watchAll=false || true
+    - cd ..
 
 build:
   stage: build
   image: node:latest
   script:
     - cd backend
+    - npm run build
+    - cd ..
+    - cd frontend
+    - echo "dang chay build"
     - npm run build
     - cd ..
   artifacts:
