@@ -19,6 +19,7 @@ install:
     - cd frontend
     - npm install --legacy-peer-deps
     - cd ..
+    - echo "Installing dependencies completed successfully"
   artifacts:
     paths:
       - backend/node_modules/
@@ -32,7 +33,6 @@ lint:
     - npm run lint
     - cd ..
     - cd frontend
-    - echo "Dang chay lint"
     - npm run lint
     - cd ..
     - echo "Linting completed successfully"
@@ -47,6 +47,7 @@ test:
     - cd frontend
     - npm run test
     - cd ..
+    - echo "Testing completed successfully"
 
 build:
   stage: build
@@ -56,9 +57,10 @@ build:
     - npm run build
     - cd ..
     - cd frontend
-    - echo "dang chay build"
     - npm run build
     - cd ..
+    - echo "Building completed successfully"
   artifacts:
     paths:
       - backend/dist/
+      - frontend/dist/
