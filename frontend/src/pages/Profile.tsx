@@ -145,7 +145,7 @@ const ProfilePage: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xs font-semibold text-gray-800">Streak</h3>
-                <p className="text-lg font-bold text-red-600">{userProfile.streak || 0} days</p>
+                <p className="text-lg font-bold text-red-600">{userProfile.streak || 0}</p>
               </div>
             </div>
             <div className="flex items-center">

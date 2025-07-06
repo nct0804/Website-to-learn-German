@@ -20,7 +20,7 @@ export default function LearningFooter( { handleCheck, selected, checking = fals
                 onClick={handleCheck}
                 disabled={!selected || checking}
             >
-                {isVocabCheck ? "Continue" : (checking ? "Checking..." : "Check")}
+                {isVocabCheck ? "Continue" : "Check"}
             </Button>
         </div>
     )

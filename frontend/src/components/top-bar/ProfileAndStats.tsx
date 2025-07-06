@@ -1,7 +1,7 @@
 import avatar from '../../assets/avatar.png';
 import StreakIcon from '../../assets/streak.png';
 import HeartIcon from '../../assets/heart.png';
-import ProgressBar from './ProgressBar';
+// import ProgressBar from './ProgressBar';
 
 export default function ProfileAndStats({ level, streak }: { level: number, streak: number}) {
     return (
@@ -24,7 +24,7 @@ export default function ProfileAndStats({ level, streak }: { level: number, stre
                   <div className="font-bold text-[#3B6978]">Thien</div>
                   <div className="text-xs text-yellow-600">Level {level}</div>
               </div>
-              <img src={avatar} alt="profile" className="h-10 w-10 h-16 w-16" />
+              <img src={avatar} alt="profile" className="h-16 w-16" />
           </div>
         </div>
         {/* <div className="mt-2">

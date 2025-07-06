@@ -1,4 +1,3 @@
-// No imports needed for ExerciseOption
 import { useState } from "react"
 
 export interface FillInBlankExerciseProps {

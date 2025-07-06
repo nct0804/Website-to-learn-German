@@ -1,8 +1,7 @@
-// src/components/learning-path/CourseCard.tsx
 import type { CourseProgress } from "@/components/types/courseProgress"
 import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, LockIcon, Play, Star } from "lucide-react"
+import { LockIcon, Play, Star } from "lucide-react"
 
 interface CourseCardProps {
   course: CourseProgress
@@ -39,7 +38,7 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg font-bold text-[#2f6879]">{course.title}</CardTitle>
+            <CardTitle className="text-xl font-bold text-[#2f6879]">{course.title}</CardTitle>
             <CardDescription className="text-sm text-black">{course.description}</CardDescription>
             
             {/* Lesson hints section */}
