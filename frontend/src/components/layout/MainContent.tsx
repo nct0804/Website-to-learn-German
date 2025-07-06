@@ -3,7 +3,7 @@ import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
 import CourseCard from "../learning-path/CourseCard"
 import useCoursesWithProgress from "../../hooks/useCoursesWithProgress";
-import { useAllModulesLessonProgress } from "../../hooks/useAllModulesLessonProgress";
+import { useAllModulesLessonProgress } from "../../hooks/useLessonModuleProgress";
 
 import GreetingIcon from "../../assets/greeting.png";
 import NumberIcon from "../../assets/numbers.png";
@@ -101,6 +101,8 @@ export default function MainContent() {
                     title={module.title}
                     description={module.description}
                     setSelectedLesson={() => setSelectedCourse(null)}
+                    isLocked={module.isLocked}
+                    order={module.order}
                   />
                 {lessonsLoading ? (
                   (console.log('Loading lessons...'), null)
