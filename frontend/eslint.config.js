@@ -8,7 +8,7 @@ export default tseslint.config(
   { ignores: ['dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}'], // applied to ts and tsx files
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -23,6 +23,9 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'no-unused-vars': 'warn',
     },
   },
 )

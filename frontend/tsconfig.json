@@ -8,6 +8,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
-  }
+    },
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "types": ["@testing-library/jest-dom"]
+  },
+  "include": ["src", "src/declaration.d.ts"]
 }

@@ -4,7 +4,8 @@
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm install && npm run build && npm start",
-    "start:frontend": "cd frontend && npm install && npm run dev",
+    "start:frontend": "cd frontend && npm run dev",
+    "install:frontend": "cd frontend && npm install --legacy-peer-deps",
     "test": "jest",
     "test:unit": "jest tests/unit",
     "test:integration": "jest tests/integration",
