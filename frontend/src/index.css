@@ -1,2 +1,12 @@
 body::-webkit-scrollbar { display: none; }
 body { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes progressShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes flowingWave {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
