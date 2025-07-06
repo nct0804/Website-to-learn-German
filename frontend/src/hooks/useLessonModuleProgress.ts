@@ -30,7 +30,7 @@ export function useLessonModuleProgress(moduleId: number) {
   useEffect(() => {
     if (!moduleId) return;
     setLoading(true);
-    fetch(`${import.meta.env.VITE_API_PROXY_TARGET}/api/lesson/module/${moduleId}/progress`, {
+    fetch(`http://localhost:3000/api/lesson/module/${moduleId}/progress`, {
       credentials: 'include',
     })
       .then(async (res) => {
@@ -58,7 +58,7 @@ export function useAllModulesLessonProgress(moduleIds: number[]) {
   
       Promise.all(
         moduleIds.map(moduleId =>
-          fetch(`${import.meta.env.VITE_API_PROXY_TARGET}/api/lesson/module/${moduleId}/progress`, {
+          fetch(`http://localhost:3000/api/lesson/module/${moduleId}/progress`, {
             credentials: "include",
           })
             .then(async res => {

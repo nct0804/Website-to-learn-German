@@ -1,0 +1,37 @@
+### Test Social Authentication Endpoints
+
+### Health Check
+GET http://localhost:3000/health
+
+### Google Login (requires valid Google ID token)
+POST http://localhost:3000/api/users/auth/google
+Content-Type: application/json
+
+{
+  "idToken": "your_google_id_token_here"
+}
+
+### Facebook Login (requires valid Facebook access token)
+POST http://localhost:3000/api/users/auth/facebook
+Content-Type: application/json
+
+{
+  "accessToken": "your_facebook_access_token_here"
+}
+
+### Apple Login (requires valid Apple identity token)
+POST http://localhost:3000/api/users/auth/apple
+Content-Type: application/json
+
+{
+  "identityToken": "your_apple_identity_token_here",
+  "authorizationCode": "optional_authorization_code"
+}
+
+### Get Social Accounts (requires authentication)
+GET http://localhost:3000/api/users/auth/social-accounts
+Cookie: token=your_jwt_token_here
+
+### Unlink Social Account (requires authentication)
+DELETE http://localhost:3000/api/users/auth/social-accounts/google
+Cookie: token=your_jwt_token_here 

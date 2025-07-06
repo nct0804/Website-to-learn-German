@@ -8,7 +8,7 @@ export default function useCoursesWithProgress() {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`${import.meta.env.VITE_API_PROXY_TARGET}/api/courses/progress/all`, {
+    fetch(`http://localhost:3000/api/courses/progress/all`, {
       credentials: "include",
     })
       .then(async (res) => {

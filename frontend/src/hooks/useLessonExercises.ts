@@ -29,7 +29,7 @@ export function useLessonExercises(lessonId: number) {
   useEffect(() => {
     if (!lessonId) return
     setLoading(true)
-    fetch(`${import.meta.env.VITE_API_PROXY_TARGET}/api/exercises/lesson/${lessonId}`)
+    fetch(`http://localhost:3000/api/exercises/lesson/${lessonId}`)
       .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const json = await res.json()
