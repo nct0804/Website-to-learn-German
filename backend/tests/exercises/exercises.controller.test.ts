@@ -24,6 +24,7 @@ describe('Exercises Controller', () => {
     level: 1,
     xp: 0,
     streak: 0,
+    hearts: 5,
     lastLogin: null,
     createdAt: new Date(),
     updatedAt: new Date()

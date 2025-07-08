@@ -355,6 +355,7 @@ export const checkAnswer = async (
       xp: true,
       streak: true,
       level: true,
+      hearts: true,
     },
   });
 
@@ -380,6 +381,24 @@ export const checkAnswer = async (
 
   const isNewCompletion =
     isCorrect && (!existingProgress || !existingProgress.completed);
+
+  let newheartcount = user.hearts;
+  let heartchange = 0;
+  if(!isCorrect && (!existingProgress || !existingProgress.completed)) {
+    if(newheartcount >0)
+    {
+      newheartcount -= 1;
+      heartchange = -1;
+    }
+  }
+  else if(isCorrect && (!existingProgress || !existingProgress.completed)) {
+    // maximun for each user is 5 so yeah
+    // Thien: For now the idea is answer the previous completed questions correctly will regain hearts
+    if (newheartcount < 5) {
+      newheartcount += 1;
+      heartchange = 1;
+    }
+  }
 
   // Only increase streak for correct answers on NEW completions
   // This prevents users from farming streak by repeating completed exercises
@@ -478,6 +497,7 @@ export const checkAnswer = async (
       data: {
         xp: { increment: finalXpReward },
         streak: newStreak,
+        hearts: newheartcount,
         level: levelUpInfo.leveledUp ? levelUpInfo.newLevel : user.level,
         updatedAt: new Date(),
       },
@@ -529,6 +549,8 @@ export const checkAnswer = async (
     completionMessage,
     score: score,
     attempts: currentAttempts,
+    hearts: newheartcount,
+    heartchange: heartchange,
   };
 };
 

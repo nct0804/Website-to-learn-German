@@ -8,6 +8,799 @@
 		"_collection_link": "https://chithien-4528100.postman.co/workspace/Chi-Thien's-Workspace~4bea45cb-dacd-44b8-88df-0f9b2d022fad/collection/44407978-278cb541-05d4-4d5f-ac98-1723d338955f?action=share&source=collection_link&creator=44407978"
 	},
 	"item": [
+
+    {
+      "name": "HEARTS SYSTEM",
+      "item": [
+        {
+          "name": "1. Check Initial Heart Count",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"User initially has 5 hearts\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const user = jsonData.data;",
+                  "    // Check if user has hearts property",
+                  "    pm.expect(user).to.have.property('hearts');",
+                  "    // Store initial heart count for future tests",
+                  "    pm.environment.set(\"initialHeartCount\", user.hearts);",
+                  "    console.log(`User has ${user.hearts} hearts`);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/users/me",
+            "description": "Check user's initial heart count"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Find Uncompleted Exercise",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Found uncompleted exercise\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const data = jsonData.data;",
+                  "    const exercises = data.exercises;",
+                  "    ",
+                  "    // Find the first uncompleted exercise",
+                  "    const uncompletedExercise = exercises.find(exercise => !exercise.isCompleted);",
+                  "    ",
+                  "    if (uncompletedExercise) {",
+                  "        // Save exercise ID for next test",
+                  "        pm.environment.set(\"uncompletedExerciseId\", uncompletedExercise.id);",
+                  "        console.log(`Found uncompleted exercise ID: ${uncompletedExercise.id}`);",
+                  "    } else {",
+                  "        console.log('No uncompleted exercises found, test might not work correctly');",
+                  "    }",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/exercises/status/lesson/{{firstLessonId}}",
+            "description": "Find an uncompleted exercise to test hearts functionality"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Submit Wrong Answer (Should Lose Heart)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Wrong answer decreases heart count\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const result = jsonData.data;",
+                  "    ",
+                  "    // Check for incorrect answer",
+                  "    pm.expect(result.isCorrect).to.be.false;",
+                  "    ",
+                  "    // Check heart information",
+                  "    pm.expect(result).to.have.property('hearts');",
+                  "    pm.expect(result).to.have.property('heartChange');",
+                  "    ",
+                  "    // For wrong answer on new exercise, should lose 1 heart",
+                  "    pm.expect(result.heartChange).to.equal(-1);",
+                  "    ",
+                  "    // Store current heart count",
+                  "    pm.environment.set(\"currentHeartCount\", result.hearts);",
+                  "    console.log(`Heart count changed by ${result.heartChange}. Current hearts: ${result.hearts}`);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Get the exercise details to find an incorrect answer option",
+                  "const exerciseId = pm.environment.get(\"uncompletedExerciseId\");",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: `${pm.environment.get(\"baseUrl\")}/api/exercises/${exerciseId}`,",
+                  "    method: 'GET',",
+                  "    header: {",
+                  "        'Authorization': `Bearer ${pm.environment.get(\"accessToken\")}`",
+                  "    }",
+                  "}, function (err, res) {",
+                  "    if (err) {",
+                  "        console.error(err);",
+                  "    } else {",
+                  "        const exercise = res.json().data;",
+                  "        ",
+                  "        if (exercise && exercise.options && exercise.options.length > 0) {",
+                  "            // Find an incorrect option",
+                  "            const incorrectOption = exercise.options.find(option => !option.isCorrect);",
+                  "            ",
+                  "            if (incorrectOption) {",
+                  "                pm.environment.set(\"incorrectOptionId\", incorrectOption.id);",
+                  "                console.log(`Using incorrect option ID: ${incorrectOption.id}`);",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"{{incorrectOptionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{uncompletedExerciseId}}/check",
+            "description": "Submit a wrong answer to an uncompleted exercise, should lose a heart"
+          },
+          "response": []
+        },
+        {
+          "name": "4. Find Completed Exercise",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Found completed exercise\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const data = jsonData.data;",
+                  "    const exercises = data.exercises;",
+                  "    ",
+                  "    // Find the first completed exercise",
+                  "    const completedExercise = exercises.find(exercise => exercise.isCompleted);",
+                  "    ",
+                  "    if (completedExercise) {",
+                  "        // Save exercise ID for next test",
+                  "        pm.environment.set(\"completedExerciseId\", completedExercise.id);",
+                  "        console.log(`Found completed exercise ID: ${completedExercise.id}`);",
+                  "    } else {",
+                  "        // If no completed exercise found, let's complete one first",
+                  "        console.log('No completed exercises found, completing one first');",
+                  "        pm.environment.set(\"needsCompletion\", true);",
+                  "    }",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": "{{baseUrl}}/api/exercises/status/lesson/{{firstLessonId}}",
+            "description": "Find a completed exercise to test hearts functionality"
+          },
+          "response": []
+        },
+        {
+          "name": "5. Complete an Exercise (If Needed)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Only run if we need to complete an exercise first",
+                  "const needsCompletion = pm.environment.get(\"needsCompletion\");",
+                  "if (!needsCompletion) {",
+                  "    // Skip this request if we already have a completed exercise",
+                  "    postman.setNextRequest(\"6. Submit Wrong Answer on Completed Exercise\");",
+                  "}",
+                  "",
+                  "// Get the exercise details to find the correct answer option",
+                  "const exerciseId = pm.environment.get(\"uncompletedExerciseId\");",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: `${pm.environment.get(\"baseUrl\")}/api/exercises/${exerciseId}`,",
+                  "    method: 'GET',",
+                  "    header: {",
+                  "        'Authorization': `Bearer ${pm.environment.get(\"accessToken\")}`",
+                  "    }",
+                  "}, function (err, res) {",
+                  "    if (err) {",
+                  "        console.error(err);",
+                  "    } else {",
+                  "        const exercise = res.json().data;",
+                  "        ",
+                  "        if (exercise && exercise.options && exercise.options.length > 0) {",
+                  "            // Find the correct option",
+                  "            const correctOption = exercise.options.find(option => option.isCorrect);",
+                  "            ",
+                  "            if (correctOption) {",
+                  "                pm.environment.set(\"correctOptionId\", correctOption.id);",
+                  "                console.log(`Using correct option ID: ${correctOption.id}`);",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Only run if we needed to complete an exercise",
+                  "const needsCompletion = pm.environment.get(\"needsCompletion\");",
+                  "if (needsCompletion) {",
+                  "    pm.test(\"Successfully completed an exercise\", function() {",
+                  "        pm.response.to.have.status(200);",
+                  "        const jsonData = pm.response.json();",
+                  "        pm.expect(jsonData.success).to.be.true;",
+                  "        ",
+                  "        const result = jsonData.data;",
+                  "        pm.expect(result.isCorrect).to.be.true;",
+                  "        ",
+                  "        // Save this as our completed exercise",
+                  "        pm.environment.set(\"completedExerciseId\", pm.environment.get(\"uncompletedExerciseId\"));",
+                  "        pm.environment.set(\"needsCompletion\", false);",
+                  "        console.log(\"Created a completed exercise for testing\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"{{correctOptionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{uncompletedExerciseId}}/check",
+            "description": "Complete an exercise if needed for testing hearts on completed exercises"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Submit Wrong Answer on Completed Exercise",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Wrong answer on completed exercise doesn't decrease hearts\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const result = jsonData.data;",
+                  "    ",
+                  "    // Check for incorrect answer",
+                  "    pm.expect(result.isCorrect).to.be.false;",
+                  "    ",
+                  "    // Check heart information",
+                  "    pm.expect(result).to.have.property('hearts');",
+                  "    pm.expect(result).to.have.property('heartChange');",
+                  "    ",
+                  "    // For wrong answer on completed exercise, should not lose hearts",
+                  "    pm.expect(result.heartChange).to.equal(0);",
+                  "    pm.expect(result.hearts).to.equal(pm.environment.get(\"currentHeartCount\"));",
+                  "    ",
+                  "    console.log(`Heart count unchanged as expected: ${result.hearts}`);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Get the completed exercise details to find an incorrect answer option",
+                  "const exerciseId = pm.environment.get(\"completedExerciseId\");",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: `${pm.environment.get(\"baseUrl\")}/api/exercises/${exerciseId}`,",
+                  "    method: 'GET',",
+                  "    header: {",
+                  "        'Authorization': `Bearer ${pm.environment.get(\"accessToken\")}`",
+                  "    }",
+                  "}, function (err, res) {",
+                  "    if (err) {",
+                  "        console.error(err);",
+                  "    } else {",
+                  "        const exercise = res.json().data;",
+                  "        ",
+                  "        if (exercise && exercise.options && exercise.options.length > 0) {",
+                  "            // Find an incorrect option",
+                  "            const incorrectOption = exercise.options.find(option => !option.isCorrect);",
+                  "            ",
+                  "            if (incorrectOption) {",
+                  "                pm.environment.set(\"incorrectCompletedOptionId\", incorrectOption.id);",
+                  "                console.log(`Using incorrect option ID: ${incorrectOption.id} for completed exercise`);",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"{{incorrectCompletedOptionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{completedExerciseId}}/check",
+            "description": "Submit a wrong answer to a completed exercise, should NOT lose a heart"
+          },
+          "response": []
+        },
+        {
+          "name": "7. Submit Correct Answer on Completed Exercise",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Correct answer on completed exercise increases heart count\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const result = jsonData.data;",
+                  "    ",
+                  "    // Check for correct answer",
+                  "    pm.expect(result.isCorrect).to.be.true;",
+                  "    ",
+                  "    // Check heart information",
+                  "    pm.expect(result).to.have.property('hearts');",
+                  "    pm.expect(result).to.have.property('heartChange');",
+                  "    ",
+                  "    // For correct answer on completed exercise, should gain 1 heart",
+                  "    // Only if current heart count is below maximum of 5",
+                  "    const previousHearts = parseInt(pm.environment.get(\"currentHeartCount\"));",
+                  "    if (previousHearts < 5) {",
+                  "        pm.expect(result.heartChange).to.equal(1);",
+                  "        pm.expect(result.hearts).to.equal(previousHearts + 1);",
+                  "        console.log(`Gained a heart as expected. Hearts: ${result.hearts}`);",
+                  "    } else {",
+                  "        pm.expect(result.hearts).to.equal(5); // Max is still 5",
+                  "        pm.expect(result.heartChange).to.equal(0);",
+                  "        console.log(`Already at max hearts (5), no change as expected`);",
+                  "    }",
+                  "    ",
+                  "    // Update current heart count",
+                  "    pm.environment.set(\"currentHeartCount\", result.hearts);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Get the completed exercise details to find the correct answer option",
+                  "const exerciseId = pm.environment.get(\"completedExerciseId\");",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: `${pm.environment.get(\"baseUrl\")}/api/exercises/${exerciseId}`,",
+                  "    method: 'GET',",
+                  "    header: {",
+                  "        'Authorization': `Bearer ${pm.environment.get(\"accessToken\")}`",
+                  "    }",
+                  "}, function (err, res) {",
+                  "    if (err) {",
+                  "        console.error(err);",
+                  "    } else {",
+                  "        const exercise = res.json().data;",
+                  "        ",
+                  "        if (exercise && exercise.options && exercise.options.length > 0) {",
+                  "            // Find the correct option",
+                  "            const correctOption = exercise.options.find(option => option.isCorrect);",
+                  "            ",
+                  "            if (correctOption) {",
+                  "                pm.environment.set(\"correctCompletedOptionId\", correctOption.id);",
+                  "                console.log(`Using correct option ID: ${correctOption.id} for completed exercise`);",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"{{correctCompletedOptionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{completedExerciseId}}/check",
+            "description": "Submit a correct answer to a completed exercise, should gain a heart (up to max 5)"
+          },
+          "response": []
+        },
+        {
+          "name": "8. Reduce Hearts to Zero",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// This test just verifies we successfully set hearts to zero",
+                  "pm.test(\"Hearts set to zero for testing\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const user = jsonData.data;",
+                  "    pm.expect(user.hearts).to.equal(0);",
+                  "    console.log(\"Successfully set hearts to zero for next test\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hearts\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/users/me",
+            "description": "Set hearts to zero to test zero hearts functionality (admin endpoint or direct DB update in real app)"
+          },
+          "response": []
+        },
+        {
+          "name": "9. Try Exercise with Zero Hearts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cannot attempt new exercise with zero hearts\", function() {",
+                  "    // The API should return a 403 Forbidden or similar status",
+                  "    pm.expect(pm.response.code).to.be.oneOf([403, 400]);",
+                  "    ",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.false;",
+                  "    ",
+                  "    // Should have a message about hearts",
+                  "    pm.expect(jsonData.message).to.include(\"hearts\");",
+                  "    ",
+                  "    console.log(\"Correctly prevented from attempting exercise with zero hearts\");",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{uncompletedExerciseId}}/check",
+            "description": "Try to attempt an uncompleted exercise with zero hearts (should be prevented)"
+          },
+          "response": []
+        },
+        {
+          "name": "10. Try Completed Exercise with Zero Hearts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Can attempt completed exercise even with zero hearts\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    // Should be allowed to attempt the completed exercise",
+                  "    console.log(\"Correctly allowed to attempt completed exercise with zero hearts\");",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Get the completed exercise details to find the correct answer option",
+                  "const exerciseId = pm.environment.get(\"completedExerciseId\");",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: `${pm.environment.get(\"baseUrl\")}/api/exercises/${exerciseId}`,",
+                  "    method: 'GET',",
+                  "    header: {",
+                  "        'Authorization': `Bearer ${pm.environment.get(\"accessToken\")}`",
+                  "    }",
+                  "}, function (err, res) {",
+                  "    if (err) {",
+                  "        console.error(err);",
+                  "    } else {",
+                  "        const exercise = res.json().data;",
+                  "        ",
+                  "        if (exercise && exercise.options && exercise.options.length > 0) {",
+                  "            // Find the correct option",
+                  "            const correctOption = exercise.options.find(option => option.isCorrect);",
+                  "            ",
+                  "            if (correctOption) {",
+                  "                pm.environment.set(\"correctCompletedOptionId\", correctOption.id);",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"{{correctCompletedOptionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{completedExerciseId}}/check",
+            "description": "Try a completed exercise with zero hearts (should be allowed)"
+          },
+          "response": []
+        },
+        {
+          "name": "11. Regain a Heart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Correct answer on completed exercise with zero hearts gains a heart\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const result = jsonData.data;",
+                  "    ",
+                  "    // Check for correct answer",
+                  "    pm.expect(result.isCorrect).to.be.true;",
+                  "    ",
+                  "    // Check heart information",
+                  "    pm.expect(result).to.have.property('hearts');",
+                  "    pm.expect(result).to.have.property('heartChange');",
+                  "    ",
+                  "    // For correct answer on completed exercise, should gain 1 heart",
+                  "    pm.expect(result.heartChange).to.equal(1);",
+                  "    pm.expect(result.hearts).to.equal(1);",
+                  "    ",
+                  "    console.log(`Successfully regained a heart: ${result.hearts}`);",
+                  "    ",
+                  "    // Reset hearts back to 5 for other tests",
+                  "    pm.environment.set(\"resetHearts\", true);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"{{correctCompletedOptionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/exercises/{{completedExerciseId}}/check",
+            "description": "Submit a correct answer to regain a heart when at zero hearts"
+          },
+          "response": []
+        },
+        {
+          "name": "12. Reset Hearts to 5",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Hearts reset to 5 for other tests\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "    ",
+                  "    const user = jsonData.data;",
+                  "    pm.expect(user.hearts).to.equal(5);",
+                  "    console.log(\"Successfully reset hearts to 5\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Only run if we need to reset hearts",
+                  "const resetHearts = pm.environment.get(\"resetHearts\");",
+                  "if (!resetHearts) {",
+                  "    postman.setNextRequest(null); // Skip this request",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hearts\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/users/me",
+            "description": "Reset hearts back to 5 for other tests"
+          },
+          "response": []
+        }
+      ],
+      "description": "Tests for the hearts system - losing/gaining hearts and zero hearts restrictions"
+    },
+  
+
 		{
 			"name": "DEMO USER JOURNEY",
 			"item": [
@@ -2555,3 +3348,7 @@
 		}
 	]
 }
+
+
+
+    

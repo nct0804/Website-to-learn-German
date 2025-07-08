@@ -24,6 +24,7 @@ describe('Courses Controller', () => {
     level: 1,
     xp: 0,
     streak: 0,
+    hearts: 5, // Assuming hearts is a property of the user
     lastLogin: null,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -32,7 +33,8 @@ describe('Courses Controller', () => {
   // Create a mock admin user
   const mockAdminUser = {
     ...mockUser,
-    id: 'admin-123'
+    id: 'admin-123',
+    hearts: 10, // Admin might have more hearts
   };
   
   beforeEach(() => {
