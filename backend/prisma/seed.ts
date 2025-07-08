@@ -27,7 +27,15 @@ async function main() {
   await createExercisesForFirstLesson(lessons[0].id);
   // Create exercises for second lesson
   await createExercisesForSecondLesson(lessons[1].id);
+  // Create exercises for third lesson
+  await createExercisesForThirdLesson(lessons[2].id);
+  // Create exercises for fourth lesson
+  await createExercisesForFourthLesson(lessons[3].id);
+  // Create exercises for fifth lesson
+  await createExercisesForFifthLesson(lessons[4].id);
+  
   // Create pronunciation data
+
   await createPronunciationData();
 
   console.log('Database seeding completed successfully!');
@@ -638,7 +646,329 @@ async function createExercisesForSecondLesson(lessonId: number) {
   console.log('Created 5 diverse exercises for the second lesson.');
 }
 
+async function createExercisesForThirdLesson(lessonId: number) {
+  console.log('Creating exercises for Formal vs Informal Speech lesson...');
+  // Exercise 1: Multiple Choice
+  const exercise1 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'You would like to ask an adult stranger for the time. Which form of "you" would you use in German?',
+      instruction: 'Choose the correct form of address',
+      order: 1,
+      xpReward: 2,
+      timeLimit: 15 // seconds
+    }
+  });
+  // Options for Exercise 1
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise1.id, text: 'Du', isCorrect: false, order: 1 },
+      { exerciseId: exercise1.id, text: 'Sie', isCorrect: true, order: 2 },
+      { exerciseId: exercise1.id, text: 'Ihr', isCorrect: false, order: 3 },
+      { exerciseId: exercise1.id, text: 'Er', isCorrect: false, order: 4 }
+    ]
+  });
+  // Exercise 2: Fill in the Blank
+  const exercise2 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'FILL_IN_BLANK',
+      question: 'A Polite expression used before starting a meal : Guten _____!',
+      instruction: 'Fill in the missing word',
+      order: 2,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 2
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise2.id, text: 'Hunger', isCorrect: true, order: 1 },
+      { exerciseId: exercise2.id, text: 'hunger', isCorrect: false, order: 2 },
+      { exerciseId: exercise2.id, text: 'Apetit', isCorrect: false, order: 3 },
+      { exerciseId: exercise2.id, text: 'apetit', isCorrect: false, order: 4 }
+    ]
+  });
 
+  // Exercise 3: Multiple Choice
+  const exercise3 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'When should you use "Du" instead of "Sie"?',
+      instruction: 'Select the most appropriate situation',
+      order: 3,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 3
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise3.id, text: 'When speaking to a stranger', isCorrect: false, order: 1 },
+      { exerciseId: exercise3.id, text: 'When addressing a friend', isCorrect: true, order: 2 },
+      { exerciseId: exercise3.id, text: 'When speaking to a boss', isCorrect: false, order: 3 },
+      { exerciseId: exercise3.id, text: 'When addressing a group', isCorrect: false, order: 4 }
+    ]
+  });
+  // Exercise 4: Vocabulary Check
+  const exercise4 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you say "See you again" in German?',
+      instruction: '',
+      order: 4,
+      xpReward: 3,
+      timeLimit: 30 // seconds
+    }
+  });
+  // Options for Exercise 4
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise4.id, text: 'Auf Wiedersehen', isCorrect: true, order: 1 },
+      { exerciseId: exercise4.id, text: 'Bis gleich', isCorrect: false, order: 2 },
+      { exerciseId: exercise4.id, text: 'Wir sehen uns', isCorrect: false, order: 3 },
+      { exerciseId: exercise4.id, text: 'Bis dann', isCorrect: false, order: 4 }
+    ]
+  });
+
+  // Exercise 5: Multiple Choice
+  const exercise5 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'What is the informal way to ask "How are you?" in German?',
+      instruction: 'Choose the correct question',
+      order: 5,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 5
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise5.id, text: 'Wie geht es Ihnen?', isCorrect: false, order: 1 },
+      { exerciseId: exercise5.id, text: 'Wie geht\'s dir?', isCorrect: true, order: 2 },
+      { exerciseId: exercise5.id, text: 'Wie heißen Sie?', isCorrect: false, order: 3 },
+      { exerciseId: exercise5.id, text: 'Woher kommen Sie?', isCorrect: false, order: 4 }
+    ]
+  });
+  console.log('Created 5 diverse exercises for the third lesson.');
+}
+
+async function createExercisesForFourthLesson(lessonId: number) {
+  console.log('Creating exercises for Asking Simple Questions lesson...');
+  // Exercise 1: Multiple Choice
+  const exercise1 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'What is the correct way to ask "Where are you from?" in German',
+      instruction: 'Choose the correct question',
+      order: 1,
+      xpReward: 2,
+      timeLimit: 15 // seconds
+    }
+  });
+  // Options for Exercise 1
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise1.id, text: 'Woher kommen Sie?', isCorrect: true, order: 1 },
+      { exerciseId: exercise1.id, text: 'Wo wohnen Sie?', isCorrect: false, order: 2 },
+      { exerciseId: exercise1.id, text: 'Wie heißen Sie?', isCorrect: false, order: 3 },
+      { exerciseId: exercise1.id, text: 'Wie alt sind Sie?', isCorrect: false, order: 4 }
+    ]
+  });
+  // Exercise 2: Fill in the Blank
+  const exercise2 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'FILL_IN_BLANK',
+      question: 'Complete the question: Woher _____ Sie?',
+      instruction: 'Fill in the missing word',
+      order: 2,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 2
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise2.id, text: 'kommen', isCorrect: true, order: 1 },
+    ]
+  });
+  // Exercise 3: Multiple Choice
+  const exercise3 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you ask "What is your job?" in German?',
+      instruction: 'Select the correct question',
+      order: 3,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 3
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise3.id, text: 'Was machen Sie beruflich?', isCorrect: true, order: 1 },
+      { exerciseId: exercise3.id, text: 'Woher kommen Sie ursprünglich?', isCorrect: false, order: 2 },
+      { exerciseId: exercise3.id, text: 'Wie heißen Sie?', isCorrect: false, order: 3 },
+      { exerciseId: exercise3.id, text: 'Wie alt sind Sie?', isCorrect: false, order: 4 }
+    ]
+  });
+  // Exercise 4: Vocabulary Check
+  const exercise4 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you say "Im from Vietnam" in German?',
+      instruction: '',
+      order: 4,
+      xpReward: 3,
+      timeLimit: 30 // seconds
+    }
+  });
+  // Options for Exercise 4
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise4.id, text: 'Ich komme aus Vietnam', isCorrect: true, order: 1 },
+      { exerciseId: exercise4.id, text: 'Ich wohne in Vietnam', isCorrect: false, order: 2 },
+      { exerciseId: exercise4.id, text: 'Ich bin in Vietnam geboren', isCorrect: false, order: 3 }
+    ]
+  });
+  // Exercise 5: Multiple Choice
+  const exercise5 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'What is the correct way to ask "How old are you?" in German?',
+      instruction: 'Choose the correct question',
+      order: 5,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 5
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise5.id, text: 'Wie alt sind Sie?', isCorrect: true, order: 1 },
+      { exerciseId: exercise5.id, text: 'Wie heißen Sie?', isCorrect: false, order: 2 },
+      { exerciseId: exercise5.id, text: 'Woher kommen Sie?', isCorrect: false, order: 3 },
+      { exerciseId: exercise5.id, text: 'Was machen Sie?', isCorrect: false, order: 4 }
+    ]
+  });
+  console.log('Created 5 diverse exercises for the fourth lesson.');
+}
+async function createExercisesForFifthLesson(lessonId: number) {
+  console.log('Creating exercises for Common Everyday Phrases lesson...');
+  // Exercise 1: Multiple Choice
+  const exercise1 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'What does "Guten Appetit" mean?',
+      instruction: 'Choose the correct translation',
+      order: 1,
+      xpReward: 2,
+      timeLimit: 15 // seconds
+    }
+  });
+  // Options for Exercise 1
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise1.id, text: 'Enjoy your meal', isCorrect: true, order: 1 },
+      { exerciseId: exercise1.id, text: 'Goodbye', isCorrect: false, order: 2 },
+      { exerciseId: exercise1.id, text: 'Good morning', isCorrect: false, order: 3 },
+      { exerciseId: exercise1.id, text: 'Thank you', isCorrect: false, order: 4 }
+    ]
+  });
+  // Exercise 2: Fill in the Blank
+  const exercise2 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'FILL_IN_BLANK',
+      question: 'Complete the Article: _____ Morgen!',
+      instruction: 'Fill in the missing word',
+      order: 2,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 2
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise2.id, text: 'Der', isCorrect: true, order: 1 },
+    ]
+  });
+  // Exercise 3: Multiple Choice
+  const exercise3 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you say "Thank you very much" in German?',
+      instruction: 'Select the correct phrase',
+      order: 3,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 3
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise3.id, text: 'Vielen Dank', isCorrect: true, order: 1 },
+      { exerciseId: exercise3.id, text: 'Danke schön', isCorrect: true, order: 2 },
+      { exerciseId: exercise3.id, text: 'Danke sehr', isCorrect: true, order: 3 },
+      { exerciseId: exercise3.id, text: 'Danke vielmals', isCorrect: true, order: 4 }
+    ]
+  });
+  // Exercise 4: Vocabulary Check
+  const exercise4 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'How do you say "Goodbye" in German?',
+      instruction: '',
+      order: 4,
+      xpReward: 3,
+      timeLimit: 30 // seconds
+    }
+  });
+  // Options for Exercise 4
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise4.id, text: 'Auf Wiedersehen', isCorrect: true, order: 1 },
+      { exerciseId: exercise4.id, text: 'Tschüss', isCorrect: true, order: 2 },
+      { exerciseId: exercise4.id, text: 'Bis später', isCorrect: true, order: 3 },
+      { exerciseId: exercise4.id, text: 'Bis bald', isCorrect: true, order: 4 }
+    ]
+  });
+  // Exercise 5: Multiple Choice
+  const exercise5 = await prisma.exercise.create({
+    data: {
+      lessonId: lessonId,
+      type: 'MULTIPLE_CHOICE',
+      question: 'What is the correct way to say "You have a good day" in German?',
+      instruction: 'Choose the correct phrase',
+      order: 5,
+      xpReward: 2,
+      timeLimit: 20 // seconds
+    }
+  });
+  // Options for Exercise 5
+  await prisma.exerciseOption.createMany({
+    data: [
+      { exerciseId: exercise5.id, text: 'Machts gut', isCorrect: true, order: 1 },
+      { exerciseId: exercise5.id, text: 'Schönen Tag noch', isCorrect: true, order: 2 },
+      { exerciseId: exercise5.id, text: 'Ciao', isCorrect: false, order: 3 },
+      { exerciseId: exercise5.id, text: 'Guten Apetit', isCorrect: false, order: 4 }
+    ]
+  });
+  console.log('Created 5 diverse exercises for the fifth lesson.');
+}
 
 /**
  * Creates pronunciation data (sound groups and sounds)
