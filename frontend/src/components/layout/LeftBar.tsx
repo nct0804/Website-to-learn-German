@@ -1,21 +1,20 @@
 import { Link, useLocation } from 'react-router-dom';
-import Home from '../../assets/home.png';
-import Training from '../../assets/training.png';
-import Ranking from '../../assets/ranking-page.png';
-import More from '../../assets/more-page.png';
+
+import MoreIcon from '../../assets/more-2.png';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
-import { faHeadphonesSimple } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLogout } from '@/hooks/useLogOut';
-import VoiceIcon from '../../assets/voice.png';
+import HomeIcon from '../../assets/home-2.png';
+import LeftBarIcon2 from '../../assets/leftbar-2.png';
+import RankingIcon from '../../assets/ranking-2.png';
+import LeftBarIcon5 from '../../assets/leftbar-4.png';
 
 const menuItems = [
-  { to: '/home', icon: Home, label: 'Home' },
-  { to: '/speak', icon: VoiceIcon, label: 'Speak' },
-  { to: '/challenge', icon: Training, label: 'Challenge' },
-  { to: '/ranking', icon: Ranking, label: 'Ranking' },
-  { to: '/pronunciation', icon: faHeadphonesSimple, label: 'Pronunciation' }
+  { to: '/home', icon: HomeIcon, label: 'Home' },
+  { to: '/challenge', icon: LeftBarIcon2, label: 'Challenge' },
+  { to: '/ranking', icon: RankingIcon, label: 'Ranking' },
+  { to: '/pronunciation', icon: LeftBarIcon5, label: 'Pronunciation' }
 ];
 
 export default function LeftBar() {
@@ -37,7 +36,7 @@ export default function LeftBar() {
   }, []);
 
   return (
-    <aside className="h-full flex flex-col justify-between w-30">
+    <aside className="h-full flex flex-col justify-between w-25 bg-gradient-to-b from-[#05315B] via-[#256996] to-[#3B6978] rounded-3xl shadow-lg">
       <div className="flex flex-col items-center gap-3 py-4">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.to;
@@ -47,8 +46,8 @@ export default function LeftBar() {
               to={item.to}
               className={clsx(
                 'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
-                'hover:bg-[#fbb024ae] hover:scale-105 active:scale-95',
-                isActive ? 'bg-[#fbb124] scale-105 shadow-md' : ''
+                'hover:scale-105 active:scale-95',
+                isActive ? 'bg-[#3B6978] scale-105 shadow-md' : ''
               )}
               title={item.label}
             >
@@ -76,14 +75,14 @@ export default function LeftBar() {
           onClick={() => setMenuOpen(!menuOpen)}
           className={clsx(
             'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
-            'hover:bg-[#fbb024ae] hover:scale-105 active:scale-95',
-            menuOpen ? 'bg-[#fbb124] scale-105 shadow-md' : ''
+            ' hover:scale-105 active:scale-95',
+            menuOpen ? 'bg-[#3B6978] scale-105 shadow-md' : ''
           )}
           aria-haspopup="true"
           aria-expanded={menuOpen}
         >
           <div className="w-8 h-8 flex items-center justify-center">
-            <img src={More} alt="More options" className="w-full h-full object-contain" />
+            <img src={MoreIcon} alt="More options" className="w-full h-full object-contain" />
           </div>
         </button>
 

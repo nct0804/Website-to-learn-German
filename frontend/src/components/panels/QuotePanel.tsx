@@ -63,7 +63,8 @@ export default function CompactQuotePanel() {
     useEffect(() => { getRandomQuote() }, [])
 
     return (
-        <div className="max-w-sm mx-auto">
+        <div className="mx-auto p-5 border-none bg-white rounded-2xl shadow-lg">
+            <h1 className="text-xl font-semibold mb-4">Daily Quote</h1>
             <div className="bg-gradient-to-br from-amber-200 via-orange-200 to-yellow-200 rounded-lg p-3 shadow-xl border-2 border-orange-300/80 relative overflow-hidden backdrop-blur-sm">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-orange-400/60 via-amber-400/40 to-transparent rounded-full -mr-10 -mt-10" />
                 <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-yellow-400/50 via-orange-400/30 to-transparent rounded-full -ml-8 -mb-8" />

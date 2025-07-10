@@ -25,7 +25,8 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
     .map(lesson => lesson.title);
 
   return (
-    <Card className={`mb-6 p-0 relative shadow-md`}>
+    <Card className={`mb-6 p-0 relative border-none shadow-sm 
+    ${!isLocked ? 'bg-[#25699613]' : ''}`}>
       
       <CardContent className="flex flex-col gap-2 p-8 relative z-20">
         {/* Top row: icon + content */}
@@ -34,12 +35,12 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
             <img
               src={icon}
               alt={`${course.title} icon`}
-              className="w-20 h-20 rounded-xl bg-[#FFFBF3] p-2"
+              className="w-24 h-24 rounded-xl bg-[#FFFBF3] p-2"
             />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-xl font-bold text-[#2f6879]">{course.title}</CardTitle>
-            <CardDescription className="text-sm text-black">{course.description}</CardDescription>
+            <CardTitle className="text-lg font-bold">{course.title}</CardTitle>
+            <CardDescription className="text-base text-black">{course.description}</CardDescription>
             
             {/* Lesson hints section */}
             {lessonTitles.length > 0 && (
@@ -49,7 +50,7 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
                   {lessonTitles.map((title, index) => (
                     <span
                       key={index}
-                      className="inline-block px-2 py-1 text-xs bg-blue-50 text-[#408297] rounded-md border border-blue-100"
+                      className="inline-block px-2 py-1 text-xs bg-[#FBFBFC] text-[#408297] rounded-md border border-blue-100"
                     >
                       {title}
                     </span>
@@ -84,7 +85,7 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
               : isCompleted
                 ? "bg-[#408297] hover:bg-[#408297] text-white"
-                : "bg-[#FDBA17] hover:bg-[#ffd66e] text-white"
+                : "bg-[#256996] hover:bg-[#ffd66e] text-white"
             }`}
             variant="default"
             size="lg"

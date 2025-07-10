@@ -5,7 +5,7 @@ import HeartIcon from '../../assets/heart.png';
 
 export default function ProfileAndStats({ level, streak }: { level: number, streak: number}) {
     return (
-      <div className="flex flex-col w-[25%] min-w-[250px] p-6 justify-end">
+      <div className="flex flex-col w-[25%] min-w-[250px] p-6 justify-end ">
         <div className="flex items-center justify-center">
           {/* Stats */}
           <div className="flex items-center gap-2 border-[#FFF4E1] pr-6">

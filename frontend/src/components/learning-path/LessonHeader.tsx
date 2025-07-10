@@ -21,7 +21,7 @@ export default function LessonHeader({
             text-white font-bold rounded-2xl px-8 py-8 
              w-full flex items-center 
             sticky top-0 z-30 shadow-lg
-            ${isLocked ? 'bg-[#b6b6b6]' : 'bg-[#fbb124]'}`}>
+            ${isLocked ? 'bg-[#b6b6b6]' : 'bg-[#256996]'}`}>
                 {/* Left arrow icon */}
                 {!isLocked ? (
                     <button

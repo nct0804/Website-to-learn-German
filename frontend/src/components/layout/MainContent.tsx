@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import LessonHeader from "../learning-path/LessonHeader";
 import VerticalStep from "../learning-path/VerticalStep";
 import CourseCard from "../learning-path/CourseCard"
@@ -58,13 +58,13 @@ export default function MainContent() {
   const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto mb-5">
+    <div className="flex-1 flex justify-center overflow-auto max-w-200 mx-auto bg-white rounded-3xl px-8 py-5 shadow-lg">
       <div className="w-full">
         {!current ? (
           <>
-            <div className="mb-8 text-center">
-              <h1 className="text-3xl font-bold text-[#2f6879] mb-2">Explore Your German Learning Path</h1>
-              <p className="text-lg text-black max-w-3xl mx-auto italic">
+            <div className="mb-8 flex flex-col items-center">
+              <h1 className="text-3xl font-bold text-black mb-2">Explore Your German Learning Path</h1>
+              <p className="text-lg text-black max-w-3xl">
                 Choose from our expertly designed courses to master German step by step. Each course is crafted just to help you as a beginner to learn German with confidence and fun!
               </p>
             </div>

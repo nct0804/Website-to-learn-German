@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen px-8 py-4 bg-[#FBFBFC]">
       <TopBar />
       <div className="flex flex-1 overflow-hidden h-full">
         <LeftBar/>
