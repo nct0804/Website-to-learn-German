@@ -58,7 +58,7 @@ export default function MainContent() {
   const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto max-w-200 mx-auto bg-white rounded-3xl px-8 py-5 shadow-lg">
+    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white rounded-3xl px-8 py-5 shadow-lg">
       <div className="w-full">
         {!current ? (
           <>
