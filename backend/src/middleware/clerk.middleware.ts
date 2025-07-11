@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { clerkClient } from "@clerk/clerk-sdk-node";
+import type { User } from "@clerk/clerk-sdk-node";
 
 export interface ClerkRequest extends Request {
   clerkUserId?: string;
-  clerkUser?: any;
+  clerkUser?: User;
 }
 
 export const verifyClerkToken = async (
