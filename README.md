@@ -112,5 +112,46 @@ To stop the app when running it locally (both backend and frontend):
 Press `Ctrl + C` inside running terminal to stop the backend and frontend server.
 
 ## API Documentation
+We don't separate controller with separate permissions/roles
 
 ### Endpoints
+
+#### Authentification
+
+#### User
+
+#### Courses
+-   **GET /api/courses**: Get all courses
+-   **GET /api/courses/:id**: Get course details by ID
+-   **GET /api/courses/:id/progress**: Get user's progress in a specific course (Only for Postman testing - admin)
+-   **GET /api/courses/progress/all**: Get user's progress across all courses
+
+#### Modules
+-   **GET /api/modules**: Get all modules
+-   **GET /api/modules/:id**: Get module details by ID
+-   **GET /api/modules/course/:courseId**: Get modules for a specific course (Only for Postman testing - admin)
+-   **GET /api/modules/course/:courseId/progress**: Get user's progress in modules
+
+#### Lessons
+
+-   GET /api/lesson: Get all lessons (optional moduleId filter)
+-   GET /api/lesson/:id: Get lesson details by ID
+-   GET /api/lesson/module/:moduleId: Get lessons for a specific module (Only for Postman testing - admin)
+-   GET /api/lesson/module/:moduleId/progress: Get user's progress in lessons
+
+#### Exercises
+
+-   GET /api/exercises: Get all exercises (optional lessonId filter)
+-   GET /api/exercises/:id: Get exercise details
+-   GET /api/exercises/lesson/:lessonId: Get exercises for specific lesson (Only for Postman testing - admin)
+-   GET /api/exercises/status/lesson/:lessonId: Get exercise status with user progress
+-   POST /api/exercises/:id/check: Submit answer and check correctness, check logical hearts and streaks functions
+
+#### Exercise Options
+
+-   GET /api/exercise-options/exercise/:exerciseId: Get options for an exercise
+
+#### Pronunciation & Vocabulary
+-   GET /api/vocabulary/groups: Get all sound groups
+-   GET /api/vocabulary/groups/:id: Get sound group by ID
+-   GET /api/vocabulary/sounds/:id: Get sound by ID
