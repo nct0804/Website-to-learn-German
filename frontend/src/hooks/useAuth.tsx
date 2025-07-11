@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect
 } from 'react';
+import { useUser, useAuth as useClerkAuth } from '@clerk/clerk-react';
 import type { ReactNode } from 'react';
 
 interface User {
@@ -27,32 +28,83 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>(null!);
+const AuthContext = createContext<AuthContextType & { refreshUser: () => Promise<void> }>(null!);
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setL] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  // Clerk Integration
+  const { user: clerkUser, isLoaded, isSignedIn } = useUser();
+  const { signOut, getToken } = useClerkAuth();
+
+  // Sync Clerk user with backend
+  async function syncClerkUser() {
+    if (!clerkUser || !isSignedIn) {
+      return;
+    }
+
+    try {
+      const token = await getToken();
+      const response = await fetch(`${API_BASE_URL}/api/users/sync-clerk`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          clerkUserId: clerkUser.id,
+          email: clerkUser.emailAddresses[0]?.emailAddress,
+          firstName: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+          username: clerkUser.username || `user_${clerkUser.id.slice(-8)}`
+        })
+      });
+
+      if (response.ok) {
+        const { data } = await response.json();
+        setUser(data.user);
+      }
+    } catch (error) {
+      console.error('Error syncing Clerk user:', error);
+    }
+  }
+
+  async function refreshUser() {
+    setLoading(true);
+    try {
+      const r = await fetch(`${API_BASE_URL}/api/users/me`, {
+        credentials: "include",
+      });
+      if (r.ok) {
+        const { data } = await r.json();
+        setUser(data.user);
+      }
+    } catch (error) {
+      console.error('Refresh user error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch("http://localhost:3000/api/users/me", {
-          credentials: "include",
-        });
-        if (r.ok) {
-          const { data } = await r.json();
-          setUser(data.user);
-        }
-      } finally {
-        setL(false);
+    if (isLoaded) {
+      if (isSignedIn && clerkUser) {
+        setLoading(true);
+        syncClerkUser().finally(() => setLoading(false));
+      } else {
+        refreshUser();
       }
-    })();
-  }, []);
+    }
+  }, [isLoaded, isSignedIn, clerkUser?.id]);
 
   async function login({ email, password }: { email: string; password: string }) {
     setL(true);
     try {
-      const r = await fetch("http://localhost:3000/api/users/login", {
+      const r = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -67,15 +119,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function logout() {
-    await fetch("http://localhost:3000/api/users/logout", {
-      method: "POST",
-      credentials: "include",
-    }).catch(() => { });
-    setUser(null);
+    try {
+      if (isSignedIn) {
+        await signOut();
+      }
+
+      await fetch(`${API_BASE_URL}/api/users/logout`, {
+        method: "POST",
+        credentials: "include",
+      }).catch(() => { });
+
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{
+      user,
+      loading: loading || !isLoaded,
+      login,
+      loginSocial,
+      logout,
+      refreshUser
+    }}>
       {children}
     </AuthContext.Provider>
   );

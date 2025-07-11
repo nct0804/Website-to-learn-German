@@ -1,91 +1,36 @@
 import React, { useState } from 'react';
-
-declare global {
-  interface Window {
-    google?: {
-      accounts: {
-        oauth2: {
-          initTokenClient: (config: any) => any;
-        };
-      };
-    };
-    FB?: {
-      init: (config: any) => void;
-      login: (callback: (response: any) => void, options?: any) => void;
-    };
-    AppleID?: {
-      auth: {
-        signIn: () => Promise<any>;
-      };
-    };
-  }
-}
+import { useSignIn, useSignUp } from '@clerk/clerk-react';
 
 export default function SocialLoginButtons() {
+  const { signIn, isLoaded: signInLoaded } = useSignIn();
+  const { signUp, isLoaded: signUpLoaded } = useSignUp();
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async (provider: 'oauth_google' | 'oauth_facebook') => {
+    if (!signInLoaded || !signUpLoaded) {
+      setError('Authentication not ready. Please try again.');
+      return;
+    }
+
     try {
-      setLoading('google');
+      setLoading(provider);
       setError(null);
-      
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-      if (!clientId || clientId === 'your-google-client-id') {
-        setError('Google Client ID not configured. Please check your .env file.');
-        return;
-      }
-      
-      // For now, just show a message
-      setError('Google login clicked! Please configure your Google Client ID.');
+
+      await signIn.authenticateWithRedirect({
+        strategy: provider,
+        redirectUrl: '/auth/callback',
+        redirectUrlComplete: '/home'
+      });
     } catch (error: any) {
-      console.error('Google login error:', error);
-      setError(error.message || 'Google login failed');
-    } finally {
+      console.error(`${provider} login error:`, error);
+      setError(error.message || `${provider} login failed`);
       setLoading(null);
     }
   };
 
-  const handleFacebookLogin = async () => {
-    try {
-      setLoading('facebook');
-      setError(null);
-      
-      const appId = import.meta.env.VITE_FACEBOOK_APP_ID;
-      if (!appId || appId === 'your-facebook-app-id') {
-        setError('Facebook App ID not configured. Please check your .env file.');
-        return;
-      }
-      
-      // For now, just show a message
-      setError('Facebook login clicked! Please configure your Facebook App ID.');
-    } catch (error: any) {
-      console.error('Facebook login error:', error);
-      setError(error.message || 'Facebook login failed');
-    } finally {
-      setLoading(null);
-    }
-  };
-
-  const handleAppleLogin = async () => {
-    try {
-      setLoading('apple');
-      setError(null);
-      
-      const clientId = import.meta.env.VITE_APPLE_CLIENT_ID;
-      if (!clientId || clientId === 'your-apple-client-id') {
-        setError('Apple Client ID not configured. Please check your .env file.');
-        return;
-      }
-      
-      setError('Apple login clicked! Please configure your Apple Client ID.');
-    } catch (error: any) {
-      console.error('Apple login error:', error);
-      setError(error.message || 'Apple login failed');
-    } finally {
-      setLoading(null);
-    }
-  };
+  const handleGoogleLogin = () => handleSocialLogin('oauth_google');
+  const handleFacebookLogin = () => handleSocialLogin('oauth_facebook');
 
   return (
     <div className="mt-4">
@@ -94,57 +39,42 @@ export default function SocialLoginButtons() {
           {error}
         </div>
       )}
-      
+
       <div className="text-center text-gray-500 text-sm mb-2">Or continue with</div>
       <div className="flex flex-row items-center justify-center gap-4">
-        <button 
+        <button
           type="button"
           onClick={handleGoogleLogin}
-          disabled={!!loading}
-          className={`p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition ${
-            loading === 'google' ? 'opacity-60 cursor-not-allowed' : ''
-          }`}
-          aria-label="Sign in with Google"
+          disabled={loading === 'oauth_google' || !signInLoaded}
+          className="flex items-center justify-center w-10 h-10 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <img 
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" 
-            alt="Google" 
-            className="w-6 h-6" 
-          />
+          {loading === 'oauth_google' ? (
+            <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+          )}
         </button>
-        
-        <button 
-          type="button" 
+
+        <button
+          type="button"
           onClick={handleFacebookLogin}
-          disabled={!!loading}
-          className={`p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition ${
-            loading === 'facebook' ? 'opacity-60 cursor-not-allowed' : ''
-          }`}
-          aria-label="Sign in with Facebook"
+          disabled={loading === 'oauth_facebook' || !signInLoaded}
+          className="flex items-center justify-center w-10 h-10 bg-[#1877F2] rounded-full hover:bg-[#166FE5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <img 
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" 
-            alt="Facebook" 
-            className="w-6 h-6" 
-          />
-        </button>
-        
-        <button 
-          type="button" 
-          onClick={handleAppleLogin}
-          disabled={!!loading}
-          className={`p-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition ${
-            loading === 'apple' ? 'opacity-60 cursor-not-allowed' : ''
-          }`}
-          aria-label="Sign in with Apple"
-        >
-          <img 
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" 
-            alt="Apple" 
-            className="w-6 h-6" 
-          />
+          {loading === 'oauth_facebook' ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
+          )}
         </button>
       </div>
     </div>
   );
-} 
+}
