@@ -154,3 +154,100 @@ Press `Ctrl + C` inside running terminal to stop the backend and frontend server
 -   **GET /api/vocabulary/groups**: Get all sound groups
 -   **GET /api/vocabulary/groups/:id**: Get sound group by ID
 -   **GET /api/vocabulary/sounds/:id**: Get sound by ID
+
+### Data Models
+
+#### User
+-   `id`: string,            
+-   `email`: string,         
+-   `username`: string,      
+-   `password`: string,      
+-   `firstName`: string?,    
+-   `lastName`: string?,     
+-   `level`: number,         **Current level (default: 1)**
+-   `xp`: number,             **Xp points (default: 0)**
+-   `streak`: number,         **Consecutive correct answers (default: 0)**
+-   `hearts`: number,         **Available attempts (default: 5)**
+-   `lastLogin`: DateTime?,  
+-   `createdAt`: DateTime,   
+-   `updatedAt`: DateTime    
+
+#### Course
+-   `id`: number,          
+-   `title`: string,         **Course title (e.g., "German A1.1")**
+-   `description`: string?,  
+-   `imageSrc`: string,    
+-   `level`: LanguageLevel,   **A1_1, A1_2, A2_1, A2_2**
+-   `order`: number,         **Display order**
+-   `isActive`: boolean,     **Course availability**
+-   `createdAt`: DateTime    
+
+
+#### Module
+-   ``id``: number,            
+-   ``courseId``: number,      
+-   ``title``: string,         
+-   ``description``: string?,  **Optional**
+-   ``order``: number,         **Display order**
+-   ``requiredXP``: number,    **XP required to unlock (default: 0)**
+-   ``xpReward``: number,      **XP gained on completion**
+-   ``estimatedTime``: number?, 
+-   ``isLocked``: boolean,      **Lock status (default: false)**
+-   ``createdAt``: DateTime   
+
+#### Lesson
+-   `id`: number,            
+-   `moduleId`: number,      
+-   `title`: string,          **Lesson title**
+-   `description`: string?,   **Optional** 
+-   `order`: number,         
+-   `xpReward`: number,      ** XP gained on completion**
+-   `estimatedTime`: number?, 
+-   `createdAt`: DateTime
+
+#### Exercise
+-   `id`: number,            
+-   `lessonId`: number,      
+-   `type`: ExerciseType,     **MULTIPLE_CHOICE, FILL_IN_BLANK, etc.**
+-   `question`: string,       **Exercise question**
+-   `instruction`: string?,  **Optional**
+-   `order`: number,         
+-   `xpReward`: number,       **XP gained **
+-   `timeLimit`: number?,    
+-   `createdAt`: DateTime    
+
+#### ExerciseOption
+-   `id`: number,            
+-   `exerciseId`: number,    
+-   `text`: string,          
+-   `isCorrect`: boolean,     **Whether this is a correct answer (True/Flase)**
+-   `imageSrc`: string?,      **Optional image**
+-   `audioSrc`: string?,      **Optional audio**
+-   `order`: number?  
+
+#### Pronouciation
+-   `id`: number,            
+-   `symbol`: string,         **Sound symbol (e.g., "ö", "ß")**
+-   `exampleWord`: string,   **Example word using this sound**
+-   `audioSrc`: string,       **Audio pronunciation URL**
+-   `type`: SoundType,        **VOWEL, CONSONANT, DIPHTHONG, UMLAUT**
+-   `createdAt`: DateTime
+
+#### ExerciseProgress
+-   `id`: number,            
+-   `userId`: string,        
+-   `exerciseId`: number?,   
+-   `completed`: boolean,     **Completion status**
+-   `completedAt`: DateTime? 
+
+#### UserProgress
+-   `id`: string,            
+-   `userId`: string,        
+-   `lessonId`: string,      
+-   `exerciseId`: string?,   
+-   `completed`: boolean,     **Completion status**
+-   `score`: number?,        **(replaced by XP)**
+-   `attempts`: number,       **Number of attempts**
+-   `completedAt`: DateTime?, **Completion timestamp**
+-   `createdAt`: DateTime,   
+-   `updatedAt`: DateTime    
