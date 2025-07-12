@@ -25,10 +25,9 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
     .map(lesson => lesson.title);
 
   return (
-    <Card className={`mb-6 p-0 relative border-none shadow-sm 
-    ${!isLocked ? 'bg-[#25699613]' : ''}`}>
+    <Card className={`relative border-none shadow-sm`}>
       
-      <CardContent className="flex flex-col gap-2 p-8 relative z-20">
+      <CardContent className="flex flex-col gap-2 py-8 relative z-20">
         {/* Top row: icon + content */}
         <div className="flex flex-row items-center gap-6 w-full ">
           <div className="flex-shrink-0 flex flex-col items-center justify-center w-24">
