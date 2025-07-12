@@ -21,7 +21,7 @@ export default function ProgressBar() {
     const percent = Math.min((xpInLevel / xpNeeded) * 100, 100);
 
     return (
-        <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto -translate-x-12">
+        <div className="flex flex-col flex-1 w-full max-w-[300px] mx-auto z-10">
             {/* Bar */}
             <div className="h-4 w-full bg-gray-200 rounded-full mb-1 overflow-hidden relative">
                 <div 

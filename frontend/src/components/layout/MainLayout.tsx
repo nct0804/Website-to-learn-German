@@ -9,7 +9,9 @@ export default function MainLayout() {
       <TopBar />
       <div className="flex flex-1 overflow-hidden h-full">
         <LeftBar/>
-        <Outlet />
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <Outlet />
+        </div>
         <RightBar />
       </div>
     </div>
