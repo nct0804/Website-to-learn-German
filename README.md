@@ -114,3 +114,140 @@ Press `Ctrl + C` inside running terminal to stop the backend and frontend server
 ## API Documentation
 
 ### Endpoints
+
+#### Authentification
+
+#### User
+
+#### Courses
+-   **GET /api/courses**: Get all courses
+-   **GET /api/courses/:id**: Get course details by ID
+-   **GET /api/courses/:id/progress**: Get user's progress in a specific course (Only for Postman testing - admin)
+-   **GET /api/courses/progress/all**: Get user's progress across all courses
+
+#### Modules
+-   **GET /api/modules**: Get all modules
+-   **GET /api/modules/:id**: Get module details by ID
+-   **GET /api/modules/course/:courseId**: Get modules for a specific course (Only for Postman testing - admin)
+-   **GET /api/modules/course/:courseId/progress**: Get user's progress in modules
+
+#### Lessons
+
+-   **GET /api/lesson**: Get all lessons (optional moduleId filter)
+-   **GET /api/lesson/:id**: Get lesson details by ID
+-   **GET /api/lesson/module/:moduleId**: Get lessons for a specific module (Only for Postman testing - admin)
+-   **GET /api/lesson/module/:moduleId/progress**: Get user's progress in lessons
+
+#### Exercises
+
+-   **GET /api/exercises**: Get all exercises (optional lessonId filter)
+-   **GET /api/exercises/:id**: Get exercise details
+-   **GET /api/exercises/lesson/:lessonId**: Get exercises for specific lesson (Only for Postman testing - admin)
+-   **GET /api/exercises/status/lesson/:lessonId**: Get exercise status with user progress
+-   **POST /api/exercises/:id/check**: Submit answer and check correctness, check logical hearts and streaks functions
+
+#### Exercise Options
+
+-   **GET /api/exercise-options/exercise/:exerciseId**: Get options for an exercise
+
+#### Pronunciation & Vocabulary
+-   **GET /api/vocabulary/groups**: Get all sound groups
+-   **GET /api/vocabulary/groups/:id**: Get sound group by ID
+-   **GET /api/vocabulary/sounds/:id**: Get sound by ID
+
+### Data Models
+
+#### User
+-   `id`: string,            
+-   `email`: string,         
+-   `username`: string,      
+-   `password`: string,      
+-   `firstName`: string?,    
+-   `lastName`: string?,     
+-   `level`: number,         **Current level (default: 1)**
+-   `xp`: number,             **Xp points (default: 0)**
+-   `streak`: number,         **Consecutive correct answers (default: 0)**
+-   `hearts`: number,         **Available attempts (default: 5)**
+-   `lastLogin`: DateTime?,  
+-   `createdAt`: DateTime,   
+-   `updatedAt`: DateTime    
+
+#### Course
+-   `id`: number,          
+-   `title`: string,         **Course title (e.g., "German A1.1")**
+-   `description`: string?,  
+-   `imageSrc`: string,    
+-   `level`: LanguageLevel,   **A1_1, A1_2, A2_1, A2_2**
+-   `order`: number,         **Display order**
+-   `isActive`: boolean,     **Course availability**
+-   `createdAt`: DateTime    
+
+
+#### Module
+-   ``id``: number,            
+-   ``courseId``: number,      
+-   ``title``: string,         
+-   ``description``: string?,  **Optional**
+-   ``order``: number,         **Display order**
+-   ``requiredXP``: number,    **XP required to unlock (default: 0)**
+-   ``xpReward``: number,      **XP gained on completion**
+-   ``estimatedTime``: number?, 
+-   ``isLocked``: boolean,      **Lock status (default: false)**
+-   ``createdAt``: DateTime   
+
+#### Lesson
+-   `id`: number,            
+-   `moduleId`: number,      
+-   `title`: string,          **Lesson title**
+-   `description`: string?,   **Optional** 
+-   `order`: number,         
+-   `xpReward`: number,      ** XP gained on completion**
+-   `estimatedTime`: number?, 
+-   `createdAt`: DateTime
+
+#### Exercise
+-   `id`: number,            
+-   `lessonId`: number,      
+-   `type`: ExerciseType,     **MULTIPLE_CHOICE, FILL_IN_BLANK, etc.**
+-   `question`: string,       **Exercise question**
+-   `instruction`: string?,  **Optional**
+-   `order`: number,         
+-   `xpReward`: number,       **XP gained **
+-   `timeLimit`: number?,    
+-   `createdAt`: DateTime    
+
+#### ExerciseOption
+-   `id`: number,            
+-   `exerciseId`: number,    
+-   `text`: string,          
+-   `isCorrect`: boolean,     **Whether this is a correct answer (True/Flase)**
+-   `imageSrc`: string?,      **Optional image**
+-   `audioSrc`: string?,      **Optional audio**
+-   `order`: number?  
+
+#### Pronouciation
+-   `id`: number,            
+-   `symbol`: string,         **Sound symbol (e.g., "ö", "ß")**
+-   `exampleWord`: string,   **Example word using this sound**
+-   `audioSrc`: string,       **Audio pronunciation URL**
+-   `type`: SoundType,        **VOWEL, CONSONANT, DIPHTHONG, UMLAUT**
+-   `createdAt`: DateTime
+
+#### ExerciseProgress
+-   `id`: number,            
+-   `userId`: string,        
+-   `exerciseId`: number?,   
+-   `completed`: boolean,     **Completion status**
+-   `completedAt`: DateTime? 
+
+#### UserProgress
+-   `id`: string,            
+-   `userId`: string,        
+-   `lessonId`: string,      
+-   `exerciseId`: string?,   
+-   `completed`: boolean,     **Completion status**
+-   `score`: number?,        **(replaced by XP)**
+-   `attempts`: number,       **Number of attempts**
+-   `completedAt`: DateTime?, **Completion timestamp**
+-   `createdAt`: DateTime,   
+-   `updatedAt`: DateTime    
