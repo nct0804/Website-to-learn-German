@@ -25,8 +25,10 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
     .map(lesson => lesson.title);
 
   return (
-    <Card className={`relative border-none shadow-sm`}>
-      
+
+    <Card className={`p-0 relative border-none shadow-sm transition-colors duration-300
+    ${!isLocked ? '  dark:bg-gray-700/50' : 'dark:bg-gray-800'}`}>
+
       <CardContent className="flex flex-col gap-2 py-8 relative z-20">
         {/* Top row: icon + content */}
         <div className="flex flex-row items-center gap-6 w-full ">
@@ -34,28 +36,28 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
             <img
               src={icon}
               alt={`${course.title} icon`}
-              className="w-24 h-24 rounded-xl bg-[#FFFBF3] p-2"
+              className="w-24 h-24 rounded-xl bg-[#FFFBF3] dark:bg-gray-600 p-2 transition-colors duration-300"
             />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg font-bold">{course.title}</CardTitle>
-            <CardDescription className="text-base text-black">{course.description}</CardDescription>
+            <CardTitle className="text-lg font-bold dark:text-white transition-colors duration-300">{course.title}</CardTitle>
+            <CardDescription className="text-base text-black dark:text-gray-300 transition-colors duration-300">{course.description}</CardDescription>
             
             {/* Lesson hints section */}
             {lessonTitles.length > 0 && (
               <div className="mt-3">
-                <p className="text-xs font-medium mb-2">You'll learn:</p>
+                <p className="text-xs font-medium mb-2 dark:text-gray-300 transition-colors duration-300">You'll learn:</p>
                 <div className="flex flex-wrap gap-1">
                   {lessonTitles.map((title, index) => (
                     <span
                       key={index}
-                      className="inline-block px-2 py-1 text-xs bg-[#FBFBFC] text-[#408297] rounded-md border border-blue-100"
+                      className="inline-block px-2 py-1 text-xs bg-[#FBFBFC] dark:bg-gray-600 text-[#408297] dark:text-blue-400 rounded-md border border-blue-100 dark:border-gray-500 transition-colors duration-300"
                     >
                       {title}
                     </span>
                   ))}
                   {course.totalLessons > number && (
-                    <span className="inline-block px-2 py-1 text-xs bg-white text-[#408297] rounded-md">
+                    <span className="inline-block px-2 py-1 text-xs bg-white dark:bg-gray-600 text-[#408297] dark:text-blue-400 rounded-md transition-colors duration-300">
                       +{course.totalLessons - number} more
                     </span>
                   )}
@@ -63,13 +65,13 @@ export default function CourseCard({ course, icon, onClick }: CourseCardProps) {
               </div>
             )}
             
-            <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="mt-3 h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden transition-colors duration-300">
               <div
                 className="h-full bg-[#FDBA17] transition-all"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <div className="text-xs text-gray-600 mt-1">
+            <div className="text-xs text-gray-600 dark:text-gray-400 mt-1 transition-colors duration-300">
               {progressPercent}%
             </div>
           </div>

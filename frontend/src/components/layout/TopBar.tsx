@@ -8,7 +8,8 @@ export default function TopBar() {
   const level = user?.level ?? 1;
   const streak = user?.streak ?? 0;
   return (
-    <header className="w-full flex items-center justify-between z-20 mb-5">
+
+    <header className="w-full flex items-center justify-between z-20 dark:text-white transition-colors duration-300">
       <Logo />
       {/* <ProgressBar /> */}
       <ProfileAndStats level={level} streak={streak} />

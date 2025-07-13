@@ -106,11 +106,11 @@ export default function MainContent() {
       {/* Hero Section: only show when no course is selected */}
       {!current && (
         <div className="w-full mb-8">
-          <div className="relative bg-gradient-to-r from-[#05315B] via-[#256996] to-[#3B6978] rounded-3xl shadow-lg px-8 py-8 flex flex-col md:flex-row items-center md:items-center text-center md:text-left gap-8 overflow-hidden">
+          <div className="relative bg-gradient-to-r from-[#ffa600] via-[#ffa600] to-[#FFB124] rounded-3xl shadow-lg px-8 py-8 flex flex-col md:flex-row items-center md:items-center text-center md:text-left gap-8 overflow-hidden">
             <div className="flex flex-col items-center justify-center md:items-start md:justify-start flex-1 z-10">
               {/* <img src={Course1Icon} alt="Learning Path" className="scale-130 mb-4" /> */}
               <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2 drop-shadow">Your Learning Path</h1>
-              <p className="text-lg text-blue-100 max-w-2xl mx-auto mb-2">Advance step by step through expertly designed German courses. Unlock new skills, earn XP, and celebrate your progress!</p>
+              <p className="text-lg text-white max-w-2xl mx-auto mb-2">Advance step by step through expertly designed German courses. Unlock new skills, earn XP, and celebrate your progress!</p>
             </div>
             {/* Circle Progress */}
             <div className="flex flex-col items-center justify-center z-10">
@@ -135,7 +135,7 @@ export default function MainContent() {
           </div>
         </div>
       )}
-      <div className="w-full rounded-3xl px-8 py-8 shadow-lg">
+      <div className="w-full rounded-3xl px-8 py-8 shadow-lg dark:bg-gray-800 transition-colors duration-300">
         {!current ? (
           <>
             
