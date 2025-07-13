@@ -58,13 +58,13 @@ export default function MainContent() {
   const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white rounded-3xl px-8 py-5 shadow-lg">
+    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-3xl px-8 py-5 shadow-lg transition-colors duration-300">
       <div className="w-full">
         {!current ? (
           <>
             <div className="mb-8 flex flex-col items-center">
-              <h1 className="text-3xl font-bold text-black mb-2">Explore Your German Learning Path</h1>
-              <p className="text-lg text-black max-w-3xl">
+              <h1 className="text-3xl font-bold text-black dark:text-white mb-2 transition-colors duration-300">Explore Your German Learning Path</h1>
+              <p className="text-lg text-black dark:text-gray-300 max-w-3xl transition-colors duration-300">
                 Choose from our expertly designed courses to master German step by step. Each course is crafted just to help you as a beginner to learn German with confidence and fun!
               </p>
             </div>

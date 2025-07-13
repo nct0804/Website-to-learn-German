@@ -63,14 +63,14 @@ export default function CompactQuotePanel() {
     useEffect(() => { getRandomQuote() }, [])
 
     return (
-        <div className="mx-auto p-5 border-none bg-white rounded-2xl shadow-lg">
-            <h1 className="text-xl font-semibold mb-4">Daily Quote</h1>
+        <div className="mx-auto p-5 border-none bg-white dark:bg-gray-800 rounded-2xl shadow-lg transition-colors duration-300">
+            <h1 className="text-xl font-semibold mb-4 dark:text-white transition-colors duration-300">Daily Quote</h1>
             <div className="bg-gradient-to-br from-amber-200 via-orange-200 to-yellow-200 rounded-lg p-3 shadow-xl border-2 border-orange-300/80 relative overflow-hidden backdrop-blur-sm">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-orange-400/60 via-amber-400/40 to-transparent rounded-full -mr-10 -mt-10" />
                 <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-yellow-400/50 via-orange-400/30 to-transparent rounded-full -ml-8 -mb-8" />
 
                 <div className="flex items-center justify-between mb-2 relative z-10">
-                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold border-2 ${difficultyColors[quote.difficulty]} shadow-lg backdrop-blur-sm`}>{quote.difficulty}</span>
+                    <span className={`px-2 py-1 rounded-full text-[15px] font-bold border-2 ${difficultyColors[quote.difficulty]} shadow-lg backdrop-blur-sm`}>{quote.difficulty}</span>
                     <div className="flex space-x-1">
                         <button 
                             onClick={speakQuote} 
@@ -94,7 +94,7 @@ export default function CompactQuotePanel() {
                 </div>
 
                 <div className={`transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'} relative z-10`}>                    
-                    <blockquote className="text-[14px] font-medium text-gray-800 mb-2">
+                    <blockquote className="text-[18px] font-medium text-gray-800 mb-2">
                         <span className="text-orange-600 text-lg">"</span>
                         <span className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent">
                             {quote.q}
@@ -108,13 +108,13 @@ export default function CompactQuotePanel() {
                     <div className="border-t-2 border-gradient-to-r from-orange-300 to-amber-300 pt-2">
                         <button 
                             onClick={toggleTranslation} 
-                            className="text-[11px] font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center space-x-1"
+                            className="text-[15px] font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center space-x-1"
                         >
                             <span>🌐</span><span>{showTranslation ? 'Hide' : 'Show'} translation</span>
                         </button>
                         {showTranslation && (
                             <div className="mt-2 p-2 bg-white/90 backdrop-blur-sm rounded-lg border border-gray-200/50 shadow-lg">
-                                <p className="text-[12px] font-semibold text-gray-700 italic">
+                                <p className="text-[18px] font-semibold text-gray-700 italic">
                                     "{quote.translation}"
                                 </p>
                             </div>

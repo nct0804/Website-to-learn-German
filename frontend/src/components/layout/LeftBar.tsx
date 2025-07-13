@@ -9,6 +9,7 @@ import HomeIcon from '../../assets/home-2.png';
 import LeftBarIcon2 from '../../assets/leftbar-2.png';
 import RankingIcon from '../../assets/ranking-2.png';
 import LeftBarIcon5 from '../../assets/leftbar-4.png';
+import DarkModeToggle from '../ui/DarkModeToggle';
 
 const menuItems = [
   { to: '/home', icon: HomeIcon, label: 'Home' },
@@ -36,7 +37,7 @@ export default function LeftBar() {
   }, []);
 
   return (
-    <aside className="h-full flex flex-col justify-between w-25 bg-gradient-to-b from-[#05315B] via-[#256996] to-[#3B6978] rounded-3xl shadow-lg">
+    <aside className="h-full flex flex-col justify-between w-25 bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 rounded-3xl shadow-lg">
       <div className="flex flex-col items-center gap-3 py-4">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.to;
@@ -47,7 +48,7 @@ export default function LeftBar() {
               className={clsx(
                 'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
                 'hover:scale-105 active:scale-95',
-                isActive ? 'bg-[#3B6978] scale-105 shadow-md' : ''
+                isActive ? 'bg-white/20 scale-105 shadow-md backdrop-blur-sm' : 'hover:bg-white/10'
               )}
               title={item.label}
             >
@@ -55,13 +56,13 @@ export default function LeftBar() {
                 {typeof item.icon === 'string' ? (
                   <img
                     src={item.icon}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-contain filter brightness-0 invert"
                     alt={item.label}
                   />
                 ) : (
                   <FontAwesomeIcon
                     icon={item.icon}
-                    className="text-[1.75rem] text-gray-800"
+                    className="text-[1.75rem] text-white"
                   />
                 )}
               </div>
@@ -70,21 +71,24 @@ export default function LeftBar() {
         })}
       </div>
 
-      <div className="relative mb-4 flex justify-center" ref={menuRef}>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className={clsx(
-            'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
-            ' hover:scale-105 active:scale-95',
-            menuOpen ? 'bg-[#3B6978] scale-105 shadow-md' : ''
-          )}
-          aria-haspopup="true"
-          aria-expanded={menuOpen}
-        >
-          <div className="w-8 h-8 flex items-center justify-center">
-            <img src={MoreIcon} alt="More options" className="w-full h-full object-contain" />
-          </div>
-        </button>
+      <div className="flex flex-col items-center gap-3 mb-4">
+        <DarkModeToggle />
+        
+        <div className="relative flex justify-center" ref={menuRef}>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className={clsx(
+              'flex items-center justify-center rounded-lg p-3 transition-all duration-200',
+              'hover:scale-105 active:scale-95',
+              menuOpen ? 'bg-white/20 scale-105 shadow-md backdrop-blur-sm' : 'hover:bg-white/10'
+            )}
+            aria-haspopup="true"
+            aria-expanded={menuOpen}
+          >
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src={MoreIcon} alt="More options" className="w-full h-full object-contain filter brightness-0 invert" />
+            </div>
+          </button>
 
         {menuOpen && (
           <div className="absolute left-full bottom-0 ml-2 flex flex-col bg-white shadow-xl rounded-lg py-2 w-[140px] z-50">
@@ -115,6 +119,7 @@ export default function LeftBar() {
             </button>
           </div>
         )}
+        </div>
       </div>
     </aside>
   );

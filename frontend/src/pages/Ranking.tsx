@@ -145,33 +145,51 @@ export default function ranking() {
       case 1: return `${baseClass} rank-1-bg`;
       case 2: return `${baseClass} rank-2-bg`;
       case 3: return `${baseClass} rank-3-bg`;
-      default: return `${baseClass} bg-white border border-gray-200`;
+      default: return `${baseClass} bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 transition-colors duration-300`;
     }
   };
+
+  // Determine how many users to show based on screen width
+  const [maxUsers, setMaxUsers] = React.useState(10);
+  const [maxHeight, setMaxHeight] = React.useState('500px');
+  React.useEffect(() => {
+    const updateMaxUsers = () => {
+      if (window.innerWidth >= 1920) {
+        setMaxUsers(20);
+        setMaxHeight('500px'); // Luôn giữ khung gọn, chỉ tăng số lượng user, không tăng chiều cao
+      } else {
+        setMaxUsers(10);
+        setMaxHeight('500px');
+      }
+    };
+    updateMaxUsers();
+    window.addEventListener('resize', updateMaxUsers);
+    return () => window.removeEventListener('resize', updateMaxUsers);
+  }, []);
 
   return (
     <div className="flex-1 flex justify-center overflow-auto px-4 max-w-3xl mx-auto leaderboard-container">
       <div className="w-full py-6">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transition-colors duration-300">
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">Leaderboard</h1>
-            <p className="text-gray-600 text-sm">Compete with others and climb to the top!</p>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-300">Leaderboard</h1>
+            <p className="text-gray-600 dark:text-gray-300 text-sm transition-colors duration-300">Compete with others and climb to the top!</p>
           </div>
 
           <div className="flex justify-center gap-2 mb-6">
             <button className="tab-button px-5 py-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-full font-medium text-sm shadow-md active">
               This Week
             </button>
-            <button className="tab-button px-5 py-2 bg-gray-100 text-gray-600 rounded-full font-medium text-sm hover:bg-gray-200 transition-colors">
+            <button className="tab-button px-5 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
               This Month
             </button>
-            <button className="tab-button px-5 py-2 bg-gray-100 text-gray-600 rounded-full font-medium text-sm hover:bg-gray-200 transition-colors">
+            <button className="tab-button px-5 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
               All Time
             </button>
           </div>
 
-          <div className="ranking-list space-y-3 max-h-[500px] overflow-y-auto">
-            {rankingData.map((user) => (
+          <div className="ranking-list space-y-3 overflow-y-auto" style={{ maxHeight }}>
+            {rankingData.slice(0, maxUsers).map((user) => (
               <div 
                 key={user.rank}
                 className={getRankingItemClass(user.rank, user.isCurrentUser)}
@@ -192,13 +210,13 @@ export default function ranking() {
                 </div>
 
                 <div className="user-info">
-                  <div className="user-name">{user.name}</div>
-                  <div className="user-level">Level {user.level}</div>
+                  <div className="user-name text-2xl font-bold">{user.name}</div>
+                  <div className="user-level text-xl font-semibold">Level {user.level}</div>
                 </div>
 
                 <div className="xp-display">
-                  <div className="xp-value">{user.xp.toLocaleString()}</div>
-                  <div className="xp-label">XP</div>
+                  <div className="xp-value text-base font-bold">{user.xp.toLocaleString()}</div>
+                  <div className="xp-label text-base">XP</div>
                 </div>
               </div>
             ))}

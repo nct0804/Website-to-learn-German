@@ -38,12 +38,12 @@ const ProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-gray-50 p-3 rounded-3xl max-w-xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 text-center">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mx-auto mb-4 flex items-center justify-center">
             <Loader2 className="w-6 h-6 animate-spin text-white" />
           </div>
-          <p className="text-gray-600 text-sm">Loading profile...</p>
+          <p className="text-gray-600 dark:text-gray-300 text-sm transition-colors duration-300">Loading profile...</p>
         </div>
       </div>
     );
@@ -51,12 +51,12 @@ const ProfilePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 p-3 rounded-3xl max-w-xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 text-center">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-white" />
           </div>
-          <p className="text-red-600 mb-4 text-sm">{error}</p>
+          <p className="text-red-600 dark:text-red-400 mb-4 text-sm transition-colors duration-300">{error}</p>
           <button 
             onClick={refetch}
             className="bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full hover:from-orange-500 hover:to-red-600 transition-all duration-300 text-sm font-medium"
@@ -70,12 +70,12 @@ const ProfilePage: React.FC = () => {
 
   if (!userProfile) {
     return (
-      <div className="bg-gray-50 p-3 rounded-3xl max-w-xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 text-center">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-white" />
           </div>
-          <p className="text-gray-600 text-sm">No profile data found</p>
+          <p className="text-gray-600 dark:text-gray-300 text-sm transition-colors duration-300">No profile data found</p>
         </div>
       </div>
     );
@@ -84,7 +84,7 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="flex-1 flex justify-center overflow-auto px-4">
       <div className="w-full max-w-4xl">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-4 border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300">
           <div className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 h-20 relative">
             <div className="absolute -bottom-8 left-4">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full border-3 border-white shadow-lg flex items-center justify-center">
@@ -98,11 +98,11 @@ const ProfilePage: React.FC = () => {
           <div className="pt-10 pb-4 px-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
               <div>
-                <h1 className="text-xl font-bold text-gray-800 mb-1">
+                <h1 className="text-xl font-bold text-gray-800 dark:text-white mb-1 transition-colors duration-300">
                   {userProfile.firstName || 'User'} {userProfile.lastName || ''}
                 </h1>
-                <p className="text-base text-gray-600 mb-2">@{userProfile.username || 'user'}</p>
-                <div className="flex items-center text-gray-500 mb-3">
+                <p className="text-base text-gray-600 dark:text-gray-300 mb-2 transition-colors duration-300">@{userProfile.username || 'user'}</p>
+                <div className="flex items-center text-gray-500 dark:text-gray-400 mb-3 transition-colors duration-300">
                   <Mail className="w-3 h-3 mr-2" />
                   <span className="text-xs">{userProfile.email || 'No email'}</span>
                 </div>
@@ -117,35 +117,35 @@ const ProfilePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300">
             <div className="flex items-center mb-2">
-              <div className="bg-orange-100 p-1.5 rounded-full mr-2">
-                <Zap className="w-4 h-4 text-orange-600" />
+              <div className="bg-orange-100 dark:bg-orange-900/30 p-1.5 rounded-full mr-2 transition-colors duration-300">
+                <Zap className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               </div>
               <div>
-                <h3 className="text-xs font-semibold text-gray-800">Experience</h3>
-                <p className="text-lg font-bold text-orange-600">{(userProfile.xp || 0).toLocaleString()}</p>
+                <h3 className="text-xs font-semibold text-gray-800 dark:text-white transition-colors duration-300">Experience</h3>
+                <p className="text-lg font-bold text-orange-600 dark:text-orange-400 transition-colors duration-300">{(userProfile.xp || 0).toLocaleString()}</p>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
+            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mb-1 transition-colors duration-300">
               <div 
                 className="bg-gradient-to-r from-orange-400 to-red-500 h-1.5 rounded-full transition-all duration-500"
                 style={{ width: `${getLevelProgress(userProfile.xp || 0, userProfile.level || 1)}%` }}
               ></div>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
               {getXpForNextLevel(userProfile.level || 1) - (userProfile.xp || 0)} XP to next level
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300">
             <div className="flex items-center mb-2">
-              <div className="bg-red-100 p-1.5 rounded-full mr-2">
-                <Flame className="w-4 h-4 text-red-600" />
+              <div className="bg-red-100 dark:bg-red-900/30 p-1.5 rounded-full mr-2 transition-colors duration-300">
+                <Flame className="w-4 h-4 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h3 className="text-xs font-semibold text-gray-800">Streak</h3>
-                <p className="text-lg font-bold text-red-600">{userProfile.streak || 0}</p>
+                <h3 className="text-xs font-semibold text-gray-800 dark:text-white transition-colors duration-300">Streak</h3>
+                <p className="text-lg font-bold text-red-600 dark:text-red-400 transition-colors duration-300">{userProfile.streak || 0}</p>
               </div>
             </div>
             <div className="flex items-center">
@@ -153,21 +153,21 @@ const ProfilePage: React.FC = () => {
                 <div 
                   key={i}
                   className={`w-3 h-3 rounded-full mr-1 ${
-                    i < (userProfile.streak || 0) % 7 ? 'bg-red-400' : 'bg-gray-200'
-                  }`}
+                    i < (userProfile.streak || 0) % 7 ? 'bg-red-400 dark:bg-red-600' : 'bg-gray-200 dark:bg-gray-600'
+                  } transition-colors duration-300`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300">
             <div className="flex items-center mb-2">
-              <div className="bg-yellow-100 p-1.5 rounded-full mr-2">
-                <Trophy className="w-4 h-4 text-yellow-600" />
+              <div className="bg-yellow-100 dark:bg-yellow-900/30 p-1.5 rounded-full mr-2 transition-colors duration-300">
+                <Trophy className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div>
-                <h3 className="text-xs font-semibold text-gray-800">Current Level</h3>
-                <p className="text-lg font-bold text-yellow-600">{userProfile.level || 1}</p>
+                <h3 className="text-xs font-semibold text-gray-800 dark:text-white transition-colors duration-300">Current Level</h3>
+                <p className="text-lg font-bold text-yellow-600 dark:text-yellow-400 transition-colors duration-300">{userProfile.level || 1}</p>
               </div>
             </div>
             <div className="flex items-center space-x-1">
@@ -175,8 +175,8 @@ const ProfilePage: React.FC = () => {
                 <Star 
                   key={i}
                   className={`w-3 h-3 ${
-                    i < (userProfile.level || 1) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                  }`}
+                    i < (userProfile.level || 1) ? 'text-yellow-400 dark:text-yellow-500 fill-current' : 'text-gray-300 dark:text-gray-500'
+                  } transition-colors duration-300`}
                 />
               ))}
             </div>
@@ -184,46 +184,39 @@ const ProfilePage: React.FC = () => {
         </div>
 
         {/* Achievement Section */}
-        <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300">
           <div className="flex items-center mb-3">
             <Award className="w-5 h-5 text-orange-500 mr-2" />
-            <h2 className="text-lg font-bold text-gray-800">Achievements</h2>
+            <h2 className="text-lg font-bold text-gray-800 dark:text-white transition-colors duration-300">Achievements</h2>
           </div>
-          
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {/* Sample achievements */}
-            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-                <Trophy className="w-4 h-4 text-gray-500" />
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center opacity-50 transition-colors duration-300">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-1 flex items-center justify-center transition-colors duration-300">
+                <Trophy className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               </div>
-              <p className="text-xs font-medium text-gray-500">First Steps</p>
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 transition-colors duration-300">First Steps</p>
             </div>
-            
-            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-                <Flame className="w-4 h-4 text-gray-500" />
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center opacity-50 transition-colors duration-300">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-1 flex items-center justify-center transition-colors duration-300">
+                <Flame className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               </div>
-              <p className="text-xs font-medium text-gray-500">Hot Streak</p>
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 transition-colors duration-300">Hot Streak</p>
             </div>
-            
-            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-gray-500" />
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center opacity-50 transition-colors duration-300">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-1 flex items-center justify-center transition-colors duration-300">
+                <Zap className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               </div>
-              <p className="text-xs font-medium text-gray-500">Power User</p>
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 transition-colors duration-300">Power User</p>
             </div>
-            
-            <div className="bg-gray-50 rounded-lg p-2 text-center opacity-50">
-              <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-1 flex items-center justify-center">
-                <Star className="w-4 h-4 text-gray-500" />
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center opacity-50 transition-colors duration-300">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-1 flex items-center justify-center transition-colors duration-300">
+                <Star className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               </div>
-              <p className="text-xs font-medium text-gray-500">Rising Star</p>
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 transition-colors duration-300">Rising Star</p>
             </div>
           </div>
-          
-          <div className="mt-3 text-center">
-            <p className="text-xs text-gray-500">Keep learning to unlock more achievements!</p>
-          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Keep learning to unlock more achievements!</p>
         </div>
       </div>
     </div>
