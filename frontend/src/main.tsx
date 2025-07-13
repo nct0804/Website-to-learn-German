@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import './App.css'
 import "./style/custom.css"
+import "./style/dark-mode.css"
 
 // async function enableMocks() { /* ... */ }
 // enableMocks()

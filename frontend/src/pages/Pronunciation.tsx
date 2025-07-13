@@ -57,7 +57,7 @@ export default function Pronunciation() {
       <div className="flex-1 flex justify-center items-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-500" />
-          <p className="text-gray-600">Loading pronunciation data...</p>
+          <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Loading pronunciation data...</p>
         </div>
       </div>
     );
@@ -68,31 +68,31 @@ export default function Pronunciation() {
       <div className="flex-1 flex justify-center items-center">
         <div className="text-center">
           <AlertCircle className="w-8 h-8 mx-auto mb-4 text-red-500" />
-          <p className="text-gray-600">Failed to load pronunciation data</p>
-          <p className="text-sm text-gray-500 mt-2">{error}</p>
+          <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Failed to load pronunciation data</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 transition-colors duration-300">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-      <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white rounded-2xl px-10 py-0 shadow-lg">
+      <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl px-10 py-0 shadow-lg transition-colors duration-300">
         <div className="w-full">
         <div className="text-center mt-6">
           <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-3">
             <Volume2 className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r text-[#017395] bg-clip-text ">
+          <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r text-[#017395] dark:text-blue-400 bg-clip-text transition-colors duration-300">
             German Pronunciation Practice
           </h1>
-          <p className="text-sm text-gray-500 max-w-lg mx-auto">
+          <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto transition-colors duration-300">
             Click any symbol below to hear its pronunciation.
           </p>
         </div>
 
         {groups.map((group: VocabularyGroup) => (
           <div key={group.id} className="mb-8">
-            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
+            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] dark:text-blue-400 bg-clip-text transition-colors duration-300">
               {group.name}
             </h2>
             <div className="grid grid-cols-5 gap-3">
@@ -105,7 +105,7 @@ export default function Pronunciation() {
                     key={sound.id}
                     onClick={() => playAudio(sound)}
                     disabled={isPlaying}
-                    className="relative overflow-hidden bg-white rounded-lg shadow-sm transform transition-transform duration-200 ease-in-out active:scale-95 hover:scale-105 cursor-pointer border border-gray-100 hover:border-gray-200 p-3 text-center will-change-[transform,opacity]"
+                    className="relative overflow-hidden bg-white dark:bg-gray-700 rounded-lg shadow-sm transform transition-transform duration-200 ease-in-out active:scale-95 hover:scale-105 cursor-pointer border border-gray-100 dark:border-gray-600 hover:border-gray-200 dark:hover:border-gray-500 p-3 text-center will-change-[transform,opacity] transition-colors duration-300"
                     style={{ minHeight: "120px" }}
                   >
                     <div
@@ -122,10 +122,10 @@ export default function Pronunciation() {
                         {sound.symbol}
                       </div>
                       <div className="mb-2 flex-1 flex flex-col justify-center">
-                        <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 transition-colors duration-300">
                           Example
                         </div>
-                        <div className="text-xs font-semibold text-gray-700">
+                        <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">
                           {sound.exampleWord}
                         </div>
                       </div>
@@ -133,7 +133,7 @@ export default function Pronunciation() {
                         className={`inline-flex items-center justify-center w-6 h-6 mx-auto rounded-full transition-transform duration-200 ease-in-out ${
                           isActive
                             ? `bg-gradient-to-r ${gradient} text-white shadow-md scale-105`
-                            : "bg-gray-100 text-gray-400"
+                            : "bg-gray-100 dark:bg-gray-600 text-gray-400 dark:text-gray-500 transition-colors duration-300"
                         }`}
                       >
                         <Play
