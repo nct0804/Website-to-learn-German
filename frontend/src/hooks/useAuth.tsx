@@ -24,18 +24,17 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (c: { email: string; password: string }) => Promise<void>;
-  loginSocial: (user: User) => void;
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType & { refreshUser: () => Promise<void> }>(null!);
+const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setL] = useState(true);
 
-  async function refreshUser() {
-    setLoading(true);
+  useEffect(() => {
+    (async () => {
       try {
         const r = await fetch("http://localhost:3000/api/users/me", {
           credentials: "include",
@@ -45,16 +44,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(data.user);
         }
       } finally {
-        setLoading(false);
+        setL(false);
       }
-  }
-
-  useEffect(() => {
-    refreshUser();
+    })();
   }, []);
 
   async function login({ email, password }: { email: string; password: string }) {
-    setLoading(true);
+    setL(true);
     try {
       const r = await fetch("http://localhost:3000/api/users/login", {
         method: "POST",
@@ -66,12 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data } = await r.json();
       setUser(data.user);
     } finally {
-      setLoading(false);
+      setL(false);
     }
-  }
-
-  function loginSocial(user: User) {
-    setUser(user);
   }
 
   async function logout() {
@@ -83,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, loginSocial, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

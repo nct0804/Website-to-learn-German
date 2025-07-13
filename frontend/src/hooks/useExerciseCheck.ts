@@ -28,7 +28,7 @@ export function useExerciseCheck() {
     
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_PROXY_TARGET}/api/exercises/${exerciseId}/check`,
+        `http://localhost:3000/api/exercises/${exerciseId}/check`,
         {
           method: 'POST',
           headers: {
