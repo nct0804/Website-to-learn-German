@@ -115,7 +115,7 @@ const RankingMedal: React.FC<RankingMedalProps> = ({ rank, size = 40 }) => {
   );
 };
 
-export default function ranking() {
+export default function Ranking() {
   const rankingData = [
     { rank: 1, name: "Julia", level: 15, xp: 1450, avatar: "J", bgColor: "from-blue-400 to-purple-500" },
     { rank: 2, name: "Erik", level: 12, xp: 1350, avatar: "E", bgColor: "from-blue-400 to-purple-500" },
@@ -135,7 +135,7 @@ export default function ranking() {
   ];
 
   const getRankingItemClass = (rank: number, isCurrentUser?: boolean) => {
-    let baseClass = "ranking-item flex items-center p-3 rounded-lg";
+    const baseClass = "ranking-item flex items-center p-3 rounded-lg";
     
     if (isCurrentUser) {
       return `${baseClass} current-user-bg`;
