@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useSignIn, useSignUp } from '@clerk/clerk-react';
+import { useSignIn, useSignUp, useAuth } from '@clerk/clerk-react';
 
 export default function SocialLoginButtons() {
   const { signIn, isLoaded: signInLoaded } = useSignIn();
   const { signUp, isLoaded: signUpLoaded } = useSignUp();
+  const { isSignedIn, signOut } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -11,6 +12,15 @@ export default function SocialLoginButtons() {
     if (!signInLoaded || !signUpLoaded) {
       setError('Authentication not ready. Please try again.');
       return;
+    }
+
+    // If a Clerk session already exists, sign out before starting a new login
+    if (isSignedIn) {
+      try {
+        await signOut();
+      } catch (e) {
+        console.error('Error signing out before social login:', e);
+      }
     }
 
     try {

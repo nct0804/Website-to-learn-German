@@ -102,7 +102,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [isLoaded, isSignedIn, clerkUser?.id]);
 
   async function login({ email, password }: { email: string; password: string }) {
-    setL(true);
     try {
       const r = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: "POST",
@@ -114,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data } = await r.json();
       setUser(data.user);
     } finally {
-      setL(false);
+      // no-op
     }
   }
 
@@ -140,7 +139,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       loading: loading || !isLoaded,
       login,
-      loginSocial,
       logout,
       refreshUser
     }}>

@@ -15,6 +15,7 @@ async function main() {
 
   // Create a demo user account
   const demoUser = await createUser();
+  await createFakeUsers();
   // Create course progression (A1.1 - A2.2)
   const courses = await createCourses();
   // Create modules for A1.1 (first unlocked, second locked)
@@ -133,6 +134,69 @@ async function createUser() {
   
   console.log(`Created demo user: ${user.username}`);
   return user;
+}
+
+async function createFakeUsers() {
+  console.log('Creating fake users...');
+  const hashedPassword = await bcrypt.hash('password123', 10);
+  const fakeUsers = [
+    {
+      email: 'anna.schmidt@example.com',
+      username: 'annaschmidt',
+      password: hashedPassword,
+      firstName: 'Anna',
+      lastName: 'Schmidt',
+      level: 1,
+      xp: 120,
+      streak: 0,
+    },
+    {
+      email: 'ben.mueller@example.com',
+      username: 'benmueller',
+      password: hashedPassword,
+      firstName: 'Ben',
+      lastName: 'Müller',
+      level: 1,
+      xp: 80,
+      streak: 0,
+    },
+    {
+      email: 'clara.schneider@example.com',
+      username: 'claraschneider',
+      password: hashedPassword,
+      firstName: 'Clara',
+      lastName: 'Schneider',
+      level: 1,
+      xp: 150,
+      streak: 0,
+    },
+    {
+      email: 'david.fischer@example.com',
+      username: 'davidfischer',
+      password: hashedPassword,
+      firstName: 'David',
+      lastName: 'Fischer',
+      level: 1,
+      xp: 60,
+      streak: 0,
+    },
+    {
+      email: 'emma.weber@example.com',
+      username: 'emmaweber',
+      password: hashedPassword,
+      firstName: 'Emma',
+      lastName: 'Weber',
+      level: 1,
+      xp: 40,
+      streak: 0,
+    },
+  ];
+
+  for (const data of fakeUsers) {
+    await prisma.user.create({ data });
+  }
+
+  console.log(`Created ${fakeUsers.length} fake users.`);
 }
 
 /**

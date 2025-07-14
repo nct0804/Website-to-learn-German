@@ -18,5 +18,6 @@ router.post("/logout", userController.logout);
 router.post("/sync-clerk", verifyClerkToken, clerkController.syncClerkUser);
 
 router.get("/me", authenticate, userController.getCurrentUser);
+router.get("/leaderboard", userController.getLeaderboard);
 
 export default router;

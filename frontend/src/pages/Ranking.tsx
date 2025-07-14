@@ -1,5 +1,7 @@
 import React from 'react';
 import '../style/LeaderRanking.css';
+import { useAuth } from '../hooks/useAuth.tsx';
+import useLeaderboard from '../hooks/useLeaderboard.ts';
 
 interface RankingMedalProps {
   rank: 1 | 2 | 3;
@@ -116,23 +118,22 @@ const RankingMedal: React.FC<RankingMedalProps> = ({ rank, size = 40 }) => {
 };
 
 export default function Ranking() {
-  const rankingData = [
-    { rank: 1, name: "Julia", level: 15, xp: 1450, avatar: "J", bgColor: "from-blue-400 to-purple-500" },
-    { rank: 2, name: "Erik", level: 12, xp: 1350, avatar: "E", bgColor: "from-blue-400 to-purple-500" },
-    { rank: 3, name: "Aisha", level: 11, xp: 1250, avatar: "A", bgColor: "from-blue-400 to-purple-500" },
-    { rank: 4, name: "Thien (You)", level: 1, xp: 0, avatar: "T", bgColor: "from-orange-400 to-orange-500", isCurrentUser: true },
-    { rank: 5, name: "Max", level: 8, xp: 850, avatar: "M", bgColor: "from-green-400 to-green-500" },
-    { rank: 6, name: "Sophie", level: 7, xp: 720, avatar: "S", bgColor: "from-pink-400 to-pink-500" },
-    { rank: 7, name: "Liam", level: 6, xp: 680, avatar: "L", bgColor: "from-cyan-400 to-cyan-500" },
-    { rank: 8, name: "Anna", level: 5, xp: 620, avatar: "A", bgColor: "from-purple-400 to-purple-500" },
-    { rank: 9, name: "David", level: 4, xp: 580, avatar: "D", bgColor: "from-indigo-400 to-indigo-500" },
-    { rank: 10, name: "Sarah", level: 3, xp: 540, avatar: "S", bgColor: "from-red-400 to-red-500" },
-    { rank: 11, name: "Mike", level: 3, xp: 510, avatar: "M", bgColor: "from-yellow-400 to-yellow-500" },
-    { rank: 12, name: "Emma", level: 2, xp: 480, avatar: "E", bgColor: "from-teal-400 to-teal-500" },
-    { rank: 13, name: "John", level: 2, xp: 450, avatar: "J", bgColor: "from-gray-400 to-gray-500" },
-    { rank: 14, name: "Lisa", level: 1, xp: 420, avatar: "L", bgColor: "from-rose-400 to-rose-500" },
-    { rank: 15, name: "Tom", level: 1, xp: 390, avatar: "T", bgColor: "from-emerald-400 to-emerald-500" }
-  ];
+  const { user } = useAuth();
+  const { users, loading } = useLeaderboard(20);
+
+  const rankingData = users.map((u, idx) => {
+    const name = u.firstName || u.lastName ? `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim() : u.username;
+    const isCurrentUser = user?.id === u.id;
+    return {
+      rank: idx + 1,
+      name: name || u.username,
+      level: u.level,
+      xp: u.xp,
+      avatar: (u.username || '?')[0].toUpperCase(),
+      bgColor: isCurrentUser ? 'from-orange-400 to-orange-500' : 'from-blue-400 to-purple-500',
+      isCurrentUser,
+    };
+  });
 
   const getRankingItemClass = (rank: number, isCurrentUser?: boolean) => {
     const baseClass = "ranking-item flex items-center p-3 rounded-lg";
@@ -189,37 +190,41 @@ export default function Ranking() {
           </div>
 
           <div className="ranking-list space-y-3 overflow-y-auto" style={{ maxHeight }}>
-            {rankingData.slice(0, maxUsers).map((user) => (
-              <div 
-                key={user.rank}
-                className={getRankingItemClass(user.rank, user.isCurrentUser)}
-              >
+            {loading ? (
+              <div className="text-center">Loading...</div>
+            ) : (
+              rankingData.slice(0, maxUsers).map((user) => (
+                <div
+                  key={user.rank}
+                  className={getRankingItemClass(user.rank, user.isCurrentUser)}
+                >
 
-                <div className="rank-container mr-4">
-                  {user.rank <= 3 ? (
-                    <RankingMedal rank={user.rank as 1 | 2 | 3} size={50} />
-                  ) : (
-                    <div className="rank-number-plain">
-                      {user.rank}
-                    </div>
-                  )}
-                </div>
+                  <div className="rank-container mr-4">
+                    {user.rank <= 3 ? (
+                      <RankingMedal rank={user.rank as 1 | 2 | 3} size={50} />
+                    ) : (
+                      <div className="rank-number-plain">
+                        {user.rank}
+                      </div>
+                    )}
+                  </div>
 
-                <div className={`user-avatar bg-gradient-to-br ${user.bgColor} mr-5`}>
-                  {user.avatar}
-                </div>
+                  <div className={`user-avatar bg-gradient-to-br ${user.bgColor} mr-5`}>
+                    {user.avatar}
+                  </div>
 
-                <div className="user-info">
-                  <div className="user-name text-2xl font-bold">{user.name}</div>
-                  <div className="user-level text-xl font-semibold">Level {user.level}</div>
-                </div>
+                  <div className="user-info">
+                    <div className="user-name text-2xl font-bold">{user.name}</div>
+                    <div className="user-level text-xl font-semibold">Level {user.level}</div>
+                  </div>
 
-                <div className="xp-display">
-                  <div className="xp-value text-base font-bold">{user.xp.toLocaleString()}</div>
-                  <div className="xp-label text-base">XP</div>
+                  <div className="xp-display">
+                    <div className="xp-value text-base font-bold">{user.xp.toLocaleString()}</div>
+                    <div className="xp-label text-base">XP</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
