@@ -120,3 +120,17 @@ export const refreshToken = async (
     next(err);
   }
 };
+
+export const getLeaderboard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const limit = req.query.limit ? Number(req.query.limit) : 10;
+    const leaderboard = await userService.getLeaderboard(limit);
+    res.json({ success: true, data: leaderboard });
+  } catch (err) {
+    next(err);
+  }
+};

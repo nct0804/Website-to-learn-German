@@ -1,11 +1,23 @@
 /// <reference types="vitest/globals" />
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './hooks/useAuth';
-import App from './App';
 import '@testing-library/jest-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+
+// Mock Clerk hooks used in AuthProvider
+vi.mock('@clerk/clerk-react', () => {
+  return {
+    __esModule: true,
+    ClerkProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    useUser: () => ({ user: null, isLoaded: true, isSignedIn: false }),
+    useAuth: () => ({ signOut: vi.fn(), getToken: vi.fn() }),
+  };
+});
+
+import { AuthProvider } from './hooks/useAuth';
+import App from './App';
 
 // Mock API responses
 const handlers = [

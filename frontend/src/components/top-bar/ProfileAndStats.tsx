@@ -1,9 +1,13 @@
 import avatar from '../../assets/avatar.png';
 import StreakIcon from '../../assets/streak.png';
 import HeartIcon from '../../assets/heart.png';
+import { useAuth } from '@/hooks/useAuth';
 // import ProgressBar from './ProgressBar';
 
-export default function ProfileAndStats({ level, streak }: { level: number, streak: number}) {
+export default function ProfileAndStats({ level, streak }: { level: number, streak: number }) {
+    const { user } = useAuth();
+    const displayName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || user?.username || 'User';
+
     return (
       <div className="flex flex-col w-[25%] min-w-[250px] p-6 justify-end ">
         <div className="flex items-center justify-center">
@@ -21,7 +25,7 @@ export default function ProfileAndStats({ level, streak }: { level: number, stre
           {/* Profile */}
           <div className="flex items-center gap-2">
               <div className="text-right">
-                  <div className="font-bold text-[#3B6978]">Thien</div>
+                  <div className="font-bold text-[#3B6978]">{displayName}</div>
                   <div className="text-xs text-yellow-600">Level {level}</div>
               </div>
               <img src={avatar} alt="profile" className="h-16 w-16" />

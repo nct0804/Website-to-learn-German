@@ -1,100 +1,50 @@
-import { useCallback } from 'react';
-import { useAuth } from './useAuth';
+import { useSignIn, useSignUp } from "@clerk/clerk-react";
+import { useCallback } from "react";
 
-export type SocialProvider = 'google' | 'facebook' | 'apple';
+export type SocialProvider = "oauth_google" | "oauth_facebook" | "oauth_apple";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+export function useClerkSocial() {
+  const { signIn, isLoaded: signInLoaded } = useSignIn();
+  const { signUp, isLoaded: signUpLoaded } = useSignUp();
 
-export function useSocialAuth() {
-  const { loginSocial } = useAuth();
-
-  const loginWithGoogle = useCallback(async (idToken: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/users/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Google login failed');
+  const loginWithSocial = useCallback(
+    async (provider: SocialProvider) => {
+      if (!signInLoaded || !signUpLoaded) {
+        throw new Error("Clerk not loaded yet");
       }
 
-      const data = await response.json();
-      
-      // Update auth context with user data
-      if (data.success && data.data.user) {
-        loginSocial(data.data.user);
+      try {
+        // Versuche zuerst Sign In
+        await signIn.authenticateWithRedirect({
+          strategy: provider,
+          redirectUrl: "/auth/callback",
+          redirectUrlComplete: "/dashboard",
+        });
+      } catch (error) {
+        console.error(`${provider} login error:`, error);
+        throw error;
       }
+    },
+    [signIn, signInLoaded, signUpLoaded]
+  );
 
-      return data;
-    } catch (error) {
-      console.error('Google login error:', error);
-      throw error;
-    }
-  }, [loginSocial]);
+  const loginWithGoogle = useCallback(
+    () => loginWithSocial("oauth_google"),
+    [loginWithSocial]
+  );
+  const loginWithFacebook = useCallback(
+    () => loginWithSocial("oauth_facebook"),
+    [loginWithSocial]
+  );
+  const loginWithApple = useCallback(
+    () => loginWithSocial("oauth_apple"),
+    [loginWithSocial]
+  );
 
-  const loginWithFacebook = useCallback(async (accessToken: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/users/auth/facebook`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accessToken }),
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Facebook login failed');
-      }
-
-      const data = await response.json();
-      
-      // Update auth context with user data
-      if (data.success && data.data.user) {
-        loginSocial(data.data.user);
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Facebook login error:', error);
-      throw error;
-    }
-  }, [loginSocial]);
-
-  const loginWithApple = useCallback(async (identityToken: string, authorizationCode?: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/users/auth/apple`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identityToken, authorizationCode }),
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Apple login failed');
-      }
-
-      const data = await response.json();
-      
-      // Update auth context with user data
-      if (data.success && data.data.user) {
-        loginSocial(data.data.user);
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Apple login error:', error);
-      throw error;
-    }
-  }, [loginSocial]);
-
-  return { 
-    loginWithGoogle, 
-    loginWithFacebook, 
-    loginWithApple 
+  return {
+    loginWithGoogle,
+    loginWithFacebook,
+    loginWithApple,
+    loginWithSocial,
   };
-} 
+}

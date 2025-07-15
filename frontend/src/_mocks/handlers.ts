@@ -18,7 +18,7 @@ export const handlers = [
           ctx.status(200),
           ctx.json({
             token: fakeToken,
-            user: { id: 1, name: 'Test User', email },
+            user: { id: 1, name: 'Anna Schmidt', email, xp: 120 },
           })
         )
       } else {

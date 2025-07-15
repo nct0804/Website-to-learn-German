@@ -46,6 +46,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/dotenv": "^6.1.1",
