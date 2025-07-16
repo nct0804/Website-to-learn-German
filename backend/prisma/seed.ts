@@ -749,9 +749,9 @@ async function createExercisesForThirdLesson(lessonId: number) {
   await prisma.exerciseOption.createMany({
     data: [
       { exerciseId: exercise2.id, text: 'Hunger', isCorrect: true, order: 1 },
-      { exerciseId: exercise2.id, text: 'hunger', isCorrect: false, order: 2 },
-      { exerciseId: exercise2.id, text: 'Apetit', isCorrect: false, order: 3 },
-      { exerciseId: exercise2.id, text: 'apetit', isCorrect: false, order: 4 }
+      { exerciseId: exercise2.id, text: 'hunger', isCorrect: true, order: 2 },
+      { exerciseId: exercise2.id, text: 'Apetit', isCorrect: true, order: 3 },
+      { exerciseId: exercise2.id, text: 'apetit', isCorrect: true, order: 4 }
     ]
   });
 
@@ -792,9 +792,9 @@ async function createExercisesForThirdLesson(lessonId: number) {
   await prisma.exerciseOption.createMany({
     data: [
       { exerciseId: exercise4.id, text: 'Auf Wiedersehen', isCorrect: true, order: 1 },
-      { exerciseId: exercise4.id, text: 'Bis gleich', isCorrect: false, order: 2 },
-      { exerciseId: exercise4.id, text: 'Wir sehen uns', isCorrect: false, order: 3 },
-      { exerciseId: exercise4.id, text: 'Bis dann', isCorrect: false, order: 4 }
+      { exerciseId: exercise4.id, text: 'Bis gleich', isCorrect: true, order: 2 },
+      { exerciseId: exercise4.id, text: 'Wir sehen uns', isCorrect: true, order: 3 },
+      { exerciseId: exercise4.id, text: 'Bis dann', isCorrect: true, order: 4 }
     ]
   });
 
@@ -901,7 +901,8 @@ async function createExercisesForFourthLesson(lessonId: number) {
     data: [
       { exerciseId: exercise4.id, text: 'Ich komme aus Vietnam', isCorrect: true, order: 1 },
       { exerciseId: exercise4.id, text: 'Ich wohne in Vietnam', isCorrect: false, order: 2 },
-      { exerciseId: exercise4.id, text: 'Ich bin in Vietnam geboren', isCorrect: false, order: 3 }
+      { exerciseId: exercise4.id, text: 'Ich bin in Vietnam geboren', isCorrect: false, order: 3 },
+      { exerciseId: exercise4.id, text: 'Ich liebe Vietnam', isCorrect: false, order: 4 }
     ]
   });
   // Exercise 5: Multiple Choice
