@@ -76,7 +76,7 @@ export default function Pronunciation() {
   }
 
   return (
-      <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl px-10 py-0 shadow-lg transition-colors duration-300">
+      <div className="flex-1 flex justify-center overflow-auto max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-2xl px-10 py-0 shadow-lg transition-colors duration-300">
         <div className="w-full">
         <div className="text-center mt-6">
           <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-3">

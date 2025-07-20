@@ -16,6 +16,7 @@ interface User {
   level: number;
   xp: number;
   streak: number;
+  hearts: number;
   lastLogin: string | null;
   createdAt: string;
   updatedAt: string;
@@ -25,6 +26,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (c: { email: string; password: string }) => Promise<void>;
+  loginSocial: (user: User) => void;
   logout: () => Promise<void>;
 }
 
@@ -115,6 +117,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       // no-op
     }
+  }
+
+  function loginSocial(user: User) {
+    setUser(user);
   }
 
   async function logout() {

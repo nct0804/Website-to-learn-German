@@ -37,7 +37,8 @@ export default function LeftBar() {
   }, []);
 
   return (
-    <aside className="h-full flex flex-col justify-between w-25 bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 rounded-3xl shadow-lg">
+    <aside className="h-full flex flex-col justify-between w-25 bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 rounded-3xl shadow-lg
+    dark:bg-gradient-to-b dark:from-[#05315B] dark:via-[#256996] dark:to-[#3B6978] dark:text-white">
       <div className="flex flex-col items-center gap-3 py-4">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.to;

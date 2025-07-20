@@ -38,7 +38,7 @@ const ProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto transition-colors duration-300">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mx-auto mb-4 flex items-center justify-center">
             <Loader2 className="w-6 h-6 animate-spin text-white" />
