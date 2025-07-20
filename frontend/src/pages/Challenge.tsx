@@ -126,11 +126,12 @@ export default function Challenge() {
   const categories = ['All', ...Array.from(new Set(challenges.map(c => c.category)))];
 
       return (
-      <div className="max-w-3xl mx-auto overflow-auto min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 rounded-3xl">
+      <div className="max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto overflow-auto min-h-screen dark:bg-gray-800 bg-gradient-to-br bg-white transition
+       rounded-3xl"> 
       {/* Hero Section */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#05315B] via-[#256996] to-[#3B6978] text-white">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#05315B] via-[#256996] to-[#3B6978] text-white px-4 py-8">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex justify-center items-center mb-6">
               <img src={trophy} alt="Trophy" className="w-16 h-16 mr-4 animate-bounce" />

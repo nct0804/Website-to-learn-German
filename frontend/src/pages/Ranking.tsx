@@ -169,7 +169,7 @@ export default function Ranking() {
   }, []);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto leaderboard-container">
+    <div className="flex-1 flex justify-center overflow-auto max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto leaderboard-container">
       <div className="w-full">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transition-colors duration-300">
           <div className="text-center mb-6">
