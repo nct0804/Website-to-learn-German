@@ -77,7 +77,7 @@ export function LearningContent({
     }
     
     const result = await checkExercise(ex.id, answer)
-    
+    refreshUser(false);
     // Track user answer and correctness
     setExerciseResults(prev => {
       const filtered = prev.filter(r => r.id !== ex.id);
@@ -190,7 +190,7 @@ export function LearningContent({
       return (
         <LessonSummary
           exercises={exerciseResults}
-          onBack={async () => { await refreshUser(); navigate(-1); }}
+          onBack={async () => { await refreshUser(loading); navigate('/home'); }}
           totalXp={totalXp}
           streak={streak}
         />

@@ -35,7 +35,7 @@ export default function LeaderboardPanel() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 mt-6 border-none shadow-lg transition-colors duration-300">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border-none shadow-lg transition-colors duration-300">
       <div className="font-semibold text-xl mb-4 text-gray-800 dark:text-white transition-colors duration-300">Leaderboard</div>
       <div className="flex flex-col gap-3">{content()}</div>
     </div>

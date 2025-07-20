@@ -75,8 +75,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function refreshUser() {
-    setLoading(true);
+  async function refreshUser(showLoading = true) {
+    if (showLoading) setLoading(true);
     try {
       const r = await fetch(`${API_BASE_URL}/api/users/me`, {
         credentials: "include",
@@ -88,7 +88,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Refresh user error:', error);
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
+        
     }
   }
 
