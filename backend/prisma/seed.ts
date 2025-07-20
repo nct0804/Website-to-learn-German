@@ -15,6 +15,7 @@ async function main() {
 
   // Create a demo user account
   const demoUser = await createUser();
+  await createFakeUsers();
   // Create course progression (A1.1 - A2.2)
   const courses = await createCourses();
   // Create modules for A1.1 (first unlocked, second locked)
@@ -133,6 +134,69 @@ async function createUser() {
   
   console.log(`Created demo user: ${user.username}`);
   return user;
+}
+
+async function createFakeUsers() {
+  console.log('Creating fake users...');
+  const hashedPassword = await bcrypt.hash('password123', 10);
+  const fakeUsers = [
+    {
+      email: 'anna.schmidt@example.com',
+      username: 'annaschmidt',
+      password: hashedPassword,
+      firstName: 'Anna',
+      lastName: 'Schmidt',
+      level: 1,
+      xp: 120,
+      streak: 0,
+    },
+    {
+      email: 'ben.mueller@example.com',
+      username: 'benmueller',
+      password: hashedPassword,
+      firstName: 'Ben',
+      lastName: 'Müller',
+      level: 1,
+      xp: 80,
+      streak: 0,
+    },
+    {
+      email: 'clara.schneider@example.com',
+      username: 'claraschneider',
+      password: hashedPassword,
+      firstName: 'Clara',
+      lastName: 'Schneider',
+      level: 1,
+      xp: 150,
+      streak: 0,
+    },
+    {
+      email: 'david.fischer@example.com',
+      username: 'davidfischer',
+      password: hashedPassword,
+      firstName: 'David',
+      lastName: 'Fischer',
+      level: 1,
+      xp: 60,
+      streak: 0,
+    },
+    {
+      email: 'emma.weber@example.com',
+      username: 'emmaweber',
+      password: hashedPassword,
+      firstName: 'Emma',
+      lastName: 'Weber',
+      level: 1,
+      xp: 40,
+      streak: 0,
+    },
+  ];
+
+  for (const data of fakeUsers) {
+    await prisma.user.create({ data });
+  }
+
+  console.log(`Created ${fakeUsers.length} fake users.`);
 }
 
 /**
@@ -685,9 +749,9 @@ async function createExercisesForThirdLesson(lessonId: number) {
   await prisma.exerciseOption.createMany({
     data: [
       { exerciseId: exercise2.id, text: 'Hunger', isCorrect: true, order: 1 },
-      { exerciseId: exercise2.id, text: 'hunger', isCorrect: false, order: 2 },
-      { exerciseId: exercise2.id, text: 'Apetit', isCorrect: false, order: 3 },
-      { exerciseId: exercise2.id, text: 'apetit', isCorrect: false, order: 4 }
+      { exerciseId: exercise2.id, text: 'hunger', isCorrect: true, order: 2 },
+      { exerciseId: exercise2.id, text: 'Apetit', isCorrect: true, order: 3 },
+      { exerciseId: exercise2.id, text: 'apetit', isCorrect: true, order: 4 }
     ]
   });
 
@@ -728,9 +792,9 @@ async function createExercisesForThirdLesson(lessonId: number) {
   await prisma.exerciseOption.createMany({
     data: [
       { exerciseId: exercise4.id, text: 'Auf Wiedersehen', isCorrect: true, order: 1 },
-      { exerciseId: exercise4.id, text: 'Bis gleich', isCorrect: false, order: 2 },
-      { exerciseId: exercise4.id, text: 'Wir sehen uns', isCorrect: false, order: 3 },
-      { exerciseId: exercise4.id, text: 'Bis dann', isCorrect: false, order: 4 }
+      { exerciseId: exercise4.id, text: 'Bis gleich', isCorrect: true, order: 2 },
+      { exerciseId: exercise4.id, text: 'Wir sehen uns', isCorrect: true, order: 3 },
+      { exerciseId: exercise4.id, text: 'Bis dann', isCorrect: true, order: 4 }
     ]
   });
 
@@ -837,7 +901,8 @@ async function createExercisesForFourthLesson(lessonId: number) {
     data: [
       { exerciseId: exercise4.id, text: 'Ich komme aus Vietnam', isCorrect: true, order: 1 },
       { exerciseId: exercise4.id, text: 'Ich wohne in Vietnam', isCorrect: false, order: 2 },
-      { exerciseId: exercise4.id, text: 'Ich bin in Vietnam geboren', isCorrect: false, order: 3 }
+      { exerciseId: exercise4.id, text: 'Ich bin in Vietnam geboren', isCorrect: false, order: 3 },
+      { exerciseId: exercise4.id, text: 'Ich liebe Vietnam', isCorrect: false, order: 4 }
     ]
   });
   // Exercise 5: Multiple Choice

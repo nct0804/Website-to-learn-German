@@ -15,6 +15,7 @@ import LandingPage from "./pages/LandingPage";
 import MainContent from './components/layout/MainContent';
 import AboutUs from './pages/AboutUs';
 import Speak from './pages/Speak';
+import AuthCallback from './components/AuthCallback';
 
 export default function App() {
   const location = useLocation()
@@ -33,6 +34,7 @@ export default function App() {
         } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/auth/callback" element={<AuthCallback />} /> { }
 
         {/* protected */}
         <Route element={<PrivateRoute />}>
@@ -41,9 +43,9 @@ export default function App() {
             <Route path="/challenge" element={<Challenge />} />
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/speak" element={<Speak/>} />
-            <Route path="/pronunciation" element={<Pronunciation/>} />
-            <Route path="/aboutus" element={<AboutUs/>} />
+            <Route path="/speak" element={<Speak />} />
+            <Route path="/pronunciation" element={<Pronunciation />} />
+            <Route path="/aboutus" element={<AboutUs />} />
           </Route>
         </Route>
         <Route path="/learn" element={<Learn />} />

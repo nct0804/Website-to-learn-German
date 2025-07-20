@@ -71,6 +71,12 @@ export const refreshAccessToken = async (refreshToken: string) => {
 export const logoutUser = (refreshToken: string) =>
   prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
 
+export const createSessionTokens = async (userId: string) => {
+  const token = generateToken(userId);
+  const refreshToken = await storeRefreshToken(userId);
+  return { token, refreshToken };
+};
+
 const storeRefreshToken = async (userId: string) => {
   const refreshToken = generateRefreshToken(userId);
   await prisma.refreshToken.create({
@@ -137,6 +143,23 @@ export const createSocialUserAlt = async (data: {
       firstName: data.first_name,
       lastName: data.last_name,
       password: "",
+    },
+  });
+};
+
+export const getLeaderboard = async (limit = 10) => {
+  return await prisma.user.findMany({
+    orderBy: {
+      xp: "desc",
+    },
+    take: limit,
+    select: {
+      id: true,
+      username: true,
+      firstName: true,
+      lastName: true,
+      level: true,
+      xp: true,
     },
   });
 };
