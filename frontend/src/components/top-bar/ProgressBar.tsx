@@ -25,7 +25,7 @@ export default function ProgressBar() {
             {/* Bar */}
             <div className="h-6 w-full bg-gray-200 rounded-full mb-1 overflow-hidden relative">
                 <div 
-                    className="h-6 bg-yellow-400 rounded-full transition-all duration-300 relative"
+                    className="h-6 rounded-full transition-all duration-300 relative"
                     style={{ 
                         width: `${percent}%`,
                         background: `linear-gradient(90deg, 
