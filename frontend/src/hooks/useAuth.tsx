@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function refreshUser({showLoading}: {showLoading : true} ) {
+  async function refreshUser(showLoading = true) {
     if (showLoading) setLoading(true);
     try {
       const r = await fetch(`${API_BASE_URL}/api/users/me`, {
