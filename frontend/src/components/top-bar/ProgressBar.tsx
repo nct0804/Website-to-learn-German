@@ -21,11 +21,11 @@ export default function ProgressBar() {
     const percent = Math.min((xpInLevel / xpNeeded) * 100, 100);
 
     return (
-        <div className="flex flex-col flex-1 w-full max-w-[300px] mx-auto z-10">
+        <div className="flex flex-col flex-1 w-full max-w-[260px] mx-auto z-10">
             {/* Bar */}
-            <div className="h-4 w-full bg-gray-200 rounded-full mb-1 overflow-hidden relative">
+            <div className="h-6 w-full bg-gray-200 rounded-full mb-1 overflow-hidden relative">
                 <div 
-                    className="h-4 bg-yellow-400 rounded-full transition-all duration-300 relative"
+                    className="h-6 bg-yellow-400 rounded-full transition-all duration-300 relative"
                     style={{ 
                         width: `${percent}%`,
                         background: `linear-gradient(90deg, 
@@ -66,11 +66,10 @@ export default function ProgressBar() {
                         width: '150%'
                     }}
                 />
-            </div>
-            {/* Bottom: XP Text */}
-            <div className="flex justify-between mt-0">
-                <span></span>
-                <span className="text-xs text-gray-600">{xpInLevel}/{xpNeeded} XP</span>
+                {/* Centered XP Text */}
+                <span className="absolute inset-0 flex items-center justify-center text-xs text-black drop-shadow-sm pointer-events-none">
+                    {xpInLevel}/{xpNeeded} XP
+                </span>
             </div>
         </div>
     )

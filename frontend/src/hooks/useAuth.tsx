@@ -16,6 +16,7 @@ interface User {
   level: number;
   xp: number;
   streak: number;
+  hearts: number;
   lastLogin: string | null;
   createdAt: string;
   updatedAt: string;
