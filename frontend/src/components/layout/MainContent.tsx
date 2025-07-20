@@ -51,7 +51,7 @@ function CircleProgress({ percent }: { percent: number }) {
   return (
     <svg height={radius * 2} width={radius * 2} className="block">
       <circle
-        stroke="#e0e7ef"
+        stroke="#fff"
         fill="transparent"
         strokeWidth={stroke}
         r={normalizedRadius}
@@ -105,13 +105,13 @@ export default function MainContent() {
     <div className="flex-1 flex flex-col items-center mx-auto bg-blue-50 rounded-3xl dark:bg-gray-800 max-w-3xl 2xl:max-w-4xl">
       {/* Hero Section: only show when no course is selected */}
       {!current && (
-        <div className="w-full mb-8">
-          <div className="relative bg-gradient-to-r from-[#ffa600] via-[#ffa600] to-[#FFB124] 
-          rounded-3xl shadow-lg px-8 py-8 flex flex-col md:flex-row items-center 
-          md:items-center text-center md:text-left gap-8 overflow-hidden
-          dark:bg-gradient-to-b dark:from-[#05315B] dark:via-[#256996] dark:to-[#3B6978] dark:text-white">
-            <div className="flex flex-col items-center justify-center 
-            md:items-start md:justify-start flex-1 z-10">
+        <div className="w-full mb-8 sticky top-0 z-40">
+          <div className="bg-gradient-to-r from-[#ffa600] via-[#ffa600] to-[#FFB124] rounded-3xl 
+          shadow-lg px-8 py-8 flex flex-col md:flex-row items-center md:items-center text-center 
+          md:text-left gap-8 overflow-hidden dark:bg-gradient-to-b dark:from-[#05315B] 
+          dark:via-[#256996] dark:to-[#3B6978] dark:text-white">
+            <div className="flex flex-col items-center justify-center md:items-start 
+            md:justify-start flex-1 z-10">
               {/* <img src={Course1Icon} alt="Learning Path" className="scale-130 mb-4" /> */}
               <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2 drop-shadow">Your Learning Path</h1>
               <p className="text-lg text-white max-w-2xl mx-auto mb-2">Advance step by step through expertly designed German courses. Unlock new skills, earn XP, and celebrate your progress!</p>
