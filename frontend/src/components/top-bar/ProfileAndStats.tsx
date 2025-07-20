@@ -5,8 +5,11 @@ import StarIcon from '../../assets/star.png';
 import ProgressBar from './ProgressBar';
 import BrezelIcon from '../../assets/brezel.png';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function ProfileAndStats({ level, streak }: { level: number, streak: number}) {
+  const { user } = useAuth();
+  
   return (
     <div className="w-[30%] min-w-[250px] max-w-xl rounded-2xl p-5 flex flex-col 
     md:flex-row justify-center items-center gap-4 md:gap-8">
@@ -22,7 +25,7 @@ export default function ProfileAndStats({ level, streak }: { level: number, stre
           </div>
           <div className="relative w-20 h-14 flex-shrink-0 flex gap-3 items-center justify-center bg-red-50 rounded-full shadow hover:scale-105 cursor-pointer group">
             <img src={HeartIcon} alt="heart" className="w-7 h-7" />
-            <span className="text-red-500 font-bold text-sm">5</span>
+            <span className="text-red-500 font-bold text-sm">{user?.hearts || 0}</span>
             <div className="absolute -top-5 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded shadow opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10 whitespace-nowrap">
               Hearts left
             </div>
