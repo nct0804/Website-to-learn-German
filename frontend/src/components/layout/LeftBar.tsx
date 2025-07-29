@@ -11,8 +11,8 @@ import RankingIcon from '../../assets/ranking-2.png';
 import LeftBarIcon5 from '../../assets/leftbar-4.png';
 import DarkModeToggle from '../ui/DarkModeToggle';
 import { useMenu } from './MenuContext';
-import profileIcon from '../../assets/profile.png';
-import questionIcon from '../../assets/question.png';
+import profileIcon from '../../assets/profile2.png';
+import aboutUsIcon from '../../assets/AboutUs.png';
 import { LogOut } from 'lucide-react';
 
 const menuItems = [
@@ -148,7 +148,7 @@ export default function LeftBar() {
               >
                 <div className="w-8 h-8 flex items-center justify-center">
                   <img
-                    src={questionIcon}
+                    src={aboutUsIcon}
                     className="w-full h-full object-contain filter brightness-0 invert"
                     alt="About Us"
                   />
