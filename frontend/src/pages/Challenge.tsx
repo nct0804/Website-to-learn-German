@@ -119,7 +119,7 @@ export default function Challenge() {
     totalXP: user?.xp ?? 0,
     level: user?.level ?? 1,
     streak: user?.streak ?? 0,
-    challengesCompleted: 23, // Hardcoded for now
+    challengesCompleted: 1, // Hardcoded for now
     totalChallenges: 30 // Hardcoded for now
   };
 
