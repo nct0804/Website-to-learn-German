@@ -1,7 +1,7 @@
 
 # GermanGains - German learning platform
 
-GermanGains is a comprehensive, self-paced German language learning platform that combines structured educational content with engaging gamification elements. Designed for learners from beginner (A1.1) to intermediate (A2.2) levels, the platform offers an interactive approach to having fun learning German through progressive content unlocking and achievement-based motivation.
+**GermanGains** is a comprehensive, self-paced German language learning platform that combines structured educational content with engaging gamification elements. Designed for learners from beginner (A1.1) to intermediate (A2.2) levels, the platform offers an interactive approach to having fun learning German through progressive content unlocking and achievement-based motivation.
 
 ![Login Page](assets/navigation.png)
 
