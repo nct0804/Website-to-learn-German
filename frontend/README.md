@@ -21,7 +21,7 @@ A modern React-based German language learning platform with interactive exercise
 *The challenge center interface displaying user statistics, challenge categories, and available challenges.*
 
 ### 📊 Leaderboard Page
-![Leaderboard Page](./src/assets/screenshots/ranking-page.png)
+![Leaderboard Page](./src/assets/screenshots/Ranking-Page.png)
 *The leaderboard page showing user rankings, XP scores, and competitive elements.*
 
 ### 🎓 Learning Interface - Exercise
