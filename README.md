@@ -1,6 +1,9 @@
+
 # GermanGains - German learning platform
 
-(Updating...)
+GermanGains is a comprehensive, self-paced German language learning platform that combines structured educational content with engaging gamification elements. Designed for learners from beginner (A1.1) to intermediate (A2.2) levels, the platform offers an interactive approach to having fun learning German through progressive content unlocking and achievement-based motivation.
+
+![Login Page](assets/navigation.png)
 
 ## Table of Contents
 
@@ -9,14 +12,30 @@
 3. [Installing](#installing)
 4. [API Documentaion](#api-documentation)
 5. [Testing](#testing)
-6. [Linting](#linting)
-7. [Contributors](#contributors)
+6. [Contributors](#contributors)
 
 ## Features
 
 - **JWT Authentication**: Secure user authentication using JSON Web Tokens, ensuring only verified users can access protected resources.
 
-- (Updating....)
+### **Gamification Elements**
+
+- **Levels Unlocking**: Content unlocks progressively as you learn previous lessons
+- **XP/Hearts System**: Earn experience points for correct answers and level up as you progress. Every user has 5 hearts - lose hearts for wrong answers, regain them by practicing completed exercises
+- **Streak Rewards**: Build learning streaks with multiplier bonuses with correct answers (5+ streak = 2x XP, 11+ streak = 3x XP)
+- **Anti-Farming Protection**: XP and streaks only awarded for new exercise completions, encouraging genuine learning
+
+###  **Diverse Exercise Contents**
+
+- **Multiple Choice Questions**: Test vocabulary, grammar, and comprehension
+- **Fill-in-the-Blank**: Practice German sentence structure and word formation
+- **Interactive Learning**: Immediate feedback with detailed explanations
+
+###  **Pronunciation Site**
+- **German Sound Library**: Comprehensive collection of German vowels, umlauts, consonants, and diphthongs
+- **Audio Examples**: Native pronunciation for each sound with example words
+- **Phonetic Learning**: Organized sound groups for systematic pronunciation practice
+
 
 ## Tech Stack
 
@@ -112,11 +131,11 @@ Ensure that the relevant ports are free on your system.
 
    ```
 
-   "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+   "npm run start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
 
-   "start:frontend": "cd frontend && npm install && npm run dev"
+   "npm run start:frontend": "cd frontend && npm install && npm run dev"
 
-   "start:backend": "cd backend && npm install && npm run build && npm run start",
+   "npm run start:backend": "cd backend && npm install && npm run build && npm run start",
 
    ```
 
@@ -281,3 +300,17 @@ Press `Ctrl + C` inside running terminal to stop the backend and frontend server
 -   `completedAt`: DateTime?, **Completion timestamp**
 -   `createdAt`: DateTime,   
 -   `updatedAt`: DateTime    
+
+
+## Testing
+The project includes automated tests for the backend using Jest. To run the tests, use the following command at project directory:
+
+```bash
+cd backend
+npm run test
+```
+## Contributors
+- Chi Thien Nguyen
+- Thanh Trung Le
+- Truc Quynh Nguyen
+- Minh Vu Nguyen Quang
