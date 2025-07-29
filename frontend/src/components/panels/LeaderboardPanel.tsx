@@ -9,8 +9,8 @@ export default function LeaderboardPanel() {
   const { users, loading, error } = useLeaderboard(3);
 
   const content = () => {
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div className="text-red-500">Failed to load leaderboard</div>;
+    if (loading) return console.log("LeaderboardPanel Loading...");
+    if (error) return console.log("Failed to load leaderboard");
 
     return users.slice(0, 3).map((user, idx) => (
       <div
