@@ -530,6 +530,7 @@ npm install --save @fortawesome/free-brands-svg-icons
 ```
 
 ### Development Tools
+
 ```bash
 # Install Mock Service Worker for API mocking
 npm install msw@1 --save-dev
