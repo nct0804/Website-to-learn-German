@@ -8,9 +8,9 @@ import { useAllModulesLessonProgress } from "../../hooks/useLessonModuleProgress
 import { useMemo } from "react";
 
 export default function MainLayout() {
-  const { courses } = useCoursesWithProgress();
+  const { courses, loading: coursesLoading } = useCoursesWithProgress();
   const moduleIds = useMemo(() => courses.flatMap(c => c.modules.map(m => m.id)), [courses]);
-  const { data: lessonsByModule } = useAllModulesLessonProgress(moduleIds);
+  const { data: lessonsByModule, loading: lessonsLoading } = useAllModulesLessonProgress(moduleIds);
 
   const nextLesson = useMemo(() => {
     for (const course of courses) {
@@ -32,6 +32,9 @@ export default function MainLayout() {
     return null;
   }, [courses, lessonsByModule]);
 
+  // Show loading state if either courses or lessons are still loading
+  const isLoading = coursesLoading || lessonsLoading;
+
   return (
     <div className="flex flex-col h-screen px-8 py-4 bg-[#FBFBFC] dark:bg-gray-900 min-w-[1400px] transition-colors duration-300">
       <TopBar />
@@ -41,7 +44,7 @@ export default function MainLayout() {
           max-w-3xl xl:max-w-3xl 2xl:max-w-4xl">
           <Outlet />
         </div>
-        <RightBar nextLesson={nextLesson} />
+        <RightBar nextLesson={nextLesson} loading={isLoading} />
       </div>
     </div>
   );
