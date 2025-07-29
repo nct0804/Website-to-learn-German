@@ -6,6 +6,7 @@ import XP1 from '../assets/XP-1.png';
 import XP2 from '../assets/XP-2.png';
 import streak from '../assets/streak.png';
 import chest from '../assets/chest.png';
+import { useAuth } from '../hooks/useAuth';
 
 interface ChallengeCard {
   id: string;
@@ -111,13 +112,16 @@ const categoryColors = {
 
 export default function Challenge() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [userStats] = useState({
-    totalXP: 1240,
-    level: 8,
-    streak: 12,
-    challengesCompleted: 23,
-    totalChallenges: 30
-  });
+  const { user } = useAuth();
+  
+  // Use real data from database
+  const userStats = {
+    totalXP: user?.xp ?? 0,
+    level: user?.level ?? 1,
+    streak: user?.streak ?? 0,
+    challengesCompleted: 23, // Hardcoded for now
+    totalChallenges: 30 // Hardcoded for now
+  };
 
   const filteredChallenges = selectedCategory === 'All' 
     ? challenges 
