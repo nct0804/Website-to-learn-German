@@ -398,13 +398,6 @@ The project uses Tailwind CSS for styling with custom configuration:
 - **Custom CSS classes** for specific styling needs
 - **CSS modules** for component-specific styles
 
-### Typography System
-Standardized typography classes for consistency:
-- `.text-title` - Main page headers
-- `.text-body` - Primary content text
-- `.text-caption` - Small labels and metadata
-- `.text-display` - Large decorative text
-
 ## 🔄 State Management
 
 ### Context API
