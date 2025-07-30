@@ -4,6 +4,14 @@ A modern React-based German language learning platform with interactive exercise
 
 ## 📸 Application Screenshots
 
+### 🔐 Sign In Page
+![Sign In Page](./src/assets/screenshots/SignIn-Page.png)
+*The sign in page with login form, social authentication options, and navigation to registration.*
+
+### 📝 Sign Up Page
+![Sign Up Page](./src/assets/screenshots/SignUp-Page.png)
+*The sign up page with registration form, terms acceptance, and navigation to login.*
+
 ### 🏠 Main Dashboard - Learning Path
 ![Main Dashboard - Learning Path](./src/assets/screenshots/Home-Page.png)
 *The main dashboard showing the learning path with course cards, progress tracking, and navigation elements.*
