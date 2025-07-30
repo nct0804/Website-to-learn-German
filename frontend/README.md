@@ -425,15 +425,180 @@ The project uses Tailwind CSS for styling with custom configuration:
 
 ## 🧪 Testing
 
-### Unit Testing
+### Test Framework & Tools
+The frontend uses **Vitest** as the primary testing framework with the following testing stack:
+
+- **Vitest** - Fast unit testing framework
+- **@testing-library/react** - React component testing utilities
+- **@testing-library/jest-dom** - Custom Jest matchers for DOM testing
+- **@testing-library/user-event** - User interaction simulation
+- **MSW (Mock Service Worker)** - API mocking for development and testing
+- **jsdom** - DOM environment for testing
+
+### Running Tests
+
+#### Basic Test Execution
 ```bash
 npm run test
 ```
 
-### Testing Structure
-- **Component tests** for UI components
-- **Hook tests** for custom logic
-- **Utility tests** for helper functions
+#### Test Configuration
+The test configuration is defined in `vite.config.ts`:
+```typescript
+test: {
+  environment: 'jsdom',
+  setupFiles: './vitest.setup.js',
+  globals: true,
+  css: true,
+  coverage: {
+    reporter: ['text', 'json', 'html']
+  }
+}
+```
+
+### Current Test Coverage
+
+#### ✅ Implemented Tests
+- **App.test.tsx** - Basic app rendering test
+  - Tests that the app renders without crashing
+  - Includes MSW setup for API mocking
+  - Mocks Clerk authentication provider
+
+#### 🔄 Mock Setup
+- **vitest.setup.js** - Global test configuration
+  - Jest DOM matchers setup
+  - TextEncoder/TextDecoder polyfills
+  - import.meta.env mocking for Vite compatibility
+  - window.matchMedia mocking for GSAP compatibility
+
+- **src/_mocks/** - API mocking configuration
+  - **handlers.ts** - MSW request handlers for API endpoints
+  - **browser.ts** - MSW worker setup for browser environment
+
+### Testing Structure & Best Practices
+
+#### Component Testing
+```typescript
+import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import '@testing-library/jest-dom';
+
+test('component renders correctly', () => {
+  render(
+    <BrowserRouter>
+      <YourComponent />
+    </BrowserRouter>
+  );
+  expect(screen.getByText('Expected Text')).toBeInTheDocument();
+});
+```
+
+#### Hook Testing
+```typescript
+import { renderHook } from '@testing-library/react';
+import { useYourHook } from './useYourHook';
+
+test('hook returns expected values', () => {
+  const { result } = renderHook(() => useYourHook());
+  expect(result.current.value).toBe(expectedValue);
+});
+```
+
+#### API Mocking with MSW
+```typescript
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+
+const handlers = [
+  rest.get('/api/endpoint', (req, res, ctx) => {
+    return res(ctx.json({ data: 'mocked response' }));
+  }),
+];
+
+const server = setupServer(...handlers);
+```
+
+### Recommended Test Improvements
+
+#### High Priority Tests to Add
+1. **Authentication Components**
+   - LoginPage component tests
+   - RegisterPage component tests
+   - AuthProvider hook tests
+
+2. **Core Learning Components**
+   - LearningContent component tests
+   - Exercise components (MultipleChoice, FillInBlank, etc.)
+   - Progress tracking components
+
+3. **Custom Hooks**
+   - useCoursesWithProgress hook tests
+   - useLessonExercises hook tests
+   - useAuth hook tests
+
+4. **Utility Functions**
+   - API utility functions
+   - Helper functions in lib/utils.ts
+
+#### Test File Organization
+```
+src/
+├── __tests__/           # Test files directory
+│   ├── components/      # Component tests
+│   ├── hooks/          # Hook tests
+│   ├── utils/          # Utility tests
+│   └── integration/    # Integration tests
+├── components/
+└── hooks/
+```
+
+### Testing Commands
+
+#### Development
+```bash
+# Run tests in watch mode
+npm run test -- --watch
+
+# Run tests with UI
+npm run test -- --ui
+
+# Run tests with coverage
+npm run test -- --coverage
+```
+
+#### Coverage Reports
+```bash
+# Generate coverage report
+npm run test -- --coverage --reporter=html
+
+# View coverage in browser
+open coverage/index.html
+```
+
+### Mocking Strategy
+
+#### External Dependencies
+- **Clerk Authentication** - Mocked in App.test.tsx
+- **React Router** - Wrapped components in BrowserRouter
+- **GSAP Animations** - Mocked window.matchMedia
+- **API Calls** - Mocked with MSW handlers
+
+#### Environment Variables
+```typescript
+// Mock Vite environment variables
+globalThis.importMeta = { 
+  env: { 
+    VITE_API_URL: 'http://localhost:3000',
+    VITE_CLERK_PUBLISHABLE_KEY: 'test_key'
+  } 
+};
+```
+
+### Continuous Integration
+Tests should be run automatically in CI/CD pipelines:
+- Pre-commit hooks for linting and basic tests
+- Pull request validation with full test suite
+- Coverage reporting and thresholds
 
 ## 🚀 Deployment
 
@@ -538,6 +703,9 @@ npm install msw@1 --save-dev
 
 # Initialize MSW
 npx msw init public/ --save
+
+# Install testing dependencies
+npm install -D @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom
 ```
 
 ### Animation Libraries
@@ -565,6 +733,9 @@ npm install --save @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg
 # Development tools
 npm install msw@1 --save-dev
 npx msw init public/ --save
+
+# Testing dependencies
+npm install -D @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom
 
 # Animations
 npm install gsap framer-motion
