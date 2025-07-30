@@ -129,16 +129,21 @@ Ensure that the relevant ports are free on your system.
 
 3. Run either backend or frontend or the whole project:
 
+-  Frontend
+
    ```
-
-   "npm run start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
-
    "npm run start:frontend": "cd frontend && npm install && npm run dev"
 
-   "npm run start:backend": "cd backend && npm install && npm run build && npm run start",
-
    ```
 
+-  Backend locally running command:
+```
+   CMD sh -c "echo \"Using database: $(echo $DATABASE_URL | sed 's/.*@.*\///' | sed 's/?.*$//')\" && \
+            npx prisma generate && \
+            npx prisma migrate deploy && \
+            npx prisma db seed && \
+            npm run dev"
+```
 ### Docker trouble shooting
 
 If it occurs either the following errors, make sure to clean your docker images by using `docker-compose prune -a`
