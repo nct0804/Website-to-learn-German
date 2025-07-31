@@ -2,6 +2,13 @@
 
 A modern React-based German language learning platform with interactive exercises, progress tracking, and gamified learning experience.
 
+## 🎨 Prototype Design
+
+The initial design and user experience for GermanGains was created in Figma, providing a comprehensive visual foundation for the application's interface and user flow.
+
+![Figma Prototype](./src/assets/screenshots/Prototype.png)
+
+
 ## 📸 Application Screenshots
 
 ### 🔐 Sign In Page
