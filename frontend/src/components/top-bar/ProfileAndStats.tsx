@@ -73,7 +73,6 @@ export default function ProfileAndStats({ level, streak }: { level: number, stre
           <Link 
             to="/profile" 
             className="group"
-            onMouseEnter={(e) => handleMouseEnter('View Profile', e)}
             onMouseLeave={handleMouseLeave}
           >
             <img src={avatar} alt="profile" className="h-20 w-20 rounded-full cursor-pointer group-hover:scale-102" />
