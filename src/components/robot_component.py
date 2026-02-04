@@ -14,6 +14,7 @@ def delete_results():
     """
     Function to delete previous robot test results.
     """
-    files = glob('robot-tests/Results*')
+    files = glob('Results/*')
     for f in files:
-        os.remove(f)
+        if os.path.isfile(f):
+            os.remove(f)
