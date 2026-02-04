@@ -15,6 +15,7 @@ Icon
 .env
 Results
 robot-tests
+__pycache__
 # Thumbnails
 ._*
 
