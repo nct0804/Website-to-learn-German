@@ -13,7 +13,8 @@ robot-tests
 Icon
  
 .env
-
+Results
+robot-tests
 # Thumbnails
 ._*
 
