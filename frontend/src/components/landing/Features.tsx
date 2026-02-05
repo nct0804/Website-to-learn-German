@@ -3,7 +3,7 @@ import { Users, Play, Clock, Gift, BookOpen, Globe } from 'lucide-react';
 
 function Features() {
   return (
-    <section id="features" className="py-10 sm:py-14 bg-gray-50">
+    <section id="features" className="py-10 sm:py-14 bg-gray-50" data-test="landing-features">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
@@ -14,8 +14,8 @@ function Features() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" data-test="landing-features-grid">
+          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow" data-test="feature-card-native-teachers">
             <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
               <Users className="h-5 w-5 text-orange-500" />
             </div>
@@ -26,7 +26,7 @@ function Features() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow" data-test="feature-card-interactive-lessons">
             <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
               <Play className="h-5 w-5 text-orange-500" />
             </div>
@@ -37,7 +37,7 @@ function Features() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow" data-test="feature-card-flexible-schedule">
             <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
               <Clock className="h-5 w-5 text-orange-500" />
             </div>
@@ -48,7 +48,7 @@ function Features() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow" data-test="feature-card-free">
             <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
               <Gift className="h-5 w-5 text-orange-500" />
             </div>
@@ -59,7 +59,7 @@ function Features() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow" data-test="feature-card-materials">
             <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
               <BookOpen className="h-5 w-5 text-orange-500" />
             </div>
@@ -70,7 +70,7 @@ function Features() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow" data-test="feature-card-culture">
             <div className="bg-orange-100 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
               <Globe className="h-5 w-5 text-orange-500" />
             </div>

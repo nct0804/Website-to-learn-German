@@ -7,7 +7,10 @@ function Hero() {
   const { user } = useAuth();
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 min-h-screen flex items-center">
+    <section
+      className="relative overflow-hidden bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 min-h-screen flex items-center"
+      data-test="landing-hero"
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600"></div>
       
       {/* Decorative elements */}
@@ -54,14 +57,14 @@ function Hero() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2.5">
+            <div className="flex flex-col sm:flex-row gap-2.5" data-test="landing-hero-cta">
               <Link to={user ? "/home" : "/login"}>
-                <button className="bg-white text-orange-600 px-5 py-2 rounded-full font-semibold text-xs sm:text-sm hover:bg-orange-100 transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2 w-full sm:w-auto">
+                <button data-test="hero-start-learning" className="bg-white text-orange-600 px-5 py-2 rounded-full font-semibold text-xs sm:text-sm hover:bg-orange-100 transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2 w-full sm:w-auto">
                   <span>{user ? "Continue Learning" : "Start Learning Now"}</span>
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </Link>
-              <button className="border-2 border-white/50 text-white px-5 py-2 rounded-full font-semibold text-xs sm:text-sm hover:bg-white/10 transition-colors flex items-center justify-center space-x-2 w-full sm:w-auto">
+              <button data-test="hero-watch-demo" className="border-2 border-white/50 text-white px-5 py-2 rounded-full font-semibold text-xs sm:text-sm hover:bg-white/10 transition-colors flex items-center justify-center space-x-2 w-full sm:w-auto">
                 <Play className="h-4 w-4" />
                 <span>Watch Demo</span>
               </button>

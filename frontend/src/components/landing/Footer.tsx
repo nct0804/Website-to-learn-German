@@ -3,9 +3,9 @@ import { Globe } from 'lucide-react';
 
 function Footer() {
   return (
-    <footer className="bg-gray-50 border-t">
+    <footer className="bg-gray-50 border-t" data-test="landing-footer">
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 text-xs">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 text-xs" data-test="footer-links">
           <div>
             <h3 className="font-semibold text-gray-900 mb-2.5">Course</h3>
             <ul className="space-y-1.5">
