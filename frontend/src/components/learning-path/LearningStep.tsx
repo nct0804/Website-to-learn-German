@@ -53,18 +53,22 @@ export default function LearningStep({
     }
   };
 
+  const dataTestBase = `lesson-step-${lessonId ?? order}`;
+
   return (
-    <div className="flex flex-col items-center relative">
+    <div className="flex flex-col items-center relative" data-test={dataTestBase}>
       {/* {active && !selected && <StartBubble />} */}
 
       {/* Connection Path */}
       {!first && (
         <div className={`w-2 h-16 absolute -top-11 left-1/2 -translate-x-1/2 rounded-full
           ${learned ? 'bg-[#3B6978]' : active ? 'bg-yellow-300 animate-pulse' : 'bg-gray-200'}
-        `}></div>
+        `}
+        data-test={`${dataTestBase}-connector-top`}
+        ></div>
       )}
 
-      <div ref={nodeWrapperRef} className="relative flex flex-col items-center">
+      <div ref={nodeWrapperRef} className="relative flex flex-col items-center" data-test={`${dataTestBase}-node`}>
         {/* Animated shadow */}
         <div
           className={`
@@ -80,12 +84,15 @@ export default function LearningStep({
         {/* Step number badge */}
         <span className={`absolute -top-5 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-xs font-bold shadow
           ${active ? 'bg-yellow-400 text-white' : learned ? 'bg-[#3B6978] text-white' : 'bg-gray-300 text-gray-700'}
-        `}>
+        `}
+        data-test={`${dataTestBase}-order`}
+        >
           {order}
         </span>
 
         {/* Circle lesson node*/}
         <button
+          data-test={`${dataTestBase}-button`}
           className={`
             relative z-10 w-20 h-20 rounded-full flex items-center justify-center
             transition-all duration-200 shadow-lg cursor-pointer
@@ -109,11 +116,12 @@ export default function LearningStep({
               strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
+              data-test={`${dataTestBase}-check`}
             >
               <polyline points="20 6 10 18 4 12" />
             </svg>
           ) : (
-            <span className="relative z-20">{icon}</span>
+            <span className="relative z-20" data-test={`${dataTestBase}-icon`}>{icon}</span>
           )}
         </button>
       </div>
@@ -128,6 +136,7 @@ export default function LearningStep({
             buttonLabel="START"
             xp={`+` + xpReward + `XP`}
             onClick={() => handleStartClick(lessonId || 0)}
+            dataTestBase={`${dataTestBase}-bubble`}
           />
         ) : learned ? (
           <DetailBubble
@@ -137,6 +146,7 @@ export default function LearningStep({
             buttonLabel="PRACTICE"
             xp={`+` + xpReward + `XP`}
             onClick={handlePracticeClick}
+            dataTestBase={`${dataTestBase}-bubble`}
           />
         ) : (
           <DetailBubble
@@ -145,6 +155,7 @@ export default function LearningStep({
             subtitle={subtitle || ""}
             buttonLabel="LOCKED"
             onClick={() => {}}
+            dataTestBase={`${dataTestBase}-bubble`}
           />
         )
       )}
@@ -153,7 +164,9 @@ export default function LearningStep({
       {!last && (
         <div className={`w-2 h-10 absolute -bottom-10 left-1/2 -translate-x-1/2 rounded-full
           ${learned ? 'bg-green-300' : active ? 'bg-yellow-300 animate-pulse' : 'bg-gray-200'}
-        `}></div>
+        `}
+        data-test={`${dataTestBase}-connector-bottom`}
+        ></div>
       )}
     </div>
   );

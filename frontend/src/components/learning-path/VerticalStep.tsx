@@ -46,6 +46,7 @@ export default function VerticalStep({ steps }: { steps: Step[] }) {
     <div
       className="flex flex-col items-center relative gap-10 min-h-[400px] w-full max-w-xs mx-auto py-20"
       ref={containerRef}
+      data-test="lesson-steps"
     >
       
       {/* Steps */}

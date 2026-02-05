@@ -14,13 +14,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="h-screen grid grid-cols-[2fr_3fr]">
-      <div className="flex flex-col items-center justify-center bg-white h-screen">
+    <div className="h-screen grid grid-cols-[2fr_3fr]" data-test="page-login">
+      <div className="flex flex-col items-center justify-center bg-white h-screen" data-test="login-left-panel">
         <LoginLeftPanel />
       </div>
-      <div className="blink-gradient relative overflow-hidden h-screen flex flex-col">
+      <div className="blink-gradient relative overflow-hidden h-screen flex flex-col" data-test="login-right-panel">
         <AnimatedBackgroundEffects />
-        <div className="flex items-center justify-center flex-1 relative z-10">
+        <div className="flex items-center justify-center flex-1 relative z-10" data-test="login-right-content">
           <LoginRightPanel />
         </div>
       </div>

@@ -38,19 +38,26 @@ export default function Learn() {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.4 }}
+      data-test="page-learn"
     >
-      <div className="flex items-center justify-center min-h-screen h-screen w-screen px-50 py-10">
+      <div className="flex items-center justify-center min-h-screen h-screen w-screen px-50 py-10" data-test="learn-container">
         <div className="w-full h-full">
-          <Card className="h-full min-h-screen flex flex-col rounded-none border-none">
+          <Card className="h-full min-h-screen flex flex-col rounded-none border-none" data-test="learn-card">
             {/* Only show header if not summary */}
             {!isSummary && !showLoading && (
-            <LearningHeader progress={progress} hearts={user?.hearts ?? 0} />
+            <div data-test="learn-header">
+              <LearningHeader progress={progress} hearts={user?.hearts ?? 0} />
+            </div>
             )}
-            <div className="flex flex-1 overflow-hidden h-full">
+            <div className="flex flex-1 overflow-hidden h-full" data-test="learn-content">
               {!user || loading || showLoading ? (
-                <LoadingScreen message="Get ready to learn!" />
+                <div data-test="learn-loading">
+                  <LoadingScreen message="Get ready to learn!" />
+                </div>
               ) : (
-              <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
+              <div data-test="learn-lesson">
+                <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
+              </div>
               )}
             </div>
           </Card>

@@ -130,10 +130,12 @@ export default function Challenge() {
   const categories = ['All', ...Array.from(new Set(challenges.map(c => c.category)))];
 
       return (
-      <div className="max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto overflow-auto min-h-screen dark:bg-gray-800 bg-gradient-to-br bg-white transition
-       rounded-3xl"> 
+      <div
+        className="max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto overflow-auto min-h-screen dark:bg-gray-800 bg-gradient-to-br bg-white transition rounded-3xl"
+        data-test="page-challenge"
+      > 
       {/* Hero Section */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#05315B] via-[#256996] to-[#3B6978] text-white px-4 py-8">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#05315B] via-[#256996] to-[#3B6978] text-white px-4 py-8" data-test="challenge-hero">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -148,29 +150,29 @@ export default function Challenge() {
             </p>
             
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto" data-test="challenge-stats">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20" data-test="challenge-stat-xp">
                 <div className="flex items-center justify-center mb-2">
                   <img src={XP1} alt="XP" className="w-6 h-6 mr-2" />
                   <span className="text-2xl font-bold">{userStats.totalXP}</span>
                 </div>
                 <p className="text-sm text-blue-100">Total XP</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20" data-test="challenge-stat-level">
                 <div className="flex items-center justify-center mb-2">
                   <img src={star} alt="Level" className="w-6 h-6 mr-2" />
                   <span className="text-2xl font-bold">{userStats.level}</span>
                 </div>
                 <p className="text-sm text-blue-100">Level</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20" data-test="challenge-stat-streak">
                 <div className="flex items-center justify-center mb-2">
                   <img src={streak} alt="Streak" className="w-6 h-6 mr-2" />
                   <span className="text-2xl font-bold">{userStats.streak}</span>
                 </div>
                 <p className="text-sm text-blue-100">Day Streak</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20" data-test="challenge-stat-completed">
                 <div className="flex items-center justify-center mb-2">
                   <img src={chest} alt="Completed" className="w-6 h-6 mr-2" />
                   <span className="text-2xl font-bold">{userStats.challengesCompleted}/{userStats.totalChallenges}</span>
@@ -183,14 +185,15 @@ export default function Challenge() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8" data-test="challenge-content">
         {/* Category Filter */}
-        <div className="mb-8">
+        <div className="mb-8" data-test="challenge-category-filter">
           <div className="flex flex-wrap gap-4 justify-center">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
+                data-test={`challenge-category-${category.toLowerCase()}`}
                 className={`px-4 py-3 rounded-full font-semibold transition-all duration-200 ${
                   selectedCategory === category
                     ? 'bg-[#256996] text-white shadow-lg scale-105'
@@ -204,16 +207,17 @@ export default function Challenge() {
         </div>
 
         {/* Challenges Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-test="challenge-grid">
           {filteredChallenges.map((challenge) => (
             <div
               key={challenge.id}
+              data-test={`challenge-card-${challenge.id}`}
               className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full ${
                 challenge.isLocked ? 'opacity-60' : ''
               }`}
             >
               {/* Header with gradient */}
-              <div className={`h-32 bg-gradient-to-r ${categoryColors[challenge.category]} relative overflow-hidden flex items-center`}>
+              <div className={`h-32 bg-gradient-to-r ${categoryColors[challenge.category]} relative overflow-hidden flex items-center`} data-test={`challenge-card-header-${challenge.id}`}>
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="relative p-6 w-full flex items-center justify-between">
                   <div className="text-4xl">{challenge.icon}</div>
@@ -232,7 +236,7 @@ export default function Challenge() {
 
               {/* Content */}
               <div className="flex flex-col flex-1 p-6">
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-3" data-test={`challenge-card-title-${challenge.id}`}>
                   <h3 className="text-xl font-bold text-gray-900">{challenge.title}</h3>
                   {challenge.isLocked && (
                     <div className="bg-gray-200 rounded-full p-1">
@@ -245,7 +249,7 @@ export default function Challenge() {
                 
                 <p className="text-gray-600 mb-4 line-clamp-2">{challenge.description}</p>
                 
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4" data-test={`challenge-card-meta-${challenge.id}`}>
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${difficultyColors[challenge.difficulty]}`}> 
                     {challenge.difficulty}
                   </span>
@@ -253,7 +257,7 @@ export default function Challenge() {
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mb-4">
+                <div className="mb-4" data-test={`challenge-card-progress-${challenge.id}`}>
                   <div className="flex justify-between text-sm text-gray-600 mb-1">
                     <span>Progress</span>
                     <span>{challenge.progress}%</span>
@@ -275,6 +279,7 @@ export default function Challenge() {
                 {/* Action Button */}
                 <button
                   disabled={challenge.isLocked}
+                  data-test={`challenge-card-action-${challenge.id}`}
                   className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-200 mt-auto ${
                     challenge.isLocked
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'

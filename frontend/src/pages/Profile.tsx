@@ -38,7 +38,7 @@ const ProfilePage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto transition-colors duration-300">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto transition-colors duration-300" data-test="profile-loading">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mx-auto mb-4 flex items-center justify-center">
             <Loader2 className="w-6 h-6 animate-spin text-white" />
@@ -51,7 +51,7 @@ const ProfilePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300" data-test="profile-error">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-white" />
@@ -59,6 +59,7 @@ const ProfilePage: React.FC = () => {
           <p className="text-red-600 dark:text-red-400 mb-4 text-sm transition-colors duration-300">{error}</p>
           <button 
             onClick={refetch}
+            data-test="profile-retry"
             className="bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 rounded-full hover:from-orange-500 hover:to-red-600 transition-all duration-300 text-sm font-medium"
           >
             Try Again
@@ -70,7 +71,7 @@ const ProfilePage: React.FC = () => {
 
   if (!userProfile) {
     return (
-      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300">
+      <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-3xl max-w-xl mx-auto transition-colors duration-300" data-test="profile-empty">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 text-center transition-colors duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-white" />
@@ -82,9 +83,9 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto px-4">
+    <div className="flex-1 flex justify-center overflow-auto px-4" data-test="page-profile">
       <div className="w-full max-w-4xl">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300" data-test="profile-header-card">
           <div className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 h-20 relative">
             <div className="absolute -bottom-8 left-4">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full border-3 border-white shadow-lg flex items-center justify-center">
@@ -116,8 +117,8 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4" data-test="profile-stats">
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300" data-test="profile-stat-xp">
             <div className="flex items-center mb-2">
               <div className="bg-orange-100 dark:bg-orange-900/30 p-1.5 rounded-full mr-2 transition-colors duration-300">
                 <Zap className="w-4 h-4 text-orange-600 dark:text-orange-400" />
@@ -138,7 +139,7 @@ const ProfilePage: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300">
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300" data-test="profile-stat-streak">
             <div className="flex items-center mb-2">
               <div className="bg-red-100 dark:bg-red-900/30 p-1.5 rounded-full mr-2 transition-colors duration-300">
                 <Flame className="w-4 h-4 text-red-600 dark:text-red-400" />
@@ -160,7 +161,7 @@ const ProfilePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300">
+          <div className="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-3 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-all duration-300" data-test="profile-stat-level">
             <div className="flex items-center mb-2">
               <div className="bg-yellow-100 dark:bg-yellow-900/30 p-1.5 rounded-full mr-2 transition-colors duration-300">
                 <Trophy className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
@@ -184,7 +185,7 @@ const ProfilePage: React.FC = () => {
         </div>
 
         {/* Achievement Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300" data-test="profile-achievements">
           <div className="flex items-center mb-3">
             <Award className="w-5 h-5 text-orange-500 mr-2" />
             <h2 className="text-lg font-bold text-gray-800 dark:text-white transition-colors duration-300">Achievements</h2>

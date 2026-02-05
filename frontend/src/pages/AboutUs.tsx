@@ -3,11 +3,11 @@ import { Code2, Coffee, MessageCircle, Users, Heart, Target } from 'lucide-react
 
 function AboutUs() {
     return (
-        <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white rounded-2xl px-10 py-0 shadow-lg">
+        <div className="flex-1 flex justify-center overflow-auto max-w-3xl mx-auto bg-white rounded-2xl px-10 py-0 shadow-lg" data-test="page-about">
             <div className="w-full">
 
                 {/* Header */}
-                <div className="text-center mt-6">
+                <div className="text-center mt-6" data-test="about-header">
                     <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-orange-500 to-red-600 rounded-full mb-3">
                         <Users className="w-5 h-5 text-white" />
                     </div>
@@ -20,7 +20,7 @@ function AboutUs() {
                 </div>
 
                 {/* Story Section */}
-                <div className="mb-8">
+                <div className="mb-8" data-test="about-story">
                     <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
                         Our Story
                     </h2>
@@ -37,7 +37,7 @@ function AboutUs() {
                 </div>
 
                 {/* Values Section */}
-                <div className="mb-8">
+                <div className="mb-8" data-test="about-values">
                     <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
                         What We Believe
                     </h2>
@@ -76,7 +76,7 @@ function AboutUs() {
                 </div>
 
                 {/* Mission Section */}
-                <div className="mb-8">
+                <div className="mb-8" data-test="about-mission">
                     <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
                         Our Mission
                     </h2>
@@ -101,7 +101,7 @@ function AboutUs() {
                 </div>
 
                 {/* Team Section */}
-                <div className="mb-8">
+                <div className="mb-8" data-test="about-team">
                     <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
                         The Team
                     </h2>
@@ -115,7 +115,7 @@ function AboutUs() {
                     </div>
                 </div>
 
-                <div className="mb-8">
+                <div className="mb-8" data-test="about-metrics">
                     <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] bg-clip-text">
                         Current Metrics
                     </h2>

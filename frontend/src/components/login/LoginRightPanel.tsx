@@ -4,7 +4,10 @@ import FunGreeting from '../custom/FundGreeting';
 
 export default function LoginRightPanel() {
   return (
-    <div className="text-white text-center p-8 relative z-10 flex flex-col justify-center h-full min-h-[400px] max-h-[600px] overflow-hidden">
+    <div
+      className="text-white text-center p-8 relative z-10 flex flex-col justify-center h-full min-h-[400px] max-h-[600px] overflow-hidden"
+      data-test="login-right-hero"
+    >
       <SplitText
         text="Meister Deutsch mit uns"
         className="text-4xl font-bold block text-white mb-4"
@@ -20,7 +23,9 @@ export default function LoginRightPanel() {
         onLetterAnimationComplete={() => console.log('Text animated!')}
       />
       
-      <FunGreeting />
+      <div data-test="login-right-greeting">
+        <FunGreeting />
+      </div>
     </div>
   );
 }

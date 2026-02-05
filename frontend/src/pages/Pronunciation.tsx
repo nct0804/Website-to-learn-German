@@ -54,7 +54,7 @@ export default function Pronunciation() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex justify-center items-center">
+      <div className="flex-1 flex justify-center items-center" data-test="pronunciation-loading">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-500" />
           <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Loading pronunciation data...</p>
@@ -65,7 +65,7 @@ export default function Pronunciation() {
 
   if (error) {
     return (
-      <div className="flex-1 flex justify-center items-center">
+      <div className="flex-1 flex justify-center items-center" data-test="pronunciation-error">
         <div className="text-center">
           <AlertCircle className="w-8 h-8 mx-auto mb-4 text-red-500" />
           <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Failed to load pronunciation data</p>
@@ -76,7 +76,7 @@ export default function Pronunciation() {
   }
 
   return (
-      <div className="flex-1 flex justify-center overflow-auto max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-2xl px-10 py-0 shadow-lg transition-colors duration-300">
+      <div className="flex-1 flex justify-center overflow-auto max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-2xl px-10 py-0 shadow-lg transition-colors duration-300" data-test="page-pronunciation">
         <div className="w-full">
         <div className="text-center mt-6">
           <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-3">
@@ -91,7 +91,7 @@ export default function Pronunciation() {
         </div>
 
         {groups.map((group: VocabularyGroup) => (
-          <div key={group.id} className="mb-8">
+          <div key={group.id} className="mb-8" data-test={`pronunciation-group-${group.id}`}>
             <h2 className="text-xl font-bold mb-4 bg-gradient-to-r text-[#017395] dark:text-blue-400 bg-clip-text transition-colors duration-300">
               {group.name}
             </h2>
@@ -105,6 +105,7 @@ export default function Pronunciation() {
                     key={sound.id}
                     onClick={() => playAudio(sound)}
                     disabled={isPlaying}
+                    data-test={`pronunciation-sound-${sound.id}`}
                     className="relative overflow-hidden bg-white dark:bg-gray-700 rounded-lg shadow-sm transform transition-transform duration-200 ease-in-out active:scale-95 hover:scale-105 cursor-pointer border border-gray-100 dark:border-gray-600 hover:border-gray-200 dark:hover:border-gray-500 p-3 text-center will-change-[transform,opacity] transition-colors duration-300"
                     style={{ minHeight: "120px" }}
                   >

@@ -109,10 +109,11 @@ export function LearningContent({
   // If we have a check result, show feedback
   if (checkResult) {
     return (
-      <CardContent className="flex-1 flex flex-col items-center justify-center px-6 py-8">
+      <CardContent className="flex-1 flex flex-col items-center justify-center px-6 py-8" data-test="learn-check-result">
         <div
           ref={feedbackRef}
           className={`relative text-center space-y-4 ${checkResult.isCorrect ? 'text-green-600' : 'text-red-600'}`}
+          data-test={`learn-check-result-${checkResult.isCorrect ? 'correct' : 'incorrect'}`}
         >
           {checkResult.isCorrect ? (
             <div className="flex flex-col items-center animate-fade-in">
@@ -166,6 +167,7 @@ export function LearningContent({
                 setSelectedText(null)
                 resetCheck()
               }}
+              data-test="learn-try-again"
               className="h-10 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98]"
             >
               Try Again
@@ -201,12 +203,12 @@ export function LearningContent({
   }
 
   return (
-    <CardContent className="flex-1 flex flex-col items-center px-6 py-8 text-[#3B6978] w-full">
+    <CardContent className="flex-1 flex flex-col items-center px-6 py-8 text-[#3B6978] w-full" data-test="learn-exercise">
       {/* Progress Indicator */}
-      <div className="w-full flex justify-center items-center mb-6">
-        <span className="text-sm font-bold text-[#3B6978]">Exercise {currentIdx + 1} of {exercises.length}</span>
+      <div className="w-full flex justify-center items-center mb-6" data-test="learn-exercise-progress">
+        <span className="text-sm font-bold text-[#3B6978]" data-test="learn-exercise-progress-text">Exercise {currentIdx + 1} of {exercises.length}</span>
     </div>
-      <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full">
+      <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full" data-test={`learn-exercise-${ex.type.toLowerCase()}`}>
         {ex.type === "FILL_IN_BLANK" && (() => {
           // Extract the part after the colon (if present)
           const fillText = ex.question.includes(":") ? ex.question.split(":").slice(1).join(":").trim() : ex.question;

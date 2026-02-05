@@ -15,17 +15,16 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="h-screen grid grid-cols-[2fr_3fr]">
-      <div className="flex flex-col items-center justify-center bg-white h-screen">
+    <div className="h-screen grid grid-cols-[2fr_3fr]" data-test="page-register">
+      <div className="flex flex-col items-center justify-center bg-white h-screen" data-test="register-left-panel">
         <RegisterLeftPanel />
       </div>
-      <div className="blink-gradient relative overflow-hidden h-screen flex flex-col">
+      <div className="blink-gradient relative overflow-hidden h-screen flex flex-col" data-test="register-right-panel">
         <AnimatedBackgroundEffects />
-        <div className="flex items-center justify-center flex-1 relative z-10">
+        <div className="flex items-center justify-center flex-1 relative z-10" data-test="register-right-content">
           <LoginRightPanel />
         </div>
       </div>
     </div>
   );
 }
-

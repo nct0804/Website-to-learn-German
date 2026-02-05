@@ -169,34 +169,35 @@ export default function Ranking() {
   }, []);
 
   return (
-    <div className="flex-1 flex justify-center overflow-auto max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto leaderboard-container">
+    <div className="flex-1 flex justify-center overflow-auto max-w-3xl 2xl:max-w-4xl 3xl:max-w-6xl mx-auto leaderboard-container" data-test="page-ranking">
       <div className="w-full">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transition-colors duration-300">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 transition-colors duration-300" data-test="ranking-card">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-300">Leaderboard</h1>
             <p className="text-gray-600 dark:text-gray-300 text-sm transition-colors duration-300">Compete with others and climb to the top!</p>
           </div>
 
-          <div className="flex justify-center gap-2 mb-6">
-            <button className="tab-button px-5 py-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-full font-medium text-sm shadow-md active">
+          <div className="flex justify-center gap-2 mb-6" data-test="ranking-tabs">
+            <button className="tab-button px-5 py-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-full font-medium text-sm shadow-md active" data-test="ranking-tab-week">
               This Week
             </button>
-            <button className="tab-button px-5 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <button className="tab-button px-5 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-test="ranking-tab-month">
               This Month
             </button>
-            <button className="tab-button px-5 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <button className="tab-button px-5 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-test="ranking-tab-all">
               All Time
             </button>
           </div>
 
-          <div className="ranking-list space-y-3 overflow-y-auto" style={{ maxHeight }}>
+          <div className="ranking-list space-y-3 overflow-y-auto" style={{ maxHeight }} data-test="ranking-list">
             {loading ? (
-              <div className="text-center">Loading...</div>
+              <div className="text-center" data-test="ranking-loading">Loading...</div>
             ) : (
               rankingData.slice(0, maxUsers).map((user) => (
                 <div
                   key={user.rank}
                   className={getRankingItemClass(user.rank, user.isCurrentUser)}
+                  data-test={`ranking-item-${user.rank}`}
                 >
 
                   <div className="rank-container mr-4">

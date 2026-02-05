@@ -93,7 +93,7 @@ export default function RegisterLeftPanel() {
         onClose={() => setNotification(prev => ({ ...prev, show: false }))}
       />
       
-      <div className="w-full h-full flex items-center scale-80 justify-center p-4 md:p-6 lg:p-8">
+      <div className="w-full h-full flex items-center scale-80 justify-center p-4 md:p-6 lg:p-8" data-test="register-form-container">
         <div className="w-full max-w-md mx-auto">
           <div className="text-center mb-6">
             <div className="relative inline-block">
@@ -105,9 +105,9 @@ export default function RegisterLeftPanel() {
             <p className="text-gray-600 mt-2 font-medium text-sm md:text-base">Sign up to get started</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4" data-test="register-form">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3" data-test="register-error">
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
@@ -123,6 +123,7 @@ export default function RegisterLeftPanel() {
                   </div>
                   <Input
                     id="firstName"
+                    data-test="register-first-name"
                     value={firstName}
                     onChange={e => setFirstName(e.target.value)}
                     placeholder="John"
@@ -142,6 +143,7 @@ export default function RegisterLeftPanel() {
                   </div>
                   <Input
                     id="lastName"
+                    data-test="register-last-name"
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Doe"
@@ -162,6 +164,7 @@ export default function RegisterLeftPanel() {
                 </div>
                 <Input
                   id="username"
+                  data-test="register-username"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                   placeholder="johndoe"
@@ -184,6 +187,7 @@ export default function RegisterLeftPanel() {
                 </div>
                 <Input
                   id="email"
+                  data-test="register-email"
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
@@ -204,6 +208,7 @@ export default function RegisterLeftPanel() {
                 </div>
                 <Input
                   id="password"
+                  data-test="register-password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
@@ -214,6 +219,7 @@ export default function RegisterLeftPanel() {
                 />
                 <button
                   type="button"
+                  data-test="register-toggle-password"
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -229,6 +235,7 @@ export default function RegisterLeftPanel() {
 
             <Button
               type="submit"
+              data-test="register-submit"
               className="w-full h-9 md:h-10 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               disabled={loading}
             >
@@ -243,11 +250,13 @@ export default function RegisterLeftPanel() {
             </Button>
 
             {/* Social Login Buttons */}
-            <SocialLoginButtons />
+            <div data-test="register-social-buttons">
+              <SocialLoginButtons />
+            </div>
 
             <p className="mt-4 text-center text-sm text-gray-600">
               Already have an account?{' '}
-              <Link to="/login" className="text-orange-600 hover:underline">
+              <Link to="/login" className="text-orange-600 hover:underline" data-test="register-login-link">
                 Sign In
               </Link>
             </p>

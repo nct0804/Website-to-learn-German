@@ -9,9 +9,9 @@ import Footer from '../components/landing/Footer';
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white" data-test="page-landing">
       <Header />
-      <main>
+      <main data-test="landing-main">
         <Hero />
         <Benefits />
         <Features />

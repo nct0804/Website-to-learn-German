@@ -102,10 +102,10 @@ export default function MainContent() {
   const { data: lessonsByModule, loading: lessonsLoading, error: lessonsError } = useAllModulesLessonProgress(moduleIds);
 
   return (
-    <div className="flex-1 flex flex-col items-center mx-auto bg-blue-50 rounded-3xl dark:bg-gray-800 max-w-3xl 2xl:max-w-4xl">
+    <div className="flex-1 flex flex-col items-center mx-auto bg-blue-50 rounded-3xl dark:bg-gray-800 max-w-3xl 2xl:max-w-4xl" data-test="page-home">
       {/* Hero Section: only show when no course is selected */}
       {!current && (
-        <div className="w-full mb-8 sticky top-0 z-40">
+        <div className="w-full mb-8 sticky top-0 z-40" data-test="home-hero">
           <div className="bg-gradient-to-r from-[#ffa600] via-[#ffa600] to-[#FFB124] rounded-3xl 
           shadow-lg px-8 py-8 flex flex-col md:flex-row items-center md:items-center text-center 
           md:text-left gap-8 overflow-hidden dark:bg-gradient-to-b dark:from-[#05315B] 
@@ -139,16 +139,17 @@ export default function MainContent() {
           </div>
         </div>
       )}
-      <div className="w-full rounded-3xl shadow-lg dark:bg-gray-800 transition-colors duration-300 h-full ">
+      <div className="w-full rounded-3xl shadow-lg dark:bg-gray-800 transition-colors duration-300 h-full" data-test="home-content">
         {!current ? (
           <>
             
-            <div className="space-y-3">
+            <div className="space-y-3" data-test="home-course-list">
               {courses.map((course, idx) => (
                 <div
                   key={course.id}
                   className="rounded-2xl transition-all duration-200 border-2 
                   border-transparent hover:border-blue-400"
+                  data-test={`home-course-card-${course.id}`}
                 >
                   <CourseCard
                     course={course}
@@ -165,7 +166,7 @@ export default function MainContent() {
           current.modules.map((module) => {
             const lessons = lessonsByModule[module.id] || [];
             return (
-              <div key={module.id}>
+              <div key={module.id} data-test={`home-module-${module.id}`}>
                 {/* {module.isLocked ? (
                   // Show a hint for the next lesson (first lesson in the module)
                   lessons.length > 0 && lessons[0].title ? (

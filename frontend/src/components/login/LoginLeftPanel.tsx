@@ -59,7 +59,10 @@ export default function LoginLeftPanel() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto transform scale-75 origin-top transition duration-300 mt-24">
+    <div
+      className="w-full max-w-md mx-auto transform scale-75 origin-top transition duration-300 mt-24"
+      data-test="login-form-container"
+    >
       <div className="text-center mb-8">
         <div className="relative inline-block">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 via-red-500 to-pink-600 bg-clip-text text-transparent mb-2 leading-tight">
@@ -72,9 +75,9 @@ export default function LoginLeftPanel() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" data-test="login-form">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4" data-test="login-error">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-5 h-5 text-red-500" />
               <p className="text-sm text-red-700">{error}</p>
@@ -92,6 +95,7 @@ export default function LoginLeftPanel() {
             </div>
             <Input
               id="email"
+              data-test="login-email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -112,6 +116,7 @@ export default function LoginLeftPanel() {
             </div>
             <Input
               id="password"
+              data-test="login-password"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
@@ -121,6 +126,7 @@ export default function LoginLeftPanel() {
             />
             <button
               type="button"
+              data-test="login-toggle-password"
               className="absolute inset-y-0 right-0 pr-4 flex items-center"
               onClick={() => setShowPassword(!showPassword)}
             >
@@ -137,6 +143,7 @@ export default function LoginLeftPanel() {
           <div className="flex items-center space-x-2">
             <Checkbox
               id="remember"
+              data-test="login-remember"
               checked={remember}
               onCheckedChange={checked => setRemember(checked === true)}
             />
@@ -144,13 +151,14 @@ export default function LoginLeftPanel() {
               Remember me
             </Label>
           </div>
-          <Link to="#" className="text-sm text-orange-600 hover:underline">
+          <Link to="#" className="text-sm text-orange-600 hover:underline" data-test="login-forgot-password">
             Forgot Password?
           </Link>
         </div>
 
         <Button
           type="submit"
+          data-test="login-submit"
           className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02] focus:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={loading}
         >
@@ -165,11 +173,13 @@ export default function LoginLeftPanel() {
         </Button>
 
         {/* Social Login Buttons */}
-        <SocialLoginButtons />
+        <div data-test="login-social-buttons">
+          <SocialLoginButtons />
+        </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{' '}
-          <Link to="/register" className="text-orange-600 hover:underline">
+          <Link to="/register" className="text-orange-600 hover:underline" data-test="login-signup-link">
             Sign Up
           </Link>
         </p>
