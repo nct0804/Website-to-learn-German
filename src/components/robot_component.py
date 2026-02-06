@@ -8,7 +8,7 @@ def start_robot_tests():
     Function to start robot tests.
     """
     import os
-    os.system("robot --outputdir Results robot-tests/*.robot")
+    os.system("source .venv/bin/activate && robot --outputdir Results robot-tests/*.robot")
 
 def delete_results():
     """
