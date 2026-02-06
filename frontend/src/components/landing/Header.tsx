@@ -22,10 +22,10 @@ function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50" data-test="landing-header">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2.5">
-          <Link to="/" className="flex items-center space-x-2" data-test="landing-logo">
+          <a href="/" className="flex items-center space-x-2" data-test="landing-logo">
             <Globe className="h-6 w-6 text-orange-500" />
             <h1 className="text-lg font-bold text-gray-900">GermanGains</h1>
-          </Link>
+          </a>
           <nav className="hidden md:flex items-center space-x-5" data-test="landing-nav">
             <button 
               onClick={() => scrollToSection('features')}
