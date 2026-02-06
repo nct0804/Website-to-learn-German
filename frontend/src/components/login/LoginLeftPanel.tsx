@@ -5,7 +5,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
-import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, AlertCircle, Globe } from 'lucide-react';
 import SocialLoginButtons from './SocialLoginButtons';
 
 export default function LoginLeftPanel() {
@@ -59,11 +59,15 @@ export default function LoginLeftPanel() {
   };
 
   return (
-    <div
-      className="w-full max-w-md mx-auto transform scale-75 origin-top transition duration-300 mt-24"
-      data-test="login-form-container"
-    >
-      <div className="text-center mb-8">
+    <div>
+      <Link to="/" className="absolute top-4 left-4 flex items-center space-x-2 hover:opacity-80 transition-opacity z-10" data-test="login-logo">
+        <Globe className="h-6 w-6 text-orange-500" />
+        <h2 className="text-lg font-bold text-gray-900">GermanGains</h2>
+      </Link>
+      <div
+        className="w-full max-w-md mx-auto transform scale-75 origin-top transition duration-300 mt-24"
+        data-test="login-form-container"
+      >
         <div className="relative inline-block">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 via-red-500 to-pink-600 bg-clip-text text-transparent mb-2 leading-tight">
             Welcome Back

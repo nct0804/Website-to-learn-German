@@ -9,7 +9,7 @@ function Hero() {
   return (
     <section
       className="relative overflow-hidden bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 min-h-screen flex items-center"
-      data-test="landing-hero"
+      data-test="landing-hero" id="hero"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600"></div>
       

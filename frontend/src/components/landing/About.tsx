@@ -23,6 +23,7 @@ function About() {
                         <div>
                     <h4 className="font-bold text-gray-900 text-xs">Chi Thien Nguyen</h4>
                         <p className="text-gray-500 text-xs">Software Engineer</p>
+                        <p className="text-gray-500 text-xs">darealthien@gmail.com</p>
                         </div>
                     </div>
                 </div>
