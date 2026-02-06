@@ -1,7 +1,9 @@
 *** Settings ***
 Documentation       Main Entrance Library Resource
 
+Library             Browser
 Library             SeleniumLibrary
-Resource            HomePage/__lib.resource
-Resource            Signin/__lib.resource
-Resource            Signup/__lib.resource
+Resource            Modules/Homepage/Homepage.resource
+Resource            Modules/Signin/Signin.resource
+Resource            Modules/Signup/Signup.resource
+Resource            Common/__lib.resource
