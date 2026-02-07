@@ -32,37 +32,34 @@ export default function Learn() {
 
   // Calculate progress percentage
   const progress = total > 0 ? (Math.min(currentIdx, total) / total) * 100 : 0;
+  
+  // Show loading screen outside of the normal layout
+  if (!user || loading || showLoading) {
+    return <LoadingScreen message="Get ready to learn!" />;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.4 }}
+      className="flex items-center justify-center min-h-screen w-full"
       data-test="page-learn"
     >
-      <div className="flex items-center justify-center min-h-screen h-screen w-screen px-50 py-10" data-test="learn-container">
-        <div className="w-full h-full">
-          <Card className="h-full min-h-screen flex flex-col rounded-none border-none" data-test="learn-card">
+      <div className="w-full max-w-7xl mx-auto h-screen flex flex-col">
+        <Card className="h-full flex flex-col rounded-none border-none" data-test="learn-card">
             {/* Only show header if not summary */}
-            {!isSummary && !showLoading && (
-            <div data-test="learn-header">
-              <LearningHeader progress={progress} hearts={user?.hearts ?? 0} />
-            </div>
-            )}
-            <div className="flex flex-1 overflow-hidden h-full" data-test="learn-content">
-              {!user || loading || showLoading ? (
-                <div data-test="learn-loading">
-                  <LoadingScreen message="Get ready to learn!" />
-                </div>
-              ) : (
-              <div data-test="learn-lesson">
-                <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
+            {!isSummary && (
+              <div data-test="learn-header">
+                <LearningHeader progress={progress} hearts={user?.hearts ?? 0} />
               </div>
-              )}
+            )}
+            <div className="flex-1 flex flex-col overflow-hidden" data-test="learn-content">
+              <LearningContent lessonId={lessonId} onProgressChange={handleProgressChange} />
             </div>
           </Card>
         </div>
-      </div>
     </motion.div>
   )
 }

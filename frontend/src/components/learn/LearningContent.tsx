@@ -203,12 +203,12 @@ export function LearningContent({
   }
 
   return (
-    <CardContent className="flex-1 flex flex-col items-center px-6 py-8 text-[#3B6978] w-full" data-test="learn-exercise">
+    <CardContent className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 text-[#3B6978] w-full max-w-4xl mx-auto" data-test="learn-exercise">
       {/* Progress Indicator */}
-      <div className="w-full flex justify-center items-center mb-6" data-test="learn-exercise-progress">
+      <div className="w-full flex justify-center items-center mb-4 sm:mb-6" data-test="learn-exercise-progress">
         <span className="text-sm font-bold text-[#3B6978]" data-test="learn-exercise-progress-text">Exercise {currentIdx + 1} of {exercises.length}</span>
-    </div>
-      <div className="flex-1 flex flex-col justify-center items-center space-y-8 w-full" data-test={`learn-exercise-${ex.type.toLowerCase()}`}>
+      </div>
+      <div className="flex-1 flex flex-col justify-center items-center space-y-6 sm:space-y-8 w-full" data-test={`learn-exercise-${ex.type.toLowerCase()}`}>
         {ex.type === "FILL_IN_BLANK" && (() => {
           // Extract the part after the colon (if present)
           const fillText = ex.question.includes(":") ? ex.question.split(":").slice(1).join(":").trim() : ex.question;
