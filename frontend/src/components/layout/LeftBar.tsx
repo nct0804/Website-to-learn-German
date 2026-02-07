@@ -14,12 +14,14 @@ import { useMenu } from './MenuContext';
 import profileIcon from '../../assets/profile2.png';
 import aboutUsIcon from '../../assets/AboutUs.png';
 import { LogOut } from 'lucide-react';
+import voiceIcon from '../../assets/voice.png';
 
 const menuItems = [
   { to: '/home', icon: HomeIcon, label: 'Home' },
   { to: '/challenge', icon: LeftBarIcon2, label: 'Challenge' },
   { to: '/ranking', icon: RankingIcon, label: 'Ranking' },
-  { to: '/pronunciation', icon: LeftBarIcon5, label: 'Pronunciation' }
+  { to: '/pronunciation', icon: LeftBarIcon5, label: 'Pronunciation' },
+  { to: '/speak', icon: voiceIcon, label: 'Speak' },
 ];
 
 export default function LeftBar() {
